@@ -276,6 +276,68 @@
             margin-top: 10px;
             color: #555;
         }
+        /* Message Section Styling */
+        .message-section {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .message-form {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .message-form input,
+        .message-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        .message-form button {
+            background: #d32f2f;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .messages-list {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .message-item {
+            border-bottom: 1px solid #eee;
+            padding: 20px 0;
+        }
+
+        .message-author {
+            font-weight: bold;
+            color: #d32f2f;
+        }
+
+        .message-text {
+            margin-top: 10px;
+            color: #555;
+        }
+
+        .message-date {
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -500,6 +562,111 @@
         </div>
     </div>
 
+        <!-- Message Section -->
+    <div class="section">
+        <h2>Ucapan & Doa</h2>
+        <div class="message-section">
+            <!-- Message Form -->
+            <div class="message-form">
+                <input type="text" id="nameInput" placeholder="Nama Anda">
+                <textarea id="messageInput" rows="4" placeholder="Tulis ucapan dan doa Anda..."></textarea>
+                <button onclick="sendMessage()">Kirim Ucapan</button>
+            </div>
+
+            <!-- Messages List -->
+            <div class="messages-list" id="messagesList">
+                <p>Memuat ucapan...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
+
+    <script>
+        // Konfigurasi Firebase (Ganti dengan konfigurasi Anda)
+        const firebaseConfig = {
+  apiKey: "AIzaSyDoth79Cu4mZ_eJpNypFFhANDehuWi4Cxs",
+  authDomain: "weddingzefanyadanesra.firebaseapp.com",
+  databaseURL: "https://weddingzefanyadanesra-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "weddingzefanyadanesra",
+  storageBucket: "weddingzefanyadanesra.firebasestorage.app",
+  messagingSenderId: "188488130948",
+  appId: "1:188488130948:web:27efe5ede6869520ad7dd1",
+  measurementId: "G-38NVJ7S39H"
+        };
+
+        // Inisialisasi Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Fungsi untuk mengirim pesan
+        function sendMessage() {
+            const name = document.getElementById('nameInput').value.trim();
+            const message = document.getElementById('messageInput').value.trim();
+
+            if (name === '' || message === '') {
+                alert('Silakan isi nama dan ucapan Anda');
+                return;
+            }
+
+            // Kirim data ke Firebase
+            const newMessage = {
+                name: name,
+                message: message,
+                timestamp: new Date().toLocaleString()
+            };
+
+            database.ref('messages').push(newMessage)
+                .then(() => {
+                    // Kosongkan form setelah berhasil dikirim
+                    document.getElementById('nameInput').value = '';
+                    document.getElementById('messageInput').value = '';
+                })
+                .catch((error) => {
+                    console.error('Error mengirim pesan:', error);
+                    alert('Terjadi kesalahan saat mengirim pesan.');
+                });
+        }
+
+        // Fungsi untuk menampilkan pesan
+        function displayMessages(snapshot) {
+            const messagesList = document.getElementById('messagesList');
+            messagesList.innerHTML = ''; // Kosongkan daftar pesan
+
+            if (!snapshot.exists()) {
+                messagesList.innerHTML = '<p>Belum ada ucapan.</p>';
+                return;
+            }
+
+            const messages = [];
+            snapshot.forEach((childSnapshot) => {
+                const message = childSnapshot.val();
+                messages.push({ id: childSnapshot.key, ...message });
+            });
+
+            // Urutkan pesan berdasarkan timestamp (terbaru di atas)
+            messages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            // Tampilkan pesan
+            messages.forEach((msg) => {
+                const messageItem = document.createElement('div');
+                messageItem.className = 'message-item';
+                messageItem.innerHTML = `
+                    <div class="message-author">${msg.name}</div>
+                    <div class="message-text">${msg.message}</div>
+                    <div class="message-date">${msg.timestamp}</div>
+                `;
+                messagesList.appendChild(messageItem);
+            });
+        }
+
+        // Listen untuk perubahan data di Firebase
+        database.ref('messages').on('value', (snapshot) => {
+            displayMessages(snapshot);
+        });
+    </script>
   <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
     <script>
