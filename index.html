@@ -375,18 +375,25 @@
             color: #888;
             margin-top: 5px;
         }
-
         /* Music Player */
-        #bgMusic {
-            display: none;
-        }
-
-    </style>
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1000;
+        }    </style>
 </head>
 <body>
-    <audio id="bgMusic" autoplay loop>
-        <source src="Canon.ogg" type="audio/mpeg">
+    <!-- Music -->
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
     </audio>
+    <div class="music-control" onclick="toggleMusic()">🎵</div>
 
     <!-- Halaman Awal -->
     <div class="cover">
