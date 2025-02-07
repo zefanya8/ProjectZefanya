@@ -746,7 +746,12 @@
             `;
 
             document.getElementById('messagesList').prepend(messageItem);
-
+        // Music Control
+        const audio = document.getElementById('bgMusic');
+        function toggleMusic() {
+            audio.paused ? audio.play() : audio.pause();
+        }
+            
             // Clear form
             document.getElementById('nameInput').value = '';
             document.getElementById('messageInput').value = '';
