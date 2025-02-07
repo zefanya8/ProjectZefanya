@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+e<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Undangan Pernikahan Zefanya & Esra</title>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Comic+Neue&family=Lucida+Calligraphy&display=swap" rel="stylesheet">
+    <title>Undangan Pernikahan Zefanya & Esrani</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Comic+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css">
     <style>
         /* Reset CSS */
         * {
@@ -12,30 +13,26 @@
             padding: 0;
             box-sizing: border-box;
         }
-
+        /* General Styling */
         body {
             font-family: 'Times New Roman', serif;
-            overflow-x: hidden;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
         }
-
-        /* Fixed Background */
-        .cover, .section {
-            background-attachment: fixed;
-            background-size: cover;
-            background-position: center;
-        }
-
+        
         .cover {
-            background-image: url('background.jpg');
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
-            color: #333;
+            background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url('background.jpg');
+            background-size: cover;
+            background-position: center;
         }
-
+        
         /* Main Content */
         .section {
             min-height: 100vh;
@@ -45,7 +42,6 @@
             flex-direction: column;
             align-items: center;
         }
-
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -68,43 +64,82 @@
             animation-fill-mode: forwards;
         }
 
-        /* Page 1 */
-        .page1 h1 {
+        .title {
             font-family: 'Great Vibes', cursive;
             font-size: 4em;
             color: #d32f2f;
             margin: 20px 0;
         }
-
-        .page1 h2 {
-            font-family: 'Comic Neue', cursive;
-            font-size: 3.5em;
-            color: #d32f2f;
-            margin-bottom: 30px;
+        
+        button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 30px;
         }
-
-        /* Page 2 */
-        .couple-container {
+        
+        .section {
+            padding: 50px 20px;
+            min-height: 100vh;
+        }
+        
+        .couple-photos {
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
-            gap: 40px;
-            max-width: 800px;
-            margin: 30px auto;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
         }
-
-        .couple-photo {
-            width: 250px;
-            height: 300px;
-            border-radius: 15px;
-            object-fit: cover;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        
+        .countdown {
+            font-size: 2em;
+            margin: 20px 0;
+            color: #d32f2f;
         }
-
-        /* Timeline */
-        .timeline {
+        
+        /* Gallery Styling */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            padding: 20px;
+        }
+        
+        .gallery-item {
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 8px;
             position: relative;
-            max-width: 800px;
+            transition: transform 0.3s;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.02);
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+              .timeline {
+            position: relative;
+            max-width: 1000px;
             margin: 50px auto;
             padding: 0 20px;
         }
@@ -120,18 +155,232 @@
             margin-left: -2px;
         }
 
+        .timeline-item {
+            display: flex;
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .timeline-date {
+            width: 45%;
+            padding: 20px;
+            text-align: right;
+        }
+
+        .timeline-content {
+            width: 45%;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            margin-left: 5%;
+        }
+
+        .timeline-date img {
+            width: 200px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .timeline-date .date {
+            font-weight: bold;
+            color: #d32f2f;
+            font-size: 1.1em;
+        }
+
+        .timeline-content::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #d32f2f;
+            left: -10px;
+            top: 20px;
+            border-radius: 50%;
+        }
+
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 31px;
+            }
+
+            .timeline-item {
+                flex-direction: column;
+            }
+
+            .timeline-date,
+            .timeline-content {
+                width: 100%;
+                text-align: left;
+                margin-left: 0;
+            }
+
+            .timeline-date {
+                padding: 10px 0;
+            }
+
+            .timeline-content {
+                margin-top: 20px;
+            }
+
+            .timeline-content::before {
+                left: 20px;
+                top: -10px;
+            }
+        }
+          /* Gift Section Styling */
+        .gift-section {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .bank-info {
+            margin: 30px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .bank-logo {
+            width: 100px;
+            margin-bottom: 15px;
+        }
+
+        .bank-details {
+            font-size: 1.1em;
+            margin: 10px 0;
+        }
+
+        /* Message Section Styling */
+        .message-section {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .message-form {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .message-form input,
+        .message-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        .message-form button {
+            background: #d32f2f;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .messages-list {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .message-item {
+            border-bottom: 1px solid #eee;
+            padding: 20px 0;
+        }
+
+        .message-author {
+            font-weight: bold;
+            color: #d32f2f;
+        }
+
+        .message-text {
+            margin-top: 10px;
+            color: #555;
+        }
+        /* Message Section Styling */
+        .message-section {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .message-form {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .message-form input,
+        .message-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        .message-form button {
+            background: #d32f2f;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .messages-list {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .message-item {
+            border-bottom: 1px solid #eee;
+            padding: 20px 0;
+        }
+
+        .message-author {
+            font-weight: bold;
+            color: #d32f2f;
+        }
+
+        .message-text {
+            margin-top: 10px;
+            color: #555;
+        }
+
+        .message-date {
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 5px;
+        }
+
         /* Music Player */
         #bgMusic {
             display: none;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .page1 h1 { font-size: 2.5em; }
-            .page1 h2 { font-size: 2em; }
-            .couple-container { flex-direction: column; }
-            .timeline::before { left: 31px; }
-        }
     </style>
 </head>
 <body>
@@ -139,58 +388,60 @@
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Cover Page -->
+    <!-- Halaman Awal -->
     <div class="cover">
         <h1>Pernikahan</h1>
         <h2 class="title">Zefanya & Esrani</h2>
         <p>Kepada Bapak/Ibu/Saudara/i</p>
-        <p> </p>
+        <p>[Nama Undangan]</p>
         <p style="font-family: 'Comic Neue', cursive; max-width: 600px; margin: 20px auto;">
             Tanpa Mengurangi Rasa Hormat, Kami Mengundang Bapak/Ibu/Saudara/i untuk hadir di acara Pernikahan Kami
         </p>
-        <button onclick="window.location.href='#undangan'">Buka Undangan</button>    </div>
-    <!-- Page 2 -->
-    <!-- Main Content -->
-    <div id="undangan" class="section">
-        <div class="animate" style="text-align: center;">
-            <h1>Pernikahan</h1>
-            <h2 class="title">Zefanya & Esrani</h2>
-            <p style="font-family: Arial; font-size: 1.2em; margin-top: 20px;">15 Mei 2025</p>
-        </div>
+        <button onclick="window.location.href='#undangan'">Buka Undangan</button>
     </div>
+
+    <!-- Halaman Undangan -->
+    <div id="undangan" class="section">
+        <h1>Pernikahan</h1>
+        <h2 class="title">Zefanya & Esrani</h2>
+        <p style="font-family: Arial, sans-serif;">15 Maret 2025</p>
+    </div>
+
+    <!-- Section Mempelai -->
     <div class="section">
         <h2 style="font-family: 'Great Vibes', cursive; font-size: 3em;">Kedua Mempelai</h2>
-        <div class="couple-container">
+        <div class="couple-photos">
             <div class="animate">
-                <img src="https://zefanya8.github.io/wedingZ-E.github.io/fama-pria.jpg" class="couple-photo" alt="Mempelai Pria">
+                <img src="https://zefanya8.github.io/wedingZ-E.github.io/fama-pria.jpg" alt="Mempelai Pria" style="width: 200px; border-radius: 50%;">
                 <h3 style="font-family: 'Lucida Calligraphy'; margin-top: 15px;">Zefanya Maranatha Mangunsong, S. Tr. T</h3>
                 <p style="font-family: 'Times New Roman'">Putra pertama dari Bapak R Simangunsong dan Ibu R Sigalingging</p>
             </div>
-            <div class="animate">
-                <img src="https://zefanya8.github.io/wedingZ-E.github.io/fama-wanita.jpg" class="couple-photo" alt="Mempelai Wanita">
+            <div>
+                <img src="https://zefanya8.github.io/wedingZ-E.github.io/fama-wanita.jpg" alt="Mempelai Wanita" style="width: 200px; border-radius: 50%;">
+
                 <h3 style="font-family: 'Lucida Calligraphy'; margin-top: 15px;">Esrani Novalina Sagala, S. Pd.</h3>
                 <p style="font-family: 'Times New Roman'">Putri pertama dari Bapak T Sagala dan Ibu D Harianja</p>
             </div>
         </div>
     </div>
-    <!-- Page 3 -->
+
+    <!-- Section Waktu & Tempat -->
     <div class="section">
-        <h2 style="font-family: 'Great Vibes'; font-size: 3em;">Waktu dan Tempat</h2>
-        <div id="countdown" style="font-size: 1.5em; margin: 30px 0;"></div>
-        
-        <div style="width: 100%; max-width: 600px; margin: 20px auto;">
-            <h3>Lokasi Pemberkatan</h3>
+        <h2>Waktu & Tempat</h2>
+        <div class="countdown" id="countdown"></div>
+        <h3>Lokasi Pemberkatan Nikah</h3>
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15937.86249353762!2d104.71918141738281!3d-2.9682191599698013!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e3b75d133e9cabd%3A0x7a3a17a565d44d12!2sGereja%20GPIN%20Yerusalem%20Palembang!5e0!3m2!1sid!2sid!4v1738839274282!5m2!1sid!2sid"&output=embed" 
                     style="width:100%; height:300px; border:0;" allowfullscreen></iframe>
             
             <h3 style="margin-top: 30px;">Lokasi Resepsi</h3>
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.4486843068526!2d104.71043427586058!3d-2.972913097003201!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e3b75ee5d4b8c4b%3A0x51db181576702dd4!2sJAMBUR%20SOPO%20GODANG%20PALEMBANG!5e0!3m2!1sid!2sid!4v1738839691274!5m2!1sid!2sid&output=embed" 
                     style="width:100%; height:300px; border:0;" allowfullscreen></iframe>
-        </div>
     </div>
-    <!-- Page 4 -->
+
+      <!-- Section Timeline -->
     <div class="section">
         <h2 style="font-family: 'Great Vibes'; font-size: 3em;">Our Journey</h2>
+        <div class="timeline">
             <!-- Item 1 -->
             <div class="timeline-item">
                 <div class="timeline-date">
@@ -250,11 +501,13 @@
                     <p>Menikah. Setelah melewati perjalanan panjang penuh cinta dan tantangan, akhirnya kami sampai pada momen yang paling dinantikan. Pada 15 Maret 2025, kami resmi bersatu dalam ikatan suci pernikahan, siap membangun masa depan bersama, dengan cinta yang semakin kuat, dan doa yang selalu mengiringi setiap langkah kami.</p>
                 </div>
             </div>
+        </div>
     </div>
-    <!-- Page 5 -->
+
+    <!-- Section Gallery -->
     <div class="section">
-        <h2 style="font-family: 'Great Vibes'; font-size: 3em;">Momen Bahagia</h2>
-        <div class="gallery">
+        <h2>Moment Bahagia</h2>
+        <div id="animatedGallery" class="gallery-grid">
             <!-- Ganti src dengan URL gambar Anda -->
             <a href="foto1.jpg" class="gallery-item" data-sub-html="<h4>Caption Foto 1</h4>">
                 <img src="foto1.jpg" alt="Moment 1">
@@ -342,39 +595,7 @@
             </div>
         </div>
     </div>
-    <script>
-        // Countdown Timer
-        const weddingDate = new Date('2025-03-15T08:00:00').getTime();
-        
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = weddingDate - now;
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById('countdown').innerHTML = `
-                ${days} Hari ${hours} Jam ${minutes} Menit ${seconds} Detik
-            `;
-        }
-        setInterval(updateCountdown, 1000);
-
-        // Animation Handler
-        function checkScroll() {
-            document.querySelectorAll('.animate').forEach(el => {
-                const rect = el.getBoundingClientRect();
-                if (rect.top < window.innerHeight * 0.8) {
-                    const animations = ['fadeIn', 'slideIn', 'rotateIn'];
-                    el.style.animationName = animations[Math.floor(Math.random()*animations.length)];
-                    el.style.opacity = '1';
-                }
-            });
-        }
-
-        window.addEventListener('scroll', checkScroll);
-        window.addEventListener('load', checkScroll);
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"></script>
@@ -489,6 +710,16 @@
         
         const countdownInterval = setInterval(updateCountdown, 1000);
         updateCountdown();
+
+        // Initialize lightGallery
+        document.addEventListener('DOMContentLoaded', () => {
+            lightGallery(document.getElementById('animatedGallery'), {
+                plugins: [lgZoom, lgThumbnail],
+                speed: 500,
+                download: false,
+                exThumbImage: 'data-src'
+            });
+        });
           // Message System
         function addMessage() {
             const name = document.getElementById('nameInput').value.trim();
@@ -516,3 +747,5 @@
             messageItem.scrollIntoView({ behavior: 'smooth' });
         }
     </script>
+</body>
+</html>
