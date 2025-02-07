@@ -7,15 +7,14 @@ e<!DOCTYPE html>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Comic+Neue&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css">
     <style>
-        /* General Styling */
+       /* General Styling */
         body {
             font-family: 'Times New Roman', serif;
-            text-align: center;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             background-color: #f9f9f9;
         }
-        
+
         .cover {
             min-height: 100vh;
             display: flex;
@@ -25,15 +24,16 @@ e<!DOCTYPE html>
             background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url('background.jpg');
             background-size: cover;
             background-position: center;
+            background-attachment: fixed;
         }
-        
+
         .title {
             font-family: 'Great Vibes', cursive;
             font-size: 4em;
             color: #d32f2f;
             margin: 20px 0;
         }
-        
+
         button {
             padding: 15px 30px;
             font-size: 1.2em;
@@ -44,10 +44,57 @@ e<!DOCTYPE html>
             cursor: pointer;
             margin-top: 30px;
         }
-        
+
         .section {
             padding: 50px 20px;
             min-height: 100vh;
+            position: relative;
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+        }
+
+        #undangan {
+            background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url('background1.jpg');
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes rotateIn {
+            from { transform: rotate(180deg) scale(0); }
+            to { transform: rotate(0) scale(1); }
+        }
+
+        .animate {
+            animation-duration: 1s;
+            animation-fill-mode: both;
+            opacity: 0;
+        }
+
+        .visible {
+            opacity: 1;
+        }
+
+        /* Music Player */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            color: white;
+            font-size: 0.8em;
+            background: rgba(0,0,0,0.7);
+            padding: 10px;
+            border-radius: 5px;
         }
         
         .couple-photos {
@@ -341,12 +388,21 @@ e<!DOCTYPE html>
     </style>
 </head>
 <body>
+        <!-- Audio Element -->
+    <audio id="bgMusic" autoplay loop>
+        <source src="music.mp3" type="audio/mpeg">
+        Browser tidak mendukung audio
+    </audio>
+    <div class="music-player">
+        Musik latar sedang dimainkan...
+    </div>
+
     <!-- Halaman Awal -->
     <div class="cover">
         <h1>Pernikahan</h1>
         <h2 class="title">Zefanya & Esrani</h2>
         <p>Kepada Bapak/Ibu/Saudara/i</p>
-        <p>[Nama Undangan]</p>
+        <p> </p>
         <p style="font-family: 'Comic Neue', cursive; max-width: 600px; margin: 20px auto;">
             Tanpa Mengurangi Rasa Hormat, Kami Mengundang Bapak/Ibu/Saudara/i untuk hadir di acara Pernikahan Kami
         </p>
@@ -359,7 +415,37 @@ e<!DOCTYPE html>
         <h2 class="title">Zefanya & Esrani</h2>
         <p style="font-family: Arial, sans-serif;">15 Maret 2025</p>
     </div>
+    <!-- Script Tambahan -->
+    <script>
+        // Animasi Scroll
+        function checkScroll() {
+            const elements = document.querySelectorAll('.animate');
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementBottom = element.getBoundingClientRect().bottom;
+                
+                if (elementTop < window.innerHeight && elementBottom > 0) {
+                    const animations = ['slideIn', 'fadeIn', 'rotateIn'];
+                    const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
+                    
+                    element.style.animationName = randomAnimation;
+                    element.classList.add('visible');
+                }
+            });
+        }
 
+        // Event Listeners
+        window.addEventListener('scroll', checkScroll);
+        window.addEventListener('load', checkScroll);
+
+        // Auto Play Music
+        document.addEventListener('DOMContentLoaded', function() {
+            const audio = document.getElementById('bgMusic');
+            audio.play().catch(error => {
+                console.log('Autoplay diblokir, perlu interaksi pengguna');
+            });
+        });
+    </script>
     <!-- Section Mempelai -->
     <div class="section">
         <h2>Kedua Mempelai</h2>
