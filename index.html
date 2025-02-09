@@ -375,30 +375,37 @@
             color: #888;
             margin-top: 5px;
         }
-        /* Music Player */
-        .music-player {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 10px;
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 1000;
-        }    
+    .music-player {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 10px;
+        background: rgba(0,0,0,0.7);
+        color: white;
+        border-radius: 5px;
+        display: none;
+    }
+    
+    .music-player button {
+        background: #4CAF50;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
     </style>
 </head>
 <body>
     <!-- Audio Element -->
-    <audio id="bgMusic" autoplay loop>
-        <source src="https://upload.wikimedia.org/wikipedia/commons/5/59/Kevin_MacLeod_-_Canon_in_D_Major.ogg" type="audio/ogg">
-        Browser tidak mendukung audio
-    </audio>
-    <div class="music-player">
-        Musik latar sedang dimainkan...
-    </div>
+<audio id="bgMusic" loop>
+    <source src="https://upload.wikimedia.org/wikipedia/commons/5/59/Kevin_MacLeod_-_Canon_in_D_Major.ogg" type="audio/ogg">
+    Browser tidak mendukung audio
+</audio>
 
+<div class="music-player" id="musicPlayer">
+    <button onclick="startMusic()">Klik untuk Memutar Musik</button>
+</div>
 
     <!-- Halaman Awal -->
     <div class="cover">
@@ -753,14 +760,39 @@
 
             document.getElementById('messagesList').prepend(messageItem);
         }
-                    // Auto Play Music
-        document.addEventListener('DOMContentLoaded', function() {
-            const audio = document.getElementById('bgMusic');
-            audio.play().catch(error => {
-                console.log('Autoplay diblokir, perlu interaksi pengguna');
+    // Fungsi untuk memulai musik setelah interaksi pengguna
+    function startMusic() {
+        const audio = document.getElementById('bgMusic');
+        const promise = audio.play();
+        
+        // Sembunyikan tombol setelah diklik
+        document.getElementById('musicPlayer').style.display = 'none';
+        
+        // Tangani error jika ada
+        if (promise !== undefined) {
+            promise.catch(error => {
+                console.log('Autoplay diblokir:', error);
+                alert('Silakan izinkan autoplay audio di browser Anda!');
             });
+        }
+    }
+
+    // Coba mulai musik otomatis saat halaman dimuat
+    window.addEventListener('DOMContentLoaded', () => {
+        const audio = document.getElementById('bgMusic');
+        audio.muted = true; // Mute sementara untuk bypass kebijakan autoplay
+        
+        audio.play().then(() => {
+            // Jika berhasil, unmute
+            audio.muted = false;
+            document.getElementById('musicPlayer').style.display = 'none';
+        }).catch(error => {
+            // Jika gagal, tampilkan tombol play
+            document.getElementById('musicPlayer').style.display = 'block';
+            audio.muted = false;
         });
-            // Clear form
+    });
+        // Clear form
             document.getElementById('nameInput').value = '';
             document.getElementById('messageInput').value = '';
 
