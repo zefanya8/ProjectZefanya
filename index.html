@@ -291,10 +291,10 @@
 
         /* Message Section Styling */
         .message-box {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin: 10px;
-            border-radius: 8px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
         }
         /* Music Player Section */
     .music-player {
@@ -519,35 +519,34 @@
     </div>
 
         <!-- Message Section -->
-    <h1>Ucapan dari Tamu</h1>
+    <h1>Kotak Ucapan</h1>
     <div id="messages"></div>
-
     <script>
-        // Ganti URL dengan URL Web App Anda
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxDyIFrxhjxShgq9vVT0CKb0dMh-Etm7LlCyZDa7wC_0KKgpzRk-Dcn4lILcgMK2D1-Ow/exec';
-
         async function loadMessages() {
+            const sheetId = '1mNvX1Mn8uRHymi0K2OVH7ODcmY-HLSNPPGUEXc0e8rw'; // Ganti dengan ID Google Sheets Anda
+            const apiKey = 'AIzaSyCeXUHSVt1PsvrOv95sLeOotzznt74DjAo'; // Ganti dengan API Key Anda
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Sheet1?key=${apiKey}`;
+
             try {
-                const response = await fetch(WEB_APP_URL);
-                const messages = await response.json();
+                const response = await fetch(url);
+                const data = await response.json();
+                const messages = data.values.slice(1); // Skip header row
 
                 const container = document.getElementById('messages');
                 messages.forEach(msg => {
                     const messageBox = document.createElement('div');
                     messageBox.className = 'message-box';
                     messageBox.innerHTML = `
-                        <h3>${msg.name}</h3>
-                        <p>${msg.message}</p>
-                        <small>${msg.timestamp}</small>
+                        <strong>${msg[0]}</strong><br>
+                        ${msg[1]}
                     `;
                     container.appendChild(messageBox);
                 });
             } catch (error) {
-                console.error('Gagal memuat ucapan:', error);
+                console.error('Error:', error);
             }
         }
 
-        // Jalankan saat halaman dimuat
         loadMessages();
     </script>
     <!-- Scripts -->
