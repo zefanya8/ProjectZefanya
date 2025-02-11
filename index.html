@@ -290,53 +290,12 @@
         }
 
         /* Message Section Styling */
-        .message-form {
-            margin-top: 30px;
-        }
-        .message-form input, .message-form textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .message-form button {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .message-form button:hover {
-            background-color: #c0392b;
-        }
-        .messages {
-            margin-top: 40px;
-            text-align: left;
-        }
         .message-box {
-            background-color: white;
             border: 1px solid #ddd;
-            border-radius: 5px;
             padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            border-radius: 8px;
         }
-        .message-box .name {
-            font-weight: bold;
-            color: #e74c3c;
-        }
-        .message-box .message {
-            margin-top: 5px;
-            color: #555;
-        }
-        .message-box .date {
-            font-size: 0.8em;
-            color: #888;
-            margin-top: 10px;
-        }
-        
         /* Music Player Section */
     .music-player {
         position: fixed;
@@ -560,112 +519,39 @@
     </div>
 
         <!-- Message Section -->
-        <div class="message-form">
-            <input type="text" id="name" placeholder="Nama Anda" required>
-            <textarea id="message" placeholder="Tulis ucapan Anda di sini..." rows="4" required></textarea>
-            <button onclick="sendMessage()">Kirim Ucapan</button>
-        </div>
+    <h1>Ucapan dari Tamu</h1>
+    <div id="messages"></div>
 
-        <!-- Daftar Ucapan -->
-        <div class="messages" id="messages"></div>
-    </div>
-    <!-- Scripts -->
     <script>
-        // Fungsi untuk mengirim ucapan ke GitHub Issues
-        async function sendMessage() {
-            const name = document.getElementById('name').value;
-            const message = document.getElementById('message').value;
+        // Ganti URL dengan URL Web App Anda
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxDyIFrxhjxShgq9vVT0CKb0dMh-Etm7LlCyZDa7wC_0KKgpzRk-Dcn4lILcgMK2D1-Ow/exec';
 
-            if (!name || !message) {
-                alert('Nama dan ucapan harus diisi!');
-                return;
-            }
-
-            // Kirim data ke GitHub Issues
-            const issueData = {
-                title: `Ucapan dari ${name}`,
-                body: `${message}\n\nDari: ${name}`,
-                labels: ['ucapan']
-            };
-
-            try {
-                const response = await fetch('https://api.github.com/repos/zefanya8/wedingZ-E.github.io/issues', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': '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', // Ganti dengan token GitHub Anda
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(issueData)
-                });
-
-                if (response.ok) {
-                    alert('Ucapan berhasil dikirim!');
-                    loadMessages(); // Muat ulang daftar ucapan
-                } else {
-                    alert('Gagal mengirim ucapan. Silakan coba lagi.');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Terjadi kesalahan. Silakan coba lagi.');
-            }
-        }
-
-        // Fungsi untuk memuat daftar ucapan dari GitHub Issues
         async function loadMessages() {
             try {
-                const response = await fetch('https://api.github.com/repos/zefanya8/wedingZ-E.github.io/issues?labels=ucapan');
-                const issues = await response.json();
+                const response = await fetch(WEB_APP_URL);
+                const messages = await response.json();
 
-                const messagesContainer = document.getElementById('messages');
-                messagesContainer.innerHTML = '';
-
-                issues.forEach(issue => {
+                const container = document.getElementById('messages');
+                messages.forEach(msg => {
                     const messageBox = document.createElement('div');
                     messageBox.className = 'message-box';
                     messageBox.innerHTML = `
-                        <div class="name">${issue.user.login}</div>
-                        <div class="message">${issue.body}</div>
-                        <div class="date">${new Date(issue.created_at).toLocaleDateString()}</div>
+                        <h3>${msg.name}</h3>
+                        <p>${msg.message}</p>
+                        <small>${msg.timestamp}</small>
                     `;
-                    messagesContainer.appendChild(messageBox);
+                    container.appendChild(messageBox);
                 });
             } catch (error) {
-                console.error('Error:', error);
-                messagesContainer.innerHTML = '<p>Gagal memuat ucapan. Silakan coba lagi nanti.</p>';
+                console.error('Gagal memuat ucapan:', error);
             }
         }
 
-        // Muat daftar ucapan saat halaman dimuat
+        // Jalankan saat halaman dimuat
         loadMessages();
     </script>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
+    <!-- Scripts -->
     <script>
-        // Countdown Timer
-        const weddingDate = new Date('2025-03-15T08:00:00').getTime();
-        
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = weddingDate - now;
-            
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            
-            document.getElementById("countdown").innerHTML = `
-                ${days} Hari ${hours} Jam ${minutes} Menit ${seconds} Detik
-            `;
-            
-            if (distance < 0) {
-                clearInterval(countdownInterval);
-                document.getElementById("countdown").innerHTML = "Acara telah dimulai!";
-            }
-        }
-        
-        const countdownInterval = setInterval(updateCountdown, 1000);
-        updateCountdown();
-
         // Initialize lightGallery
         document.addEventListener('DOMContentLoaded', () => {
             lightGallery(document.getElementById('animatedGallery'), {
@@ -675,25 +561,6 @@
                 exThumbImage: 'data-src'
             });
         });
-          // Message System
-        function addMessage() {
-            const name = document.getElementById('nameInput').value.trim();
-            const message = document.getElementById('messageInput').value.trim();
-
-            if (name === '' || message === '') {
-                alert('Silakan isi nama dan ucapan Anda');
-                return;
-            }
-
-            const messageItem = document.createElement('div');
-            messageItem.className = 'message-item';
-            messageItem.innerHTML = `
-                <div class="message-author">${name}</div>
-                <div class="message-text">${message}</div>
-            `;
-
-            document.getElementById('messagesList').prepend(messageItem);
-        }
     // Fungsi untuk memulai musik setelah interaksi pengguna
     function startMusic() {
         const audio = document.getElementById('bgMusic');
