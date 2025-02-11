@@ -290,11 +290,32 @@
         }
 
         /* Message Section Styling */
-        .message-box {
-            border: 1px solid #ccc;
+        .form-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+        input, textarea {
+            width: 100%;
             padding: 10px;
-            margin-bottom: 10px;
+            margin: 10px 0;
+        }
+        button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
             border-radius: 5px;
+            cursor: pointer;
+        }
+        .message-box {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 8px;
         }
         /* Music Player Section */
     .music-player {
@@ -521,32 +542,54 @@
         <!-- Message Section -->
     <h1>Kotak Ucapan</h1>
     <div id="messages"></div>
+    /*ucapan*/
+            /*Ucapan*/
+            <div class="form-container">
+        <h2>Tulis Ucapan</h2>
+        <form id="messageForm">
+            <input type="text" id="name" placeholder="Nama Anda" required>
+            <textarea id="message" placeholder="Tulis ucapan Anda..." required></textarea>
+            <button type="submit">Kirim Ucapan</button>
+        </form>
+    </div>
+
+    <!-- Tempat menampilkan ucapan -->
+    <div id="messages"></div>
+    
+        /*script ucapan*/
+    <div id="messages"></div>
+
     <script>
+        // Ganti dengan URL Web App Anda
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyox4A59sApsxWCfLzPYyU3qHNkgybMaBwk6LtCNYtLHcczcTsdb7xs95u_VXcW5jZMBQ/exec';
+
+        // Fungsi untuk memuat ucapan
         async function loadMessages() {
-            const sheetId = '1mNvX1Mn8uRHymi0K2OVH7ODcmY-HLSNPPGUEXc0e8rw'; // Ganti dengan ID Google Sheets Anda
-            const apiKey = 'AIzaSyCeXUHSVt1PsvrOv95sLeOotzznt74DjAo'; // Ganti dengan API Key Anda
-            const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Sheet1?key=${apiKey}`;
-
             try {
-                const response = await fetch(url);
-                const data = await response.json();
-                const messages = data.values.slice(1); // Skip header row
+                // 1. Ambil data dari Google Apps Script
+                const response = await fetch(WEB_APP_URL);
+                const messages = await response.json();
 
+                // 2. Tampilkan di website
                 const container = document.getElementById('messages');
-                messages.forEach(msg => {
+                container.innerHTML = ''; // Kosongkan kontainer
+
+                messages.forEach((msg) => {
                     const messageBox = document.createElement('div');
                     messageBox.className = 'message-box';
                     messageBox.innerHTML = `
-                        <strong>${msg[0]}</strong><br>
-                        ${msg[1]}
+                        <h3>${msg.name}</h3>
+                        <p>${msg.message}</p>
+                        <small>${msg.timestamp}</small>
                     `;
                     container.appendChild(messageBox);
                 });
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Gagal memuat ucapan:', error);
             }
         }
 
+        // Jalankan saat halaman dimuat
         loadMessages();
     </script>
     <!-- Scripts -->
