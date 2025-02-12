@@ -311,12 +311,22 @@
             cursor: pointer;
         }
         .message-box {
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin: 10px;
-            border-radius: 8px;
-        }
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 15px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.message-box h3 {
+    color: #d32f2f;
+    margin-bottom: 10px;
+}
+
+.message-box small {
+    color: #666;
+    font-size: 0.8em;
+}
         /* Music Player Section */
     .music-player {
         position: fixed;
@@ -539,8 +549,9 @@
         </div>
     </div>
 
-        <!-- Message Section -->
-            <div class="form-container">
+    <!-- Message Section -->
+<div class="section">
+    <div class="form-container">
         <h2>Tulis Ucapan</h2>
         <form id="messageForm">
             <input type="text" id="name" placeholder="Nama Anda" required>
@@ -550,41 +561,71 @@
     </div>
 
     <!-- Tempat menampilkan ucapan -->
-    <div id="messages"></div>
-    
-    <script>
-        // Ganti dengan URL Web App Anda
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyox4A59sApsxWCfLzPYyU3qHNkgybMaBwk6LtCNYtLHcczcTsdb7xs95u_VXcW5jZMBQ/exec';
+    <div id="messages" style="margin: 20px auto; max-width: 800px;"></div>
+</div>
+<script>
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzTotXW98YagnUB_B7-FCcNfxftiiNg7qlUIY0QpNd7ajU45dbwbziuhPce3QcUd_3m-A/exec';
 
-        // Fungsi untuk memuat ucapan
-        async function loadMessages() {
-            try {
-                // 1. Ambil data dari Google Apps Script
-                const response = await fetch(WEB_APP_URL);
-                const messages = await response.json();
-
-                // 2. Tampilkan di website
-                const container = document.getElementById('messages');
-                container.innerHTML = ''; // Kosongkan kontainer
-
-                messages.forEach((msg) => {
-                    const messageBox = document.createElement('div');
-                    messageBox.className = 'message-box';
-                    messageBox.innerHTML = `
-                        <h3>${msg.name}</h3>
-                        <p>${msg.message}</p>
-                        <small>${msg.timestamp}</small>
-                    `;
-                    container.appendChild(messageBox);
-                });
-            } catch (error) {
-                console.error('Gagal memuat ucapan:', error);
-            }
+    // Fungsi untuk memuat ucapan
+    async function loadMessages() {
+        try {
+            const response = await fetch(https://script.google.com/macros/s/AKfycbzTotXW98YagnUB_B7-FCcNfxftiiNg7qlUIY0QpNd7ajU45dbwbziuhPce3QcUd_3m-A/exec);
+            const messages = await response.json();
+            
+            const container = document.getElementById('messages');
+            container.innerHTML = '';
+            
+            messages.forEach((msg) => {
+                const messageBox = document.createElement('div');
+                messageBox.className = 'message-box';
+                messageBox.innerHTML = `
+                    <h3>${msg.name}</h3>
+                    <p>${msg.message}</p>
+                    <small>${new Date(msg.timestamp).toLocaleString()}</small>
+                `;
+                container.prepend(messageBox); // Tampilkan yang terbaru di atas
+            });
+        } catch (error) {
+            console.error('Gagal memuat ucapan:', error);
         }
+    }
 
-        // Jalankan saat halaman dimuat
-        loadMessages();
-    </script>
+    // Handle form submission
+    document.getElementById('messageForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target);
+        const data = {
+            name: formData.get('name'),
+            message: formData.get('message')
+        };
+
+        try {
+            const response = await fetch(https://script.google.com/macros/s/AKfycbzTotXW98YagnUB_B7-FCcNfxftiiNg7qlUIY0QpNd7ajU45dbwbziuhPce3QcUd_3m-A/exec, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                // Clear form
+                e.target.reset();
+                // Reload messages
+                await loadMessages();
+                // Scroll to messages
+                document.getElementById('messages').scrollIntoView({ behavior: 'smooth' });
+            }
+        } catch (error) {
+            alert('Gagal mengirim ucapan. Silakan coba lagi.');
+            console.error(error);
+        }
+    });
+
+    // Load messages on page load
+    loadMessages();
+</script>
     <!-- Scripts -->
     <script>
         // Initialize lightGallery
