@@ -628,5 +628,12 @@ document.getElementById('messageForm').addEventListener('submit', async (e) => {
         // Load messages on page load
         loadMessages();
     </script>
+    <script>
+    // Inisialisasi Lightgallery
+    lightGallery(document.getElementById('animatedGallery'), {
+        selector: '.gallery-item', // Selector untuk item galeri
+        download: false, // Nonaktifkan tombol unduh
+    });
+</script>
 </body>
 </html>
