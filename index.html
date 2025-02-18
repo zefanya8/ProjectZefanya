@@ -628,12 +628,11 @@ document.getElementById('messageForm').addEventListener('submit', async (e) => {
         // Load messages on page load
         loadMessages();
     </script>
-    <script>
-    // Inisialisasi Lightgallery
-    lightGallery(document.getElementById('animatedGallery'), {
-        selector: '.gallery-item', // Selector untuk item galeri
-        download: false, // Nonaktifkan tombol unduh
-    });
-</script>
+<!-- Lightgallery JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
+<!-- Lightgallery plugins (jika diperlukan) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/plugins/thumbnail/lg-thumbnail.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/plugins/zoom/lg-zoom.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/plugins/fullscreen/lg-fullscreen.min.js"></script>
 </body>
 </html>
