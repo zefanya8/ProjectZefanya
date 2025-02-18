@@ -604,14 +604,15 @@ document.getElementById('messageForm').addEventListener('submit', async (e) => {
     submitButton.textContent = 'Mengirim...';
 
     // Kirim data
-    await sendMessage(name, message);
+    const result = await sendMessage(name, message);
 
-    // Reset form
-    e.target.reset();
-    alert('Ucapan berhasil dikirim!');
-
-    // Muat ulang pesan
-    await loadMessages();
+    if (result.success) {
+      alert('Ucapan berhasil dikirim!');
+      e.target.reset();
+      await loadMessages();
+    } else {
+      throw new Error(result.error || 'Gagal mengirim ucapan');
+    }
 
   } catch (error) {
     alert('Gagal mengirim ucapan. Silakan coba lagi.');
@@ -624,7 +625,6 @@ document.getElementById('messageForm').addEventListener('submit', async (e) => {
     submitButton.textContent = 'Kirim Ucapan';
   }
 });
-
         // Load messages on page load
         loadMessages();
     </script>
