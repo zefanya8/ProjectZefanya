@@ -315,70 +315,9 @@
                 height: 200px;
             }
         }
-// Dynamic Nama Tamu
-document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const nama = urlParams.get('nama') || 'Bapak/Ibu/Saudara/i';
-    document.getElementById('dynamicNama').textContent = nama;
-});
-
-// Copy Rekening
-function copyText(text) {
-    navigator.clipboard.writeText(text)
-        .then(() => alert('Nomor rekening berhasil disalin!'))
-        .catch(err => console.error('Gagal menyalin:', err));
-}
-
-// Form Ucapan & RSVP
-document.getElementById('formUcapan').addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const nama = document.getElementById('nama').value;
-    const pesan = document.getElementById('pesan').value;
-    const kehadiran = document.getElementById('kehadiran').value;
-
-    db.collection('ucapan').add({
-        nama: nama,
-        pesan: pesan,
-        kehadiran: kehadiran,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    })
-    .then(() => {
-        document.getElementById('formUcapan').reset();
-        alert('Ucapan berhasil dikirim!');
-    });
-});
-
-// Tampilkan Ucapan Realtime
-db.collection('ucapan').orderBy('timestamp').onSnapshot(snapshot => {
-    let html = '';
-    snapshot.forEach(doc => {
-        const data = doc.data();
-        html += `
-            <div class="ucapan-item">
-                <h4>${data.nama}</h4>
-                <p>${data.pesan}</p>
-                <small>Status: ${data.kehadiran}</small>
-            </div>
-        `;
-    });
-    document.getElementById('daftarUcapan').innerHTML = html;
-});
-    // Konfigurasi Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyAZgAhmcp0ZVs57L6ca7ZsDjfJt8AhA6bo",
-  authDomain: "weddingz-e.firebaseapp.com",
-  projectId: "weddingz-e",
-  storageBucket: "weddingz-e.firebasestorage.app",
-  messagingSenderId: "894008721767",
-  appId: "1:894008721767:web:5fa2f45c3ab7c462052fc2"
-};
-
-// Inisialisasi Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-     </style>
+    </style>
 </head>
+<body>
 <body>
     <!-- Audio Element -->
     <audio id="bgMusic" loop>
@@ -395,7 +334,6 @@ const db = firebase.firestore();
         <p style="font-family: 'Comic Neue', cursive; max-width: 600px; margin: 20px auto;">
             Tanpa Mengurangi Rasa Hormat, Kami Mengundang Bapak/Ibu/Saudara/i untuk hadir di acara Pernikahan Kami
         </p>
-        <div class="nama-tamu" id="namaTamu">
         <button onclick="openInvitation()">Buka Undangan</button>
     </div>
 
@@ -555,8 +493,10 @@ const db = firebase.firestore();
                      alt="Bank Mandiri" 
                      class="bank-logo">
                 <div class="bank-details">
-            <p>9000040483969<br>a.n Zefanya Maranatha Mangunsong</p>
-            <button onclick="copyText('9000040483969')">Copy No. Rek</button>
+                    9000040483969
+                </div>
+                <div class="bank-details">
+                    a.n Zefanya Maranatha Mangunsong
                 </div>
             </div>
 
@@ -565,29 +505,136 @@ const db = firebase.firestore();
                      alt="Bank CIMB Niaga" 
                      class="bank-logo">
                 <div class="bank-details">
-            <p>707039180200<br>a.n Esrani Novalina Sagala</p>
-            <button onclick="copyText('707039180200')">Copy No. Rek</button>
+                    707039180200
+                </div>
+                <div class="bank-details">
+                    a.n Esrani Novalina Sagala
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Message Section -->
-    <div class="ucapan-section">
+<div class="section">
+    <div class="form-container">
         <h2>Tulis Ucapan</h2>
-        <form id="formUcapan">
-            <input type="text" id="nama" placeholder="Nama Anda" required>
-            <textarea id="pesan" placeholder="Ucapan & Doa" required></textarea>
-            <select id="kehadiran" required>
-                <option value="">Konfirmasi Kehadiran</option>
-                <option value="Hadir">Hadir</option>
-                <option value="Tidak Hadir">Tidak Hadir</option>
-                <option value="Ragu-ragu">Ragu-ragu</option>
-            </select>
-            <button type="submit">Kirim</button>
+        <form id="messageForm">
+            <input type="text" id="name" placeholder="Nama Anda" required>
+            <textarea id="message" placeholder="Tulis ucapan Anda..." required></textarea>
+            <button type="submit">Kirim Ucapan</button>
         </form>
-        <div id="daftarUcapan"></div>
     </div>
+
+    <!-- Tempat menampilkan ucapan -->
+    <div id="messages" style="margin: 20px auto; max-width: 800px;"></div>
+</div>
+    <script>
+        // Fungsi untuk membuka undangan
+        function openInvitation() {
+            document.querySelector('.cover').style.display = 'none';
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'flex';
+            });
+            startMusic();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Fungsi untuk memulai musik
+        function startMusic() {
+            const audio = document.getElementById('bgMusic');
+            audio.play().catch(error => {
+                console.log('Autoplay diblokir:', error);
+            });
+            localStorage.setItem('musicStarted', 'true');
+        }
+
+        // Cek local storage saat halaman dimuat
+        window.addEventListener('load', () => {
+            if(localStorage.getItem('musicStarted') === 'true') {
+                document.getElementById('bgMusic').play();
+            }
+        });
+
+        // Fungsi untuk memuat dan mengirim ucapan
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz2JOZQkPfY7faiYvcSlW5877S7scbCwOjBnnfvOV1UpLl59UMsGVV7w4vYQ758lG4s/exec';
+
+// Fungsi untuk mengirim ucapan
+async function sendMessage(name, message) {
+  try {
+    const response = await fetch(WEB_APP_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: name,
+        message: message
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Gagal mengirim data');
+    }
+
+    const result = await response.json();
+    return result;
+
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+}
+
+// Handle form submission
+document.getElementById('messageForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById('name').value.trim();
+  const message = document.getElementById('message').value.trim();
+
+  if (!name || !message) {
+    alert('Nama dan pesan tidak boleh kosong');
+    return;
+  }
+
+  try {
+    // Tampilkan loading
+    const submitButton = e.target.querySelector('button');
+    submitButton.disabled = true;
+    submitButton.textContent = 'Mengirim...';
+
+    // Kirim data
+    const result = await sendMessage(name, message);
+
+    if (result.success) {
+      alert('Ucapan berhasil dikirim!');
+      e.target.reset();
+      await loadMessages();
+    } else {
+      throw new Error(result.error || 'Gagal mengirim ucapan');
+    }
+
+  } catch (error) {
+    alert('Gagal mengirim ucapan. Silakan coba lagi.');
+    console.error('Error:', error);
+
+  } finally {
+    // Reset button
+    const submitButton = e.target.querySelector('button');
+    submitButton.disabled = false;
+    submitButton.textContent = 'Kirim Ucapan';
+  }
+});
+        // Load messages on page load
+        loadMessages();
+    </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
+    <script>
+    // Inisialisasi Lightgallery
+    lightGallery(document.getElementById('animatedGallery'), {
+        selector: '.gallery-item', // Selector untuk item galeri
+        download: false, // Nonaktifkan tombol unduh
+    });
 </script>
 </body>
 </html>
