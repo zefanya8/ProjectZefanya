@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Undangan Pernikahan Zefanya & Esrani</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.33.3/dist/umd/supabase.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Comic+Neue&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css">
-    <!-- Firebase App (the core Firebase SDK) -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <!-- Firebase Realtime Database -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
     <style>
         /* Reset CSS */
         * {
@@ -243,32 +240,26 @@
             margin-bottom: 15px;
         }
 
-        /* Message Section */
-        .form-container {
+        /* CSS untuk tampilan reservasi */
+        .reservation-box {
             max-width: 600px;
             margin: 20px auto;
             padding: 20px;
-            border: 1px solid #ddd;
+            background: #f5f5f5;
             border-radius: 10px;
-            background: white;
         }
-
-        input, textarea {
-            width: 100%;
-            padding: 10px;
+        .message-list {
+            list-style: none;
+            padding: 0;
+        }
+        .message-item {
+            background: white;
+            padding: 15px;
             margin: 10px 0;
-            border: 1px solid #ddd;
             border-radius: 5px;
-        }
-
-        .message-box {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 15px 0;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-
+        
         /* Music Player */
         .music-player {
             position: fixed;
@@ -338,7 +329,7 @@
         <p style="font-family: 'Comic Neue', cursive; max-width: 600px; margin: 20px auto;">
             Tanpa Mengurangi Rasa Hormat, Kami Mengundang Bapak/Ibu/Saudara/i untuk hadir di acara Pernikahan Kami
         </p>
-        <p id="inviteeName" style="font-family: 'Comic Neue', cursive; font-size: 1.5em; color: #376282;"></p>
+        <div id="nama-undangan">Nama Tamu</div>
         <button onclick="openInvitation()">Buka Undangan</button>
     </div>
 
@@ -519,100 +510,85 @@
         </div>
     </div>
 
-    <!-- Section Reservasi -->
-    <div class="section2">
-        <h2 style="font-family: 'Great Vibes', cursive; font-size: 3em;">Reservasi</h2>
-        <div class="reservation-form">
-            <textarea id="message" placeholder="Tulis ucapan Anda di sini..." style="width: 100%; height: 100px; padding: 10px; font-family: 'Comic Neue', cursive;"></textarea>
-            <select id="attendance" style="width: 100%; padding: 10px; margin-top: 10px; font-family: 'Comic Neue', cursive;">
+    <!-- Message Section -->
+    <div class="reservation-box">
+        <h3>Reservasi Kehadiran</h3>
+        <form id="reservationForm">
+            <input type="text" id="guestName" placeholder="Nama Anda" required>
+            <select id="attendanceStatus" required>
+                <option value="">Konfirmasi Kehadiran</option>
                 <option value="hadir">Hadir</option>
-                <option value="tidak hadir">Tidak Hadir</option>
-                <option value="ragu-ragu">Ragu-ragu</option>
+                <option value="tidak_hadir">Tidak Hadir</option>
+                <option value="ragu_ragu">Ragu-ragu</option>
             </select>
-            <button onclick="submitReservation()" style="width: 100%; padding: 15px; margin-top: 10px; background-color: #d32f2f; color: white; border: none; border-radius: 25px; cursor: pointer;">Kirim</button>
-        </div>
-        <div id="reservationList" style="margin-top: 20px;"></div>
+            <textarea id="guestMessage" placeholder="Ucapan/Pesan"></textarea>
+            <button type="submit">Kirim Reservasi</button>
+        </form>
     </div>
 
-    <!-- Script Firebase dan JavaScript -->
+    <div class="reservation-box">
+        <h3>Ucapan Tamu</h3>
+        <ul id="messageList" class="message-list"></ul>
+    </div>
+
     <script>
-        // Konfigurasi Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyAGlwR-ZPC-FlkY3QL3U9QCwuayDnOTAgs",
-            authDomain: "wedding-ze.firebaseapp.com",
-            databaseURL: "https://wedding-ze-default-rtdb.asia-southeast2.firebasedatabase.app",
-            projectId: "wedding-ze",
-            storageBucket: "wedding-ze.firebasestorage.app",
-            messagingSenderId: "63226808026",
-            appId: "1:63226808026:web:e8cf76800eca9917f5c7e3"
-        };
+        // Konfigurasi Supabase
+        const supabaseUrl = 'https://szjemdiahjnrztjzkohb.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6amVtZGlhaGpucnp0anprb2hiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0Njk3NTksImV4cCI6MjA1NjA0NTc1OX0.7GG6VosM3IaquV57ieL1K_sU9vpdCgO_bnTiuRVLzFk';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // Inisialisasi Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+        // Tampilkan nama dari URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const guestName = urlParams.get('name') || 'Tamu';
+        document.getElementById('nama-undangan').textContent = guestName;
 
-        // Fungsi untuk mendapatkan parameter dari URL
-        function getParameterByName(name, url = window.location.href) {
-            name = name.replace(/[\[\]]/g, '\\$&');
-            let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-                results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, ' '));
-        }
+        // Form submission handler
+        document.getElementById('reservationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const { data, error } = await supabase
+                .from('reservations')
+                .insert([
+                    {
+                        name: document.getElementById('guestName').value,
+                        status: document.getElementById('attendanceStatus').value,
+                        message: document.getElementById('guestMessage').value
+                    }
+                ]);
 
-        // Tampilkan nama undangan berdasarkan parameter URL
-        const inviteeName = getParameterByName('nama');
-        if (inviteeName) {
-            document.getElementById('inviteeName').innerText = inviteeName;
-        }
-
-        // Fungsi untuk mengirim reservasi
-        function submitReservation() {
-            const message = document.getElementById('message').value;
-            const attendance = document.getElementById('attendance').value;
-            const name = inviteeName || 'Anonim';
-
-            if (message.trim() === "") {
-                alert("Silakan tulis ucapan Anda.");
-                return;
+            if (error) {
+                alert('Error: ' + error.message);
+            } else {
+                alert('Reservasi berhasil!');
+                document.getElementById('reservationForm').reset();
             }
+        });
 
-            const reservationData = {
-                name: name,
-                message: message,
-                attendance: attendance,
-                timestamp: firebase.database.ServerValue.TIMESTAMP
-            };
+        // Real-time updates
+        const reservations = supabase
+            .channel('custom-all-channel')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'reservations' }, (payload) => {
+                loadMessages();
+            })
+            .subscribe();
 
-            database.ref('reservations').push(reservationData, error => {
-                if (error) {
-                    alert("Terjadi kesalahan, silakan coba lagi.");
-                } else {
-                    alert("Reservasi berhasil dikirim!");
-                    document.getElementById('message').value = "";
-                }
-            });
+        // Load data saat halaman pertama kali dibuka
+        async function loadMessages() {
+            const { data } = await supabase
+                .from('reservations')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            const messageList = document.getElementById('messageList');
+            messageList.innerHTML = data.map(item => `
+                <li class="message-item">
+                    <strong>${item.name}</strong> (${item.status})<br>
+                    ${item.message}
+                </li>
+            `).join('');
         }
 
-        // Fungsi untuk menampilkan reservasi
-        function displayReservations() {
-            const reservationList = document.getElementById('reservationList');
-            database.ref('reservations').on('value', snapshot => {
-                reservationList.innerHTML = '';
-                snapshot.forEach(childSnapshot => {
-                    const data = childSnapshot.val();
-                    const reservationItem = document.createElement('div');
-                    reservationItem.style.padding = '10px';
-                    reservationItem.style.borderBottom = '1px solid #ccc';
-                    reservationItem.innerHTML = `<strong>${data.name}</strong>: ${data.message} (${data.attendance})`;
-                    reservationList.appendChild(reservationItem);
-                });
-            });
-        }
-
-        // Panggil fungsi untuk menampilkan reservasi saat halaman dimuat
-        displayReservations();
+        loadMessages();
     </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
     <script>
@@ -621,6 +597,14 @@
         selector: '.gallery-item', // Selector untuk item galeri
         download: false, // Nonaktifkan tombol unduh
     });
+</script>
+    <script>
+  // Ambil parameter 'name' dari URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const guestName = urlParams.get('name') || 'Tamu'; // Default ke 'Tamu' jika tidak ada parameter
+
+  // Tampilkan nama di elemen dengan ID 'nama-undangan'
+  document.getElementById('nama-undangan').textContent = guestName;
 </script>
 </body>
 </html>
