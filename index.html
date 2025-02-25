@@ -260,11 +260,12 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         /* Gaya untuk kolom nama */
-        #nama-tamu {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            margin-bottom: 10px;
+/* Gaya untuk kolom nama */
+#nama-tamu {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 10px;
 }
 
 /* Gaya untuk kolom ucapan */
@@ -277,7 +278,7 @@
 }
 
 /* Gaya untuk tombol kirim */
-#kirim-ucapan {
+#form-reservasi button {
   width: 100%;
   padding: 10px;
   font-size: 16px;
@@ -287,7 +288,7 @@
   cursor: pointer;
 }
 
-#kirim-ucapan:hover {
+#form-reservasi button:hover {
   background-color: #45a049;
 }
         /* Music Player */
@@ -345,12 +346,11 @@
 <body>
 <body>
     <!-- Audio Element -->
-    <audio controls autoplay>
-        <source src="https://upload.wikimedia.org/wikipedia/commons/5/59/Kevin_MacLeod_-_Canon_in_D_Major.ogg" type="audio/ogg">
-        Browser Anda tidak mendukung elemen audio.
-    </audio>
-
-    <!-- Halaman Awal -->
+    <audio autoplay loop>
+  <source src="https://upload.wikimedia.org/wikipedia/commons/5/59/Kevin_MacLeod_-_Canon_in_D_Major.ogg" type="audio/ogg">
+  Browser Anda tidak mendukung elemen audio.
+</audio>
+        <!-- Halaman Awal -->
     <div class="cover">
         <h2 style="font-family: 'Great Vibes', cursive; font-size: 3em;">The Wedding of</h2>
         <h2 class="title">Zefanya & Esrani</h2>
@@ -551,8 +551,11 @@
                 <option value="tidak_hadir">Tidak Hadir</option>
                 <option value="ragu_ragu">Ragu-ragu</option>
             </select>
-            <textarea id="guestMessage" placeholder="Ucapan/Pesan"></textarea>
-            <button type="submit">Kirim Reservasi</button>
+<form id="form-reservasi" onsubmit="return sendReservasi(event)">
+  <input type="text" id="nama-tamu" placeholder="Nama Anda" required>
+  <textarea id="isi-ucapan" placeholder="Ucapan Anda" required></textarea>
+  <button type="submit">Kirim Reservasi</button>
+</form>
         </form>
     </div>
 
@@ -563,25 +566,39 @@
 
     <script>
         // Konfigurasi Supabase
-        const supabaseUrl = 'https://szjemdiahjnrztjzkohb.supabase.co'
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6amVtZGlhaGpucnp0anprb2hiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0Njk3NTksImV4cCI6MjA1NjA0NTc1OX0.7GG6VosM3IaquV57ieL1K_sU9vpdCgO_bnTiuRVLzFk';
-        const { createClient } = supabase;
-        const supabaseClient = createClient(supabaseUrl, supabaseKey);
+function sendReservasi(event) {
+  event.preventDefault(); // Mencegah redirect
 
-        // Fungsi untuk mengirim ucapan
-        async function sendUcapan(nama, ucapan) {
-            try {
-                const { data, error } = await supabaseClient
-                    .from('undangan') // Nama tabel di Supabase
-                .insert([{ nama: nama, ucapan: ucapan }]);
-                if (error) throw error;
-                alert('Ucapan berhasil dikirim!');
-                location.reload(); // Refresh halaman untuk menampilkan ucapan terbaru
-            } catch (error) {
-                console.error('Error:', error.message);
-                alert('Gagal mengirim ucapan. Silakan coba lagi.');
-            }
-        }
+  const nama = document.getElementById('nama-tamu').value;
+  const ucapan = document.getElementById('isi-ucapan').value;
+
+  if (!nama || !ucapan) {
+    alert('Nama dan ucapan harus diisi.');
+    return;
+  }
+
+  // Kirim data ke Supabase
+  fetch('https://szjemdiahjnrztjzkohb.supabase.co/rest/v1/undangan', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6amVtZGlhaGpucnp0anprb2hiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0Njk3NTksImV4cCI6MjA1NjA0NTc1OX0.7GG6VosM3IaquV57ieL1K_sU9vpdCgO_bnTiuRVLzFk',
+    },
+    body: JSON.stringify({ nama: nama, ucapan: ucapan }),
+  })
+    .then(response => {
+      if (response.ok) {
+        alert('Ucapan berhasil dikirim!');
+        location.reload(); // Refresh halaman untuk menampilkan ucapan terbaru
+      } else {
+        throw new Error('Gagal mengirim ucapan.');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error.message);
+      alert('Gagal mengirim ucapan. Silakan coba lagi.');
+    });
+}
 
 // Event listener untuk tombol kirim
 document.getElementById('kirim-ucapan').addEventListener('click', () => {
