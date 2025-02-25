@@ -6,6 +6,10 @@
     <title>Undangan Pernikahan Zefanya & Esrani</title>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Comic+Neue&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css">
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <!-- Firebase Realtime Database -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
     <style>
         /* Reset CSS */
         * {
@@ -334,6 +338,7 @@
         <p style="font-family: 'Comic Neue', cursive; max-width: 600px; margin: 20px auto;">
             Tanpa Mengurangi Rasa Hormat, Kami Mengundang Bapak/Ibu/Saudara/i untuk hadir di acara Pernikahan Kami
         </p>
+        <p id="inviteeName" style="font-family: 'Comic Neue', cursive; font-size: 1.5em; color: #376282;"></p>
         <button onclick="openInvitation()">Buka Undangan</button>
     </div>
 
@@ -514,119 +519,100 @@
         </div>
     </div>
 
-    <!-- Message Section -->
-<div class="section">
-    <div class="form-container">
-        <h2>Tulis Ucapan</h2>
-        <form id="messageForm">
-            <input type="text" id="name" placeholder="Nama Anda" required>
-            <textarea id="message" placeholder="Tulis ucapan Anda..." required></textarea>
-            <button type="submit">Kirim Ucapan</button>
-        </form>
+    <!-- Section Reservasi -->
+    <div class="section2">
+        <h2 style="font-family: 'Great Vibes', cursive; font-size: 3em;">Reservasi</h2>
+        <div class="reservation-form">
+            <textarea id="message" placeholder="Tulis ucapan Anda di sini..." style="width: 100%; height: 100px; padding: 10px; font-family: 'Comic Neue', cursive;"></textarea>
+            <select id="attendance" style="width: 100%; padding: 10px; margin-top: 10px; font-family: 'Comic Neue', cursive;">
+                <option value="hadir">Hadir</option>
+                <option value="tidak hadir">Tidak Hadir</option>
+                <option value="ragu-ragu">Ragu-ragu</option>
+            </select>
+            <button onclick="submitReservation()" style="width: 100%; padding: 15px; margin-top: 10px; background-color: #d32f2f; color: white; border: none; border-radius: 25px; cursor: pointer;">Kirim</button>
+        </div>
+        <div id="reservationList" style="margin-top: 20px;"></div>
     </div>
 
-    <!-- Tempat menampilkan ucapan -->
-    <div id="messages" style="margin: 20px auto; max-width: 800px;"></div>
-</div>
+    <!-- Script Firebase dan JavaScript -->
     <script>
-        // Fungsi untuk membuka undangan
-        function openInvitation() {
-            document.querySelector('.cover').style.display = 'none';
-            document.querySelectorAll('.section').forEach(section => {
-                section.style.display = 'flex';
-            });
-            startMusic();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Konfigurasi Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAGlwR-ZPC-FlkY3QL3U9QCwuayDnOTAgs",
+            authDomain: "wedding-ze.firebaseapp.com",
+            databaseURL: "https://wedding-ze-default-rtdb.asia-southeast2.firebasedatabase.app",
+            projectId: "wedding-ze",
+            storageBucket: "wedding-ze.firebasestorage.app",
+            messagingSenderId: "63226808026",
+            appId: "1:63226808026:web:e8cf76800eca9917f5c7e3"
+        };
+
+        // Inisialisasi Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Fungsi untuk mendapatkan parameter dari URL
+        function getParameterByName(name, url = window.location.href) {
+            name = name.replace(/[\[\]]/g, '\\$&');
+            let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
         }
 
-        // Fungsi untuk memulai musik
-        function startMusic() {
-            const audio = document.getElementById('bgMusic');
-            audio.play().catch(error => {
-                console.log('Autoplay diblokir:', error);
-            });
-            localStorage.setItem('musicStarted', 'true');
+        // Tampilkan nama undangan berdasarkan parameter URL
+        const inviteeName = getParameterByName('nama');
+        if (inviteeName) {
+            document.getElementById('inviteeName').innerText = inviteeName;
         }
 
-        // Cek local storage saat halaman dimuat
-        window.addEventListener('load', () => {
-            if(localStorage.getItem('musicStarted') === 'true') {
-                document.getElementById('bgMusic').play();
+        // Fungsi untuk mengirim reservasi
+        function submitReservation() {
+            const message = document.getElementById('message').value;
+            const attendance = document.getElementById('attendance').value;
+            const name = inviteeName || 'Anonim';
+
+            if (message.trim() === "") {
+                alert("Silakan tulis ucapan Anda.");
+                return;
             }
-        });
 
-        // Fungsi untuk memuat dan mengirim ucapan
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz2JOZQkPfY7faiYvcSlW5877S7scbCwOjBnnfvOV1UpLl59UMsGVV7w4vYQ758lG4s/exec';
+            const reservationData = {
+                name: name,
+                message: message,
+                attendance: attendance,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            };
 
-// Fungsi untuk mengirim ucapan
-async function sendMessage(name, message) {
-  try {
-    const response = await fetch(WEB_APP_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: name,
-        message: message
-      })
-    });
+            database.ref('reservations').push(reservationData, error => {
+                if (error) {
+                    alert("Terjadi kesalahan, silakan coba lagi.");
+                } else {
+                    alert("Reservasi berhasil dikirim!");
+                    document.getElementById('message').value = "";
+                }
+            });
+        }
 
-    if (!response.ok) {
-      throw new Error('Gagal mengirim data');
-    }
+        // Fungsi untuk menampilkan reservasi
+        function displayReservations() {
+            const reservationList = document.getElementById('reservationList');
+            database.ref('reservations').on('value', snapshot => {
+                reservationList.innerHTML = '';
+                snapshot.forEach(childSnapshot => {
+                    const data = childSnapshot.val();
+                    const reservationItem = document.createElement('div');
+                    reservationItem.style.padding = '10px';
+                    reservationItem.style.borderBottom = '1px solid #ccc';
+                    reservationItem.innerHTML = `<strong>${data.name}</strong>: ${data.message} (${data.attendance})`;
+                    reservationList.appendChild(reservationItem);
+                });
+            });
+        }
 
-    const result = await response.json();
-    return result;
-
-  } catch (error) {
-    console.error('Error:', error);
-    throw error;
-  }
-}
-
-// Handle form submission
-document.getElementById('messageForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const name = document.getElementById('name').value.trim();
-  const message = document.getElementById('message').value.trim();
-
-  if (!name || !message) {
-    alert('Nama dan pesan tidak boleh kosong');
-    return;
-  }
-
-  try {
-    // Tampilkan loading
-    const submitButton = e.target.querySelector('button');
-    submitButton.disabled = true;
-    submitButton.textContent = 'Mengirim...';
-
-    // Kirim data
-    const result = await sendMessage(name, message);
-
-    if (result.success) {
-      alert('Ucapan berhasil dikirim!');
-      e.target.reset();
-      await loadMessages();
-    } else {
-      throw new Error(result.error || 'Gagal mengirim ucapan');
-    }
-
-  } catch (error) {
-    alert('Gagal mengirim ucapan. Silakan coba lagi.');
-    console.error('Error:', error);
-
-  } finally {
-    // Reset button
-    const submitButton = e.target.querySelector('button');
-    submitButton.disabled = false;
-    submitButton.textContent = 'Kirim Ucapan';
-  }
-});
-        // Load messages on page load
-        loadMessages();
+        // Panggil fungsi untuk menampilkan reservasi saat halaman dimuat
+        displayReservations();
     </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
     <script>
