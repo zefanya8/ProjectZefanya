@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Undangan Pernikahan Zefanya & Esrani</title>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Comic+Neue&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css">
     <style>
@@ -317,28 +315,70 @@
                 height: 200px;
             }
         }
-               /* CSS untuk tampilan reservasi */
-        .reservation-box {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            background: #f5f5f5;
-            border-radius: 10px;
-        }
-        .message-list {
-            list-style: none;
-            padding: 0;
-        }
-        .message-item {
-            background: white;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-    </style>
+// Dynamic Nama Tamu
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const nama = urlParams.get('nama') || 'Bapak/Ibu/Saudara/i';
+    document.getElementById('dynamicNama').textContent = nama;
+});
+
+// Copy Rekening
+function copyText(text) {
+    navigator.clipboard.writeText(text)
+        .then(() => alert('Nomor rekening berhasil disalin!'))
+        .catch(err => console.error('Gagal menyalin:', err));
+}
+
+// Form Ucapan & RSVP
+document.getElementById('formUcapan').addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const nama = document.getElementById('nama').value;
+    const pesan = document.getElementById('pesan').value;
+    const kehadiran = document.getElementById('kehadiran').value;
+
+    db.collection('ucapan').add({
+        nama: nama,
+        pesan: pesan,
+        kehadiran: kehadiran,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    })
+    .then(() => {
+        document.getElementById('formUcapan').reset();
+        alert('Ucapan berhasil dikirim!');
+    });
+});
+
+// Tampilkan Ucapan Realtime
+db.collection('ucapan').orderBy('timestamp').onSnapshot(snapshot => {
+    let html = '';
+    snapshot.forEach(doc => {
+        const data = doc.data();
+        html += `
+            <div class="ucapan-item">
+                <h4>${data.nama}</h4>
+                <p>${data.pesan}</p>
+                <small>Status: ${data.kehadiran}</small>
+            </div>
+        `;
+    });
+    document.getElementById('daftarUcapan').innerHTML = html;
+});
+    // Konfigurasi Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyAZgAhmcp0ZVs57L6ca7ZsDjfJt8AhA6bo",
+  authDomain: "weddingz-e.firebaseapp.com",
+  projectId: "weddingz-e",
+  storageBucket: "weddingz-e.firebasestorage.app",
+  messagingSenderId: "894008721767",
+  appId: "1:894008721767:web:5fa2f45c3ab7c462052fc2"
+};
+
+// Inisialisasi Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+     </style>
 </head>
-<body>
 <body>
     <!-- Audio Element -->
     <audio id="bgMusic" loop>
@@ -355,6 +395,7 @@
         <p style="font-family: 'Comic Neue', cursive; max-width: 600px; margin: 20px auto;">
             Tanpa Mengurangi Rasa Hormat, Kami Mengundang Bapak/Ibu/Saudara/i untuk hadir di acara Pernikahan Kami
         </p>
+        <div class="nama-tamu" id="namaTamu">
         <button onclick="openInvitation()">Buka Undangan</button>
     </div>
 
@@ -514,10 +555,8 @@
                      alt="Bank Mandiri" 
                      class="bank-logo">
                 <div class="bank-details">
-                    9000040483969
-                </div>
-                <div class="bank-details">
-                    a.n Zefanya Maranatha Mangunsong
+            <p>9000040483969<br>a.n Zefanya Maranatha Mangunsong</p>
+            <button onclick="copyText('9000040483969')">Copy No. Rek</button>
                 </div>
             </div>
 
@@ -526,102 +565,29 @@
                      alt="Bank CIMB Niaga" 
                      class="bank-logo">
                 <div class="bank-details">
-                    707039180200
-                </div>
-                <div class="bank-details">
-                    a.n Esrani Novalina Sagala
+            <p>707039180200<br>a.n Esrani Novalina Sagala</p>
+            <button onclick="copyText('707039180200')">Copy No. Rek</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Message Section -->
-    <!-- Bagian Nama Personal -->
-    <div id="nama-undangan">Ari Siswanto</div>
-
-    <div class="reservation-box">
-        <h3>Reservasi Kehadiran</h3>
-        <form id="reservationForm">
-            <input type="text" id="guestName" placeholder="Nama Anda" required>
-            <select id="attendanceStatus" required>
+    <div class="ucapan-section">
+        <h2>Tulis Ucapan</h2>
+        <form id="formUcapan">
+            <input type="text" id="nama" placeholder="Nama Anda" required>
+            <textarea id="pesan" placeholder="Ucapan & Doa" required></textarea>
+            <select id="kehadiran" required>
                 <option value="">Konfirmasi Kehadiran</option>
-                <option value="hadir">Hadir</option>
-                <option value="tidak_hadir">Tidak Hadir</option>
-                <option value="ragu_ragu">Ragu-ragu</option>
+                <option value="Hadir">Hadir</option>
+                <option value="Tidak Hadir">Tidak Hadir</option>
+                <option value="Ragu-ragu">Ragu-ragu</option>
             </select>
-            <textarea id="guestMessage" placeholder="Ucapan/Pesan"></textarea>
-            <button type="submit">Kirim Reservasi</button>
+            <button type="submit">Kirim</button>
         </form>
+        <div id="daftarUcapan"></div>
     </div>
-
-    <div class="reservation-box">
-        <h3>Ucapan Tamu</h3>
-        <ul id="messageList" class="message-list"></ul>
-    </div>
-
-    <script>
-        // Konfigurasi Firebase (Ganti dengan konfigurasi project Anda)
-const firebaseConfig = {
-  apiKey: "AIzaSyAZgAhmcp0ZVs57L6ca7ZsDjfJt8AhA6bo",
-  authDomain: "weddingz-e.firebaseapp.com",
-  projectId: "weddingz-e",
-  storageBucket: "weddingz-e.firebasestorage.app",
-  messagingSenderId: "894008721767",
-  appId: "1:894008721767:web:5fa2f45c3ab7c462052fc2",
-  measurementId: "G-PTBJYK32CT"
-};
-        // Inisialisasi Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        const reservationsRef = database.ref('reservations');
-
-        // Tampilkan nama dari URL parameter
-        const urlParams = new URLSearchParams(window.location.search);
-        const guestName = urlParams.get('name') || 'Tamu';
-        document.getElementById('nama-undangan').textContent = guestName;
-
-        // Form submission handler
-        document.getElementById('reservationForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const newReservation = {
-                name: document.getElementById('guestName').value,
-                status: document.getElementById('attendanceStatus').value,
-                message: document.getElementById('guestMessage').value,
-                timestamp: firebase.database.ServerValue.TIMESTAMP
-            };
-
-            reservationsRef.push(newReservation);
-            alert('Reservasi berhasil dikirim!');
-            document.getElementById('reservationForm').reset();
-        });
-
-        // Tampilkan pesan secara real-time
-        reservationsRef.orderByChild('timestamp').on('value', (snapshot) => {
-            const messages = [];
-            snapshot.forEach((childSnapshot) => {
-                messages.push(childSnapshot.val());
-            });
-            
-            // Urutkan dari yang terbaru
-            messages.sort((a, b) => b.timestamp - a.timestamp);
-            
-            const messageList = document.getElementById('messageList');
-            messageList.innerHTML = messages.map(msg => `
-                <li class="message-item">
-                    <strong>${msg.name}</strong> (${msg.status})<br>
-                    ${msg.message}
-                </li>
-            `).join('');
-        });
-    </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
-    <script>
-    // Inisialisasi Lightgallery
-    lightGallery(document.getElementById('animatedGallery'), {
-        selector: '.gallery-item', // Selector untuk item galeri
-        download: false, // Nonaktifkan tombol unduh
-    });
 </script>
 </body>
 </html>
