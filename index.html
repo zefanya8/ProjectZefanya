@@ -567,8 +567,7 @@
             }
         });
 
-        // Fungsi untuk memuat dan mengirim ucapan
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz2JOZQkPfY7faiYvcSlW5877S7scbCwOjBnnfvOV1UpLl59UMsGVV7w4vYQ758lG4s/exec';
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz2JOZQkPfY7faiYvcSlW5877S7scbCwOjBnnfvOV1UpLl59UMsGVV7w4vYQ758lG4s/exec';
 
 // Fungsi untuk mengirim ucapan
 async function sendMessage(name, message) {
@@ -583,7 +582,7 @@ async function sendMessage(name, message) {
         message: message
       })
     });
-
+    
     if (!response.ok) {
       throw new Error('Gagal mengirim data');
     }
