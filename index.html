@@ -516,120 +516,134 @@
 
     <!-- Message Section -->
 <div class="section">
-    <div class="form-container">
-        <h2>Tulis Ucapan</h2>
-        <form id="messageForm">
-            <input type="text" id="name" placeholder="Nama Anda" required>
-            <textarea id="message" placeholder="Tulis ucapan Anda..." required></textarea>
-            <button type="submit">Kirim Ucapan</button>
-        </form>
-    </div>
-
-    <!-- Tempat menampilkan ucapan -->
-    <div id="messages" style="margin: 20px auto; max-width: 800px;"></div>
+        <script src="data:text/javascript;base64,ZnVuY3Rpb24gY29weVRleHQoZWwpe3ZhciBjb250ZW50PWpRdWVyeShlbCkuc2libGluZ3MoJ2Rpdi5jb3B5LWNvbnRlbnQnKS5odG1sKCkKdmFyIHRlbXA9alF1ZXJ5KCI8dGV4dGFyZWE+Iik7alF1ZXJ5KCJib2R5IikuYXBwZW5kKHRlbXApO3RlbXAudmFsKGNvbnRlbnQucmVwbGFjZSgvPGJyID9cLz8+L2csIlxuIikpLnNlbGVjdCgpO2RvY3VtZW50LmV4ZWNDb21tYW5kKCJjb3B5Iik7dGVtcC5yZW1vdmUoKTt2YXIgdGV4dD1qUXVlcnkoZWwpLmh0bWwoKQpqUXVlcnkoZWwpLmh0bWwoalF1ZXJ5KGVsKS5kYXRhKCdtZXNzYWdlJykpCnZhciBjb3VudGVyPTA7dmFyIGludGVydmFsPXNldEludGVydmFsKGZ1bmN0aW9uKCl7Y291bnRlcisrO2lmKGNvdW50ZXI9PTEpe2pRdWVyeShlbCkuaHRtbCh0ZXh0KX19LDUwMCl9" defer>
+        
+        </script> 
+      </div>
+      </div>
 </div>
-    <script>
-        // Fungsi untuk membuka undangan
-        function openInvitation() {
-            document.querySelector('.cover').style.display = 'none';
-            document.querySelectorAll('.section').forEach(section => {
-                section.style.display = 'flex';
-            });
-            startMusic();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Fungsi untuk memulai musik
-        function startMusic() {
-            const audio = document.getElementById('bgMusic');
-            audio.play().catch(error => {
-                console.log('Autoplay diblokir:', error);
-            });
-            localStorage.setItem('musicStarted', 'true');
-        }
-
-        // Cek local storage saat halaman dimuat
-        window.addEventListener('load', () => {
-            if(localStorage.getItem('musicStarted') === 'true') {
-                document.getElementById('bgMusic').play();
-            }
-        });
-
-        // Fungsi untuk memuat dan mengirim ucapan
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz2JOZQkPfY7faiYvcSlW5877S7scbCwOjBnnfvOV1UpLl59UMsGVV7w4vYQ758lG4s/exec';
-
-// Fungsi untuk mengirim ucapan
-async function sendMessage(name, message) {
-  try {
-    const response = await fetch(WEB_APP_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: name,
-        message: message
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error('Gagal mengirim data');
-    }
-
-    const result = await response.json();
-    return result;
-
-  } catch (error) {
-    console.error('Error:', error);
-    throw error;
-  }
-}
-
-// Handle form submission
-document.getElementById('messageForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const name = document.getElementById('name').value.trim();
-  const message = document.getElementById('message').value.trim();
-
-  if (!name || !message) {
-    alert('Nama dan pesan tidak boleh kosong');
-    return;
-  }
-
-  try {
-    // Tampilkan loading
-    const submitButton = e.target.querySelector('button');
-    submitButton.disabled = true;
-    submitButton.textContent = 'Mengirim...';
-
-    // Kirim data
-    const result = await sendMessage(name, message);
-
-    if (result.success) {
-      alert('Ucapan berhasil dikirim!');
-      e.target.reset();
-      await loadMessages();
-    } else {
-      throw new Error(result.error || 'Gagal mengirim ucapan');
-    }
-
-  } catch (error) {
-    alert('Gagal mengirim ucapan. Silakan coba lagi.');
-    console.error('Error:', error);
-
-  } finally {
-    // Reset button
-    const submitButton = e.target.querySelector('button');
-    submitButton.disabled = false;
-    submitButton.textContent = 'Kirim Ucapan';
-  }
-});
-        // Load messages on page load
-        loadMessages();
-    </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
-    <script>
+</div>
+</div>
+</div>
+  <div class="elementor-element elementor-element-60230f4a elementor-widget elementor-widget-spacer" data-id="60230f4a" data-element_type="widget" data-widget_type="spacer.default">
+    <div class="elementor-widget-container">
+      <div class="elementor-spacer">
+        <div class="elementor-spacer-inner"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+  <div class="elementor-element elementor-element-48727c0e e-flex e-con-boxed e-con e-child" data-id="48727c0e" data-element_type="container" data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
+    <div class="e-con-inner"><div class="elementor-element elementor-element-1d52d70c elementor-widget elementor-widget-heading" data-id="1d52d70c" data-element_type="widget" data-widget_type="heading.default">
+      <div class="elementor-widget-container">
+        <p class="elementor-heading-title elementor-size-default">RSVP &amp; Ucapan</p></div>
+    </div>
+      <div class="elementor-element elementor-element-600bb35a animated-slow elementor-invisible elementor-widget elementor-widget-heading" data-id="600bb35a" data-element_type="widget" data-settings="{&quot;_animation&quot;:&quot;zoomIn&quot;,&quot;_animation_mobile&quot;:&quot;zoomIn&quot;}" data-widget_type="heading.default">
+        <div class="elementor-widget-container">
+          <p class="elementor-heading-title elementor-size-default">Berikan doa terbaik untuk kedua memepelai</p>
+        </div>
+      </div>
+      <div class="elementor-element elementor-element-1a2df636 muncul elementor-widget elementor-widget-weddingpress-kit2" data-id="1a2df636" data-element_type="widget" data-settings="{&quot;attendence&quot;:&quot;yes&quot;}" data-widget_type="weddingpress-kit2.default">
+        <div class="elementor-widget-container">
+          <div class='cui-wrapper cui-golden cui-border' style='overflow: hidden;'>
+            <div class='cui-wrap-link'>
+              <div class='header-cui'><a id='cui-link-55959' class='cui-link cui-icon-link cui-icon-link-true auto-load-true' href='?post_id=55959&amp;comments=54&amp;get=30&amp;order=DESC' title='54 Comment'>
+                <span>54</span> Comments</a>
+              </div>
+            </div>
+            <div id='cui-wrap-commnent-55959' class='cui-wrap-comments' style='display:none;'>
+              <div id='cui-wrap-form-55959' class='cui-clearfix'>
+                <div class="cui-comment-attendence">
+                  <div id="invitation-count-55959" class="cui_comment_count_card_wrap">
+                    <div class="cui_comment_count_card_row">
+                      <div class="cui_comment_count_card cui_card-hadir">
+                        <span> </span>
+                        <span>Hadir</span>
+                      </div>
+                      <div class="cui_comment_count_card cui_card-tidak_hadir">
+                        <span> </span>
+                        <span>Tidak hadir</span>
+                      </div>
+                      <div class="cui_comment_count_card cui_card-masih_ragu">
+                        <span> </span>
+                        <span>Masih Ragu</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="cui-clearfix cui-wrap-form ">
+                  <div id='cui-container-form-55959' class='cui-container-form cui-no-login'>
+                    <div id='respond-55959' class='respond cui-clearfix'>
+                      <form action='https://okimdesign.my.id/wp-comments-post.php' method='post' id='commentform-55959'>
+                        <p class="comment-form-author cui-field-1">
+                          <input id="author" name="author" type="text" aria-required="true" class="cui-input" placeholder="Nama" />
+                          <span class="cui-required">*</span>
+                          <span class="cui-error-info cui-error-info-name">Mohon maaf! Khusus untuk tamu undangan</span></p>
+                        <div class="cui-wrap-textarea">
+                          <textarea id="cui-textarea-55959" class="waci_comment cui-textarea autosize-textarea" name="comment" aria-required="true" placeholder="Ucapan" rows="2"></textarea>
+                          <span class="cui-required">*</span>
+                          <span class="cui-error-info cui-error-info-text">2 characters minimum.</span>
+                        </div>
+                        <div class="nm-wrap-comments">
+                          <div class="row">
+                            
+                          </div>
+                        </div>
+                        <div class="cui-clearfix cui-wrap-select cui-field-wrap cui-select-attending">
+<select class="waci_comment cui-select" name="konfirmasi" id="konfirmasi">
+  <option value="" disabled selected>Konfirmasi Kehadiran</option>
+  <option value="Hadir">Datang</option>
+  <option value="Tidak hadir">Absen</option>
+  <option value="Masih Ragu">Mungkin</option>
+</select>
+                          <span class="cui-required"></span>
+                          <span class="cui-error-info cui-error-info-confirm"></span>
+                        </div>
+                        <div class='cui-wrap-submit cui-clearfix'>
+                          <p class='form-submit'>
+                            <span class="cui-hide">Do not change these fields following</span>
+                            <input type="text" class="cui-hide" name="name" value="username">
+                            <input type="text" class="cui-hide" name="nombre" value="">
+                            <input type="text" class="cui-hide" name="form-cui" value="">
+                            <input type="button" class="cui-form-btn cui-cancel-btn" value="Cancel">
+                            <input name='submit' id='submit-55959' value='Kirim' type='submit' />
+                            <input type='hidden' name='commentpress' value='true' />
+                            <input type='hidden' name='comment_post_ID' value='55959' id='comment_post_ID' />
+                            <input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+                          </p>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id='cui-comment-status-55959'  class='cui-comment-status'></div>
+              <div id='cui-box' class='cui-box'>
+                <ul id='cui-container-comment-55959' class='cui-container-comments cui-order-DESC  cui-has-54-comments cui-multiple-comments' data-order='DESC'></ul>
+              </div>
+              <div id='cui-holder-id-55959' class='cui-holder-55959 cui-holder'></div>
+            </div>
+          </div>
+          <style>.cui-wrapper .cui-holder {
+                    display: block !important;
+                }
+          </style>
+          <style>.cui-comment-time{
+                    display: none !important;
+                }
+          </style>
+          <style>.cui-comment-content{margin-left: 0!important;}.cui-comment-avatar{display:none !important;}</style>
+          <script src="data:text/javascript;base64,dmFyIHR4dD1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnY3VpLWxpbmstNTU5NTknKS5pbm5lckhUTUw7dmFyIHBvcz10eHQucmVwbGFjZSgvQ29tbWVudHMvZywiVWNhcGFuICZhbXA7IERvYSBSZXN0dSIpCmRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdjdWktbGluay01NTk1OScpLmlubmVySFRNTD1wb3M7dmFyIHR4dDE9ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2ludml0YXRpb24tY291bnQtNTU5NTknKS5pbm5lckhUTUw7dmFyIHBvczE9dHh0MQoucmVwbGFjZSgvSGFkaXIvZywiSGFkaXIiKS5yZXBsYWNlKC9UaWRhayBoYWRpci9nLCJUaWRhayBIYWRpciIpLnJlcGxhY2UoL01hc2loIFJhZ3UvZywiTWFzaWggUmFndSIpO2RvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdpbnZpdGF0aW9uLWNvdW50LTU1OTU5JykuaW5uZXJIVE1MPXBvczE7dmFyIHR4dDI9ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2NvbW1lbnRmb3JtLTU1OTU5JykuaW5uZXJIVE1MO3ZhciBwb3MyPXR4dDIKLnJlcGxhY2UoL05hbWEvZywiSXNpa2FuIE5hbWEgQW5kYSIpLnJlcGxhY2UoL1VjYXBhbi9nLCJCZXJpa2FuIFVjYXBhbiBUZXJiYWlrIikucmVwbGFjZSgvS29uZmlybWFzaSBLZWhhZGlyYW4vZywiS29uZmlybWFzaSBLZWhhZGlyYW4iKS5yZXBsYWNlKC9EYXRhbmcvZywiSGFkaXIiKS5yZXBsYWNlKC9BYnNlbi9nLCJUaWRhayBIYWRpciIpLnJlcGxhY2UoL011bmdraW4vZywiTWFzaWggUmFndSIpLnJlcGxhY2UoL0tpcmltL2csIktpcmltIFVjYXBhbiIpO2RvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdjb21tZW50Zm9ybS01NTk1OScpLmlubmVySFRNTD1wb3My" defer>
+            
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
     // Inisialisasi Lightgallery
     lightGallery(document.getElementById('animatedGallery'), {
         selector: '.gallery-item', // Selector untuk item galeri
