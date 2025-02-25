@@ -533,10 +533,12 @@
 
     <script>
         // Konfigurasi Supabase
-        const supabaseUrl = 'https://szjemdiahjnrztjzkohb.supabase.co';
+        import { createClient } from '@supabase/supabase-js'
+        const supabaseUrl = 'https://szjemdiahjnrztjzkohb.supabase.co'
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6amVtZGlhaGpucnp0anprb2hiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0Njk3NTksImV4cCI6MjA1NjA0NTc1OX0.7GG6VosM3IaquV57ieL1K_sU9vpdCgO_bnTiuRVLzFk';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
+        const supabaseKey = process.env.SUPABASE_KEY
+        const supabase = createClient(supabaseUrl, supabaseKey)
+        
         // Tampilkan nama dari URL parameter
         const urlParams = new URLSearchParams(window.location.search);
         const guestName = urlParams.get('name') || 'Tamu';
