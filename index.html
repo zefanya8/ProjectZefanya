@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js"></script>
+<script>
+  // Konfigurasi Firebase
+  const firebaseConfig = { /* Paste kode dari Firebase Console */ };
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Undangan Pernikahan Zefanya & Esrani</title>
@@ -566,78 +574,26 @@
                 document.getElementById('bgMusic').play();
             }
         });
+<!-- Form Ucapan -->
+<form id="formUcapan">
+  <input type="text" id="nama" placeholder="Nama Anda" required>
+  <textarea id="pesan" placeholder="Ucapan & Doa" required></textarea>
+  <button type="submit">Kirim</button>
+</form>
 
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz2JOZQkPfY7faiYvcSlW5877S7scbCwOjBnnfvOV1UpLl59UMsGVV7w4vYQ758lG4s/exec';
-
-// Fungsi untuk mengirim ucapan
-async function sendMessage(name, message) {
-  try {
-    const response = await fetch(WEB_APP_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: name,
-        message: message
-      })
-    });
-    
-    if (!response.ok) {
-      throw new Error('Gagal mengirim data');
-    }
-
-    const result = await response.json();
-    return result;
-
-  } catch (error) {
-    console.error('Error:', error);
-    throw error;
-  }
-}
-
-// Handle form submission
-document.getElementById('messageForm').addEventListener('submit', async (e) => {
+<script>
+document.getElementById('formUcapan').addEventListener('submit', (e) => {
   e.preventDefault();
-
-  const name = document.getElementById('name').value.trim();
-  const message = document.getElementById('message').value.trim();
-
-  if (!name || !message) {
-    alert('Nama dan pesan tidak boleh kosong');
-    return;
-  }
-
-  try {
-    // Tampilkan loading
-    const submitButton = e.target.querySelector('button');
-    submitButton.disabled = true;
-    submitButton.textContent = 'Mengirim...';
-
-    // Kirim data
-    const result = await sendMessage(name, message);
-
-    if (result.success) {
-      alert('Ucapan berhasil dikirim!');
-      e.target.reset();
-      await loadMessages();
-    } else {
-      throw new Error(result.error || 'Gagal mengirim ucapan');
-    }
-
-  } catch (error) {
-    alert('Gagal mengirim ucapan. Silakan coba lagi.');
-    console.error('Error:', error);
-
-  } finally {
-    // Reset button
-    const submitButton = e.target.querySelector('button');
-    submitButton.disabled = false;
-    submitButton.textContent = 'Kirim Ucapan';
-  }
+  
+  db.collection('ucapan').add({
+    nama: document.getElementById('nama').value,
+    pesan: document.getElementById('pesan').value,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  
+  alert('Ucapan berhasil dikirim!');
 });
-        // Load messages on page load
-        loadMessages();
+</script>
     </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
     <script>
