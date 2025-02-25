@@ -259,7 +259,37 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        
+        /* Gaya untuk kolom nama */
+        #nama-tamu {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+}
+
+/* Gaya untuk kolom ucapan */
+#isi-ucapan {
+  width: 100%;
+  height: 150px; /* Tinggi kolom ucapan */
+  padding: 10px;
+  font-size: 16px;
+  resize: none; /* Nonaktifkan resize manual */
+}
+
+/* Gaya untuk tombol kirim */
+#kirim-ucapan {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+#kirim-ucapan:hover {
+  background-color: #45a049;
+}
         /* Music Player */
         .music-player {
             position: fixed;
@@ -315,9 +345,9 @@
 <body>
 <body>
     <!-- Audio Element -->
-    <audio id="bgMusic" loop>
+    <audio controls autoplay>
         <source src="https://upload.wikimedia.org/wikipedia/commons/5/59/Kevin_MacLeod_-_Canon_in_D_Major.ogg" type="audio/ogg">
-        Browser tidak mendukung audio
+        Browser Anda tidak mendukung elemen audio.
     </audio>
 
     <!-- Halaman Awal -->
@@ -533,12 +563,66 @@
 
     <script>
         // Konfigurasi Supabase
-        import { createClient } from '@supabase/supabase-js'
         const supabaseUrl = 'https://szjemdiahjnrztjzkohb.supabase.co'
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6amVtZGlhaGpucnp0anprb2hiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0Njk3NTksImV4cCI6MjA1NjA0NTc1OX0.7GG6VosM3IaquV57ieL1K_sU9vpdCgO_bnTiuRVLzFk';
-        const supabaseKey = process.env.SUPABASE_KEY
-        const supabase = createClient(supabaseUrl, supabaseKey)
-        
+        const { createClient } = supabase;
+        const supabaseClient = createClient(supabaseUrl, supabaseKey);
+
+        // Fungsi untuk mengirim ucapan
+        async function sendUcapan(nama, ucapan) {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('undangan') // Nama tabel di Supabase
+                .insert([{ nama: nama, ucapan: ucapan }]);
+                if (error) throw error;
+                alert('Ucapan berhasil dikirim!');
+                location.reload(); // Refresh halaman untuk menampilkan ucapan terbaru
+            } catch (error) {
+                console.error('Error:', error.message);
+                alert('Gagal mengirim ucapan. Silakan coba lagi.');
+            }
+        }
+
+// Event listener untuk tombol kirim
+document.getElementById('kirim-ucapan').addEventListener('click', () => {
+  const nama = document.getElementById('nama-tamu').value;
+  const ucapan = document.getElementById('isi-ucapan').value;
+
+  if (!nama || !ucapan) {
+    alert('Nama dan ucapan harus diisi.');
+    return;
+  }
+
+  sendUcapan(nama, ucapan);
+});
+        <div id="penghitung-undangan">
+  <p>Hadir: <span id="jumlah-hadir">0</span></p>
+  <p>Tidak Hadir: <span id="jumlah-tidak-hadir">0</span></p>
+  <p>Ragu-ragu: <span id="jumlah-ragu">0</span></p>
+</div>
+        async function updatePenghitungUndangan() {
+  try {
+    const { data, error } = await supabaseClient
+      .from('reservasi_kehadiran') // Nama tabel di Supabase
+      .select('*');
+    
+    if (error) throw error;
+
+    const hadir = data.filter(item => item.status === 'Hadir').length;
+    const tidakHadir = data.filter(item => item.status === 'Tidak Hadir').length;
+    const raguRagu = data.filter(item => item.status === 'Ragu-ragu').length;
+
+    document.getElementById('jumlah-hadir').textContent = hadir;
+    document.getElementById('jumlah-tidak-hadir').textContent = tidakHadir;
+    document.getElementById('jumlah-ragu').textContent = raguRagu;
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+}
+
+// Panggil fungsi saat halaman dimuat
+updatePenghitungUndangan();
+
         // Tampilkan nama dari URL parameter
         const urlParams = new URLSearchParams(window.location.search);
         const guestName = urlParams.get('name') || 'Tamu';
