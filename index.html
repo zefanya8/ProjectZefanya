@@ -544,7 +544,6 @@
     <div class="reservation-box">
         <h3>Reservasi Kehadiran</h3>
         <form id="reservationForm">
-            <input type="text" id="guestName" placeholder="Nama Anda" required>
             <select id="attendanceStatus" required>
                 <option value="">Konfirmasi Kehadiran</option>
                 <option value="hadir">Hadir</option>
@@ -578,7 +577,7 @@ function sendReservasi(event) {
   }
 
   // Kirim data ke Supabase
-  fetch('https://szjemdiahjnrztjzkohb.supabase.co/rest/v1/undangan', {
+  fetch('https://szjemdiahjnrztjzkohb.supabase.co/rest/v1/ucapan_tamu', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
