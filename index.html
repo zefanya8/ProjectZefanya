@@ -519,9 +519,9 @@
                      alt="Bank Mandiri" 
                      class="bank-logo">
                 <div class="bank-details">
-                <span id="mandiri-account">9000040483969</span> 
+                <span id="mandiri-account"><h3>9000040483969</h3></span> 
                 <button onclick="copyToClipboard('mandiri-account')">Copy</button>
-                <br>a.n Zefanya Maranatha Mangunsong
+                <br><h4>a.n Zefanya Maranatha Mangunsong</h4>
                 </div>
             </div>
 
@@ -530,9 +530,9 @@
                      alt="Bank CIMB Niaga" 
                      class="bank-logo">
                 <div class="bank-details">
-                <span id="cimb-account">707039180200</span> 
+                <span id="cimb-account"><h3>707039180200</h3></span> 
                 <button onclick="copyToClipboard('cimb-account')">Copy</button>
-                <br>a.n Esrani Novalina Sagala
+                <br><h4>a.n Esrani Novalina Sagala</h4>
             </div>
         </div>
     </div>
@@ -708,13 +708,15 @@ updatePenghitungUndangan();
 </script>
     // Membuka undangan harus klick
     <script>
+            // Membuka undangan harus klick
     document.getElementById('open-invitation').addEventListener('click', function() {
         document.getElementById('cover').style.display = 'none';
         document.getElementById('section reveal').style.display = 'block';
     });
 </script>
-    // Klick Copy Rekening
+
     <script>
+            // Klick Copy Rekening
     function copyToClipboard(elementId) {
         // Mendapatkan teks dari elemen dengan ID tertentu
         const textToCopy = document.getElementById(elementId).innerText;
