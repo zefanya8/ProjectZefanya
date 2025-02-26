@@ -519,10 +519,9 @@
                      alt="Bank Mandiri" 
                      class="bank-logo">
                 <div class="bank-details">
-                    9000040483969
-                </div>
-                <div class="bank-details">
-                    a.n Zefanya Maranatha Mangunsong
+                <span id="mandiri-account">9000040483969</span> 
+                <button onclick="copyToClipboard('mandiri-account')">Copy</button>
+                <br>a.n Zefanya Maranatha Mangunsong
                 </div>
             </div>
 
@@ -531,13 +530,12 @@
                      alt="Bank CIMB Niaga" 
                      class="bank-logo">
                 <div class="bank-details">
-                    707039180200
-                </div>
-                <div class="bank-details">
-                    a.n Esrani Novalina Sagala
-                </div>
+                <span id="cimb-account">707039180200</span> 
+                <button onclick="copyToClipboard('cimb-account')">Copy</button>
+                <br>a.n Esrani Novalina Sagala
             </div>
         </div>
+    </div>
     </div>
 
     <!-- Message Section -->
@@ -707,6 +705,38 @@ updatePenghitungUndangan();
 
   // Tampilkan nama di elemen dengan ID 'nama-undangan'
   document.getElementById('nama-undangan').textContent = guestName;
+</script>
+    // Membuka undangan harus klick
+    <script>
+    document.getElementById('open-invitation').addEventListener('click', function() {
+        document.getElementById('cover').style.display = 'none';
+        document.getElementById('section reveal').style.display = 'block';
+    });
+</script>
+    // Klick Copy Rekening
+    <script>
+    function copyToClipboard(elementId) {
+        // Mendapatkan teks dari elemen dengan ID tertentu
+        const textToCopy = document.getElementById(elementId).innerText;
+
+        // Membuat elemen textarea sementara untuk menyalin teks
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = textToCopy;
+        document.body.appendChild(tempTextArea);
+
+        // Memilih teks dalam textarea
+        tempTextArea.select();
+        tempTextArea.setSelectionRange(0, 99999); // Untuk mendukung perangkat mobile
+
+        // Menyalin teks ke clipboard
+        document.execCommand('copy');
+
+        // Menghapus elemen textarea sementara
+        document.body.removeChild(tempTextArea);
+
+        // Memberikan notifikasi kepada pengguna
+        alert('Nomor rekening berhasil disalin: ' + textToCopy);
+    }
 </script>
 </body>
 </html>
