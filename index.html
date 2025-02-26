@@ -632,9 +632,11 @@
 <script>
     // Konfigurasi Supabase
     const supabaseUrl = 'https://szjemdiahjnrztjzkohb.supabase.co'; // Ganti dengan URL Supabase Anda
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; // Ganti dengan API key Anda
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6amVtZGlhaGpucnp0anprb2hiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0Njk3NTksImV4cCI6MjA1NjA0NTc1OX0.7GG6VosM3IaquV57ieL1K_sU9vpdCgO_bnTiuRVLzFk'; // Ganti dengan API key Anda
     const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+</script>
 
+    <script>
     // Fungsi untuk mengirim data reservasi
     async function sendReservation(event) {
         event.preventDefault(); // Mencegah form mengarahkan ke halaman lain
