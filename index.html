@@ -33,8 +33,39 @@
             background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.1)), url('background1.jpg');
             background-size: cover;
             background-position: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: all 0.8s ease;
         }
+/* Halaman Undangan */
+.undangan {
+    position: fixed;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    background: white;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
+.undangan.active {
+    top: 0;
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease-out;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
         /* Section Styling */
         .section {
             min-height: 100vh;
@@ -377,14 +408,13 @@
     </style>
 </head>
 <body>
-<body>
     <!-- Audio Element -->
     <audio autoplay loop>
   <source src="https://zefanya8.github.io/wedingZ-E.github.io/CanonRock.mp3" type="audio/mp3">
   Browser Anda tidak mendukung elemen audio.
 </audio>
         <!-- Halaman Awal -->
-    <div class="cover">
+    <div class="cover" id="cover">
         <h2 style="font-family: 'Great Vibes', cursive; font-size: 3em;">The Wedding of</h2>
         <h2 class="title">Zefanya & Esrani</h2>
         <p style="font-family: 'Comic Neue', cursive; max-width: 600px; margin: 20px auto;"><h3>Kepada Bapak/Ibu/Saudara/i</h3></p>
@@ -397,7 +427,7 @@
     </div>
 
     <!-- Halaman Undangan -->
-    <div id="undangan" class="section reveal" class="section1">
+    <div id="undangan" class="undangan" class="section1">
         <img src="https://zefanya8.github.io/wedingZ-E.github.io/Pembatas_Page.jpg" style="width:500px; height:100px">
         <h2 style="font-family: 'Great Vibes', cursive; font-size: 3em;">Pernikahan</h2>
         <h2 class="title">Zefanya & Esrani</h2>
@@ -407,7 +437,7 @@
     </div>
 
     <!-- Section Mempelai -->
-    <div class="section1">
+    <div class="section1 reveal">
         <h2 style="font-family: 'Great Vibes', cursive; font-size: 3em;">Kedua Mempelai</h2>
         <div class="couple-photos">
             <div>
@@ -426,7 +456,7 @@
     </div>
 
     <!-- Section Waktu & Tempat -->
-    <div class="section2">
+    <div class="section2 reveal">
         <h2 style="font-family: 'Great Vibes', cursive; font-size: 3em;">Waktu dan Tempat</h2>
         <div class="countdown" id="countdown"></div>
         <h3>Lokasi Pemberkatan Nikah</h3>
@@ -439,7 +469,7 @@
     </div>
 
       <!-- Section Timeline -->
-    <div class="section3">
+    <div class="section3 reveal">
         <h2 style="font-family: 'Great Vibes'; font-size: 3em;">Our Journey</h2>
         <div>
             <!-- Item 1 -->
@@ -500,7 +530,7 @@
     </div>
 
     <!-- Section Gallery -->
-   <div class="section2">
+   <div class="section2 reveal">
     <h2 style="font-family: 'Great Vibes', cursive; font-size: 3em;">Momen Bahagia</h2>
     <div id="animatedGallery" class="gallery-grid lightgallery">
             <!-- Ganti src dengan URL gambar Anda -->
@@ -544,7 +574,7 @@
         </div>
     </div>
     <!-- Gift Section -->
-    <div class="section2">
+    <div class="section2 reveal">
         <h2 style="font-family: 'Great Vibes', cursive; font-size: 3em;">Kirim Hadiah</h2>
         <div class="gift-section">
             <div class="bank-info">
@@ -784,6 +814,26 @@ document.getElementById('bukaUndangan').addEventListener('click', function() {
   void undangan.offsetHeight;
   
   undangan.classList.add('active');
+});
+        // buka undangan
+        document.getElementById('bukaUndangan').addEventListener('click', function() {
+    // Sembunyikan cover dengan efek fade
+    document.getElementById('cover').style.opacity = '0';
+    
+    // Set timeout untuk sinkronisasi animasi
+    setTimeout(() => {
+        document.getElementById('cover').style.display = 'none';
+        
+        // Tampilkan undangan dengan efek slide-up
+        const undangan = document.getElementById('undangan');
+        undangan.classList.add('active');
+        
+        // Aktifkan animasi reveal untuk konten
+        const reveals = document.querySelectorAll('.reveal');
+        reveals.forEach(reveal => {
+            reveal.classList.add('active');
+        });
+    }, 500); // Sesuaikan dengan durasi transisi
 });
 </script>
 </body>
