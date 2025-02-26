@@ -360,7 +360,7 @@
             }
         }
 /* Sembunyikan halaman undangan awalnya */
-#undangan {
+.undangan {
   position: relative;
   visibility: hidden;
   opacity: 0;
@@ -369,7 +369,7 @@
 }
 
 /* Efek muncul saat aktif */
-#undangan.active {
+.undangan.active {
   visibility: visible;
   opacity: 1;
   transform: translateY(0);
@@ -743,7 +743,7 @@ updatePenghitungUndangan();
             // Membuka undangan harus klick
     document.getElementById('open-invitation').addEventListener('click', function() {
         document.getElementById('cover').style.display = 'none';
-        document.getElementById('section reveal').style.display = 'block';
+        document.getElementById('section reveal').style.display = 'fly in';
     });
 </script>
 
