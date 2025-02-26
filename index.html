@@ -341,6 +341,20 @@
                 height: 200px;
             }
         }
+        /* Sembunyikan konten undangan awalnya */
+#undangan {
+    display: none;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.5s ease-out;
+}
+
+/* Efek slide-up saat aktif */
+#undangan.active {
+    display: block;
+    transform: translateY(0);
+    opacity: 1;
+}
     </style>
 </head>
 <body>
@@ -360,7 +374,7 @@
             <h3>Tanpa Mengurangi Rasa Hormat, Kami Mengundang Bapak/Ibu/Saudara/i untuk hadir di acara Pernikahan Kami</h3>
         </p>
         <div id="nama-undangan"><h4>Nama Tamu</h4></div>
-        <button onclick="openInvitation()">Buka Undangan</button>
+        <button id="bukaUndangan" class="btn">Buka Undangan</button>
     </div>
 
     <!-- Halaman Undangan -->
@@ -738,6 +752,18 @@ updatePenghitungUndangan();
         // Memberikan notifikasi kepada pengguna
         alert('Nomor rekening berhasil disalin: ' + textToCopy);
     }
+
+        //Buka Undangan
+    document.getElementById('bukaUndangan').addEventListener('click', function() {
+    const undangan = document.getElementById('undangan');
+    
+    // Tampilkan elemen dan trigger reflow
+    undangan.style.display = 'block';
+    void undangan.offsetHeight; // Force reflow
+    
+    // Tambahkan class untuk efek animasi
+    undangan.classList.add('active');
+});
 </script>
 </body>
 </html>
