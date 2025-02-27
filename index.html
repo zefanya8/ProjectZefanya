@@ -508,7 +508,7 @@ button {
             <h3>Tanpa Mengurangi Rasa Hormat, Kami Mengundang Bapak/Ibu/Saudara/i untuk hadir di acara Pernikahan Kami</h3>
         </p>
         <div id="nama-undangan" font-size: 10em>Nama Tamu</div>
-        <button id="bukaUndangan">Buka Undangan</button>
+       <button id="bukaUndangan">Buka Undangan</button>
     </div>
 
     <!-- Halaman Undangan -->
@@ -544,7 +544,7 @@ button {
 <!-- Section Waktu & Tempat -->
 <div class="section2 reveal">
     <h2 style="font-family: 'Great Vibes', cursive; font-size: 3em;">Waktu dan Tempat</h2>
-    
+
     <!-- Countdown Timer -->
     <div class="countdown" id="countdown">
         <div id="countdown-timer">
@@ -553,7 +553,7 @@ button {
             <span id="minutes"></span>Menit
             <span id="seconds"></span>Detik
         </div>
-        <button onclick="addToCalendar()">Tambahkan ke Kalender</button>
+       <button onclick="addToCalendar()">Tambahkan ke Kalender</button>
     </div>
 
     <h3>Lokasi Pemberkatan Nikah</h3>
@@ -735,7 +735,7 @@ function tampilkanUcapan() {
     const mulai = (halamanAktif - 1) * perHalaman;
     const akhir = mulai + perHalaman;
     const dataTampil = dataUcapan.slice(mulai, akhir);
-    
+
     let html = '';
     dataTampil.forEach(item => {
         html += `
@@ -746,7 +746,7 @@ function tampilkanUcapan() {
             </div>
         `;
     });
-    
+
     document.getElementById('ucapanList').innerHTML = html;
     document.getElementById('nomorHalaman').innerText = halamanAktif;
 }
@@ -778,7 +778,7 @@ function ambilDataUcapan() {
             alert('Terjadi kesalahan saat mengambil data dari Google Sheet.');
         });
 }
-        
+
 // Jalankan saat halaman load
 document.addEventListener('DOMContentLoaded', ambilDataUcapan);
 // Update setiap 30 detik
@@ -918,13 +918,13 @@ const countdownInterval = setInterval(updateCountdown, 1000);
 
 // Fungsi untuk menambahkan acara ke kalender
 function addToCalendar() {
-    const eventDate = '20250315T080000'; // Format: YYYYMMDDTHHMMSS
+   const eventDate = '20250315T080000'; // Format: YYYYMMDDTHHMMSS
     const eventTitle = 'Pernikahan Zefanya & Esrani';
     const eventLocation = 'Gereja GPIN Yerusalem Palembang dan Jambur Sopo Godang Palembang';
     const eventDetails = 'Mari hadiri pernikahan Zefanya & Esrani pada tanggal 15 Maret 2025.';
 
     const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=${eventDate}/${eventDate}&details=${encodeURIComponent(eventDetails)}&location=${encodeURIComponent(eventLocation)}&sf=true&output=xml`;
-    
+
     window.open(googleCalendarUrl, '_blank');
 }
 </script>
