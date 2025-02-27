@@ -732,7 +732,22 @@ function ubahHalaman(ubah) {
   halamanAktif = Math.max(1, Math.min(halamanAktif, totalHalaman));
   tampilkanUcapan();
 }
+        // Ambil data dari Google Sheet
+function ambilDataUcapan() {
+    fetch('https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec?action=read')
+    .then(response => response.json())
+    .then(data => {
+        dataUcapan = data.reverse();
+        halamanAktif = 1;
+        tampilkanUcapan();
+    })
+    .catch(error => console.error('Error:', error));
+}
 
+// Jalankan saat halaman load
+document.addEventListener('DOMContentLoaded', ambilDataUcapan);
+// Update setiap 30 detik
+setInterval(ambilDataUcapan, 30000);
     </script>
     <script>
 // Script baru (ganti dengan ini)
@@ -775,22 +790,7 @@ function kirimReservasi() {
         alert('Terjadi kesalahan saat mengirim data');
     });
 }
-        // Ambil data dari Google Sheet
-function ambilDataUcapan() {
-    fetch('https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec?action=read')
-    .then(response => response.json())
-    .then(data => {
-        dataUcapan = data.reverse();
-        halamanAktif = 1;
-        tampilkanUcapan();
-    })
-    .catch(error => console.error('Error:', error));
-}
 
-// Jalankan saat halaman load
-document.addEventListener('DOMContentLoaded', ambilDataUcapan);
-// Update setiap 30 detik
-setInterval(ambilDataUcapan, 30000);
     </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
