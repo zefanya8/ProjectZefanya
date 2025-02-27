@@ -785,11 +785,11 @@ document.addEventListener('DOMContentLoaded', ambilDataUcapan);
 setInterval(ambilDataUcapan, 30000);
     </script>
     <script>
-document.getElementById('reservasiForm').addEventListener('submit', function(e) {
-    e.preventDefault(); // Mencegah form submit default
-    kirimReservasi();
-});
-
+// document.getElementById('reservasiForm').addEventListener('submit', function(e) {
+//     e.preventDefault(); // Mencegah form submit default
+//     kirimReservasi();
+// });
+        
 function kirimReservasi() {
     const nama = document.getElementById('nama').value;
     const status = document.getElementById('attendanceStatus').value;
