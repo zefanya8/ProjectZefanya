@@ -437,7 +437,7 @@
 button {
   margin-top: 15px;
 }
-        .message-item {
+.message-item {
     background: white;
     padding: 15px;
     margin: 10px 0;
@@ -454,7 +454,7 @@ button {
     margin: 0 10px;
     padding: 5px 15px;
 }
-        .message-item {
+.message-item {
     background: white;
     padding: 15px;
     margin: 10px 0;
@@ -494,7 +494,7 @@ button {
 .pagination button:hover {
     background-color: #b71c1c;
 }
-    </style>
+</style>
 </head>
 <body>
     <!-- Audio Element -->
@@ -694,7 +694,7 @@ button {
 <div class="reservasi-container">
     <div class="input-group">
             <label>Konfirmasi Kehadiran</label>
-    <form id="reservasiForm" method="POST" action="https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec">
+    <form  id="reservasiForm" method="POST" action="https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec">
         <select id="attendanceStatus" name="status" required>
         <option value="">Konfirmasi Kehadiran</option>
         <option value="Ragu-ragu">Ragu-ragu</option>
@@ -706,7 +706,6 @@ button {
         <textarea id="ucapan" name="ucapan" placeholder="Ucapan Anda" required></textarea>
   <button type="submit" onclick="kirimReservasi()">Kirim Reservasi</button>
     </form>
-</div>
 </div>
 <div class="reservation-box">
     <div id="ucapanContainer">
@@ -723,7 +722,8 @@ button {
         let dataUcapan = [];
 let halamanAktif = 1;
 const perHalaman = 4;
-
+        
+// Script baru (ganti dengan ini)
 function tampilkanUcapan() {
     const mulai = (halamanAktif - 1) * perHalaman;
     const akhir = mulai + perHalaman;
@@ -744,7 +744,7 @@ function tampilkanUcapan() {
     document.getElementById('ucapanList').innerHTML = html;
     document.getElementById('nomorHalaman').innerText = halamanAktif;
 }
-        
+
 function ubahHalaman(ubah) {
   halamanAktif += ubah;
   const totalHalaman = Math.ceil(dataUcapan.length / perHalaman);
@@ -753,7 +753,6 @@ function ubahHalaman(ubah) {
 }
 
 // Ambil data dari Google Sheet
-// Script baru (ganti dengan ini)
 function ambilDataUcapan() {
     fetch('https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec?action=read')
     .then(response => response.json())
@@ -764,14 +763,13 @@ function ambilDataUcapan() {
     })
     .catch(error => console.error('Error:', error));
 }
-        
+
 // Jalankan saat halaman load
 document.addEventListener('DOMContentLoaded', ambilDataUcapan);
 // Update setiap 30 detik
 setInterval(ambilDataUcapan, 30000);
     </script>
     <script>
-// Script baru (ganti dengan ini)
 document.getElementById('reservasiForm').addEventListener('submit', function(e) {
     e.preventDefault(); // Mencegah form submit default
     kirimReservasi();
