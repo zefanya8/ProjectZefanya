@@ -445,6 +445,20 @@ button {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+.message-item h4 {
+    margin: 0 0 10px;
+    color: #376282;
+}
+
+.message-item p {
+    margin: 5px 0;
+}
+
+.message-item small {
+    color: #888;
+    font-size: 0.9em;
+}
+
 .pagination {
     margin-top: 20px;
     text-align: center;
@@ -453,7 +467,16 @@ button {
 .pagination button {
     margin: 0 10px;
     padding: 5px 15px;
-}        
+    background-color: #d32f2f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.pagination button:hover {
+    background-color: #b71c1c;
+}
 </style>
 </head>
 <body>
@@ -678,21 +701,11 @@ button {
         </div>
     </div>
 </div>
-    
-<div id="ucapanContainer">
-  <div id="ucapanList"></div>
-  <div class="pagination">
-    <button onclick="ubahHalaman(-1)">Sebelumnya</button>
-    <span id="nomorHalaman">1</span>
-    <button onclick="ubahHalaman(1)">Berikutnya</button>
-  </div>
-</div>
-
     <script>
         let dataUcapan = [];
 let halamanAktif = 1;
 const perHalaman = 4;
-
+        
 function tampilkanUcapan() {
     const mulai = (halamanAktif - 1) * perHalaman;
     const akhir = mulai + perHalaman;
@@ -703,8 +716,9 @@ function tampilkanUcapan() {
         html += `
             <div class="message-item">
                 <h4>${item.nama || ''}</h4>
-                <p>Status: ${item.status || ''}</p>
-                <p>${item.ucapan || ''}</p>
+                <p><strong>Status:</strong> ${item.status || ''}</p>
+                <p><strong>Ucapan:</strong> ${item.ucapan || ''}</p>
+                <p><small>${item.tanggal || ''}</small></p>
             </div>
         `;
     });
@@ -743,6 +757,7 @@ document.getElementById('reservasiForm').addEventListener('submit', function(e) 
     kirimReservasi();
 });
 
+// Script baru (ganti dengan ini)
 function kirimReservasi() {
     const nama = document.getElementById('nama').value;
     const status = document.getElementById('attendanceStatus').value;
@@ -750,12 +765,27 @@ function kirimReservasi() {
 
     fetch('https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec', {
         method: 'POST',
-        body: new URLSearchParams({
-            'nama': nama,
-            'status': status,
-            'ucapan': ucapan
-        })
+        body: JSON.stringify({
+            nama: nama,
+            ucapan: ucapan,
+            status: status
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
     })
+    .then(response => {
+        if(response.ok) {
+            alert('Reservasi berhasil dikirim!');
+            document.getElementById('reservasiForm').reset();
+            ambilDataUcapan(); // Memperbarui data setelah pengiriman
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat mengirim data');
+    });
+}
     .then(response => {
         if(response.ok) {
             alert('Reservasi berhasil dikirim!');
