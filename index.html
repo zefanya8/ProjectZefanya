@@ -726,13 +726,15 @@ function tampilkanUcapan() {
     document.getElementById('ucapanList').innerHTML = html;
     document.getElementById('nomorHalaman').innerText = halamanAktif;
 }
+
 function ubahHalaman(ubah) {
   halamanAktif += ubah;
   const totalHalaman = Math.ceil(dataUcapan.length / perHalaman);
   halamanAktif = Math.max(1, Math.min(halamanAktif, totalHalaman));
   tampilkanUcapan();
 }
-        // Ambil data dari Google Sheet
+
+// Ambil data dari Google Sheet
 function ambilDataUcapan() {
     fetch('https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec?action=read')
     .then(response => response.json())
@@ -750,7 +752,6 @@ document.addEventListener('DOMContentLoaded', ambilDataUcapan);
 setInterval(ambilDataUcapan, 30000);
     </script>
     <script>
-// Script baru (ganti dengan ini)
 document.getElementById('reservasiForm').addEventListener('submit', function(e) {
     e.preventDefault(); // Mencegah form submit default
     kirimReservasi();
@@ -790,7 +791,30 @@ function kirimReservasi() {
         alert('Terjadi kesalahan saat mengirim data');
     });
 }
-
+    .then(response => {
+        if(response.ok) {
+            alert('Reservasi berhasil dikirim!');
+            document.getElementById('reservasiForm').reset();
+            ambilDataUcapan(); // Memperbarui data setelah pengiriman
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat mengirim data');
+    });
+}
+    .then(response => {
+        if(response.ok) {
+            alert('Reservasi berhasil dikirim!');
+            document.getElementById('reservasiForm').reset();
+            ambilDataUcapan(); // Memperbarui data setelah pengiriman
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat mengirim data');
+    });
+}
     </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
