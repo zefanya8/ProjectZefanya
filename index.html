@@ -855,9 +855,14 @@ function copyToClipboard(elementId) {
     </script>
     <script>
 document.getElementById('bukaUndangan').addEventListener('click', function() {
-  // Sembunyikan halaman cover
-  document.getElementById('cover').style.display = 'none';
-
+    const audio = document.querySelector('audio');
+    audio.play();
+    // Sembunyikan halaman cover dan tampilkan undangan
+    document.getElementById('cover').style.display = 'none';
+    const undangan = document.getElementById('undangan');
+    undangan.style.visibility = 'visible';
+    undangan.classList.add('active');
+});
   // Tampilkan halaman undangan dengan efek slide-up
   const undangan = document.getElementById('undangan');
   undangan.style.visibility = 'visible';
