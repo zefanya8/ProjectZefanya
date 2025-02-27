@@ -1,0 +1,42 @@
+.posts {
+    margin-bottom: 30px;
+  }
+
+div .card{
+    width: 20rem;
+}
+
+div .miring{
+    font-style: italic;
+    margin:auto;
+}
+
+.tebal{
+    font-weight: 700;
+}
+
+
+.loader{
+    pointer-events: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #fff;
+    animation: an1 1s ease infinite;
+  }
+  
+  @keyframes an1 {
+    0%{
+      transform: rotate(0turn);
+    }
+    100%{
+      transform: rotate(1turn);
+    }
+  }
+
+  .custom-width{
+    width:90px;
+    height: 40px;
+    display: flex;
+  }
