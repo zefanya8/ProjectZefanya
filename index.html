@@ -654,7 +654,7 @@ button {
 <div class="reservasi-container">
     <div class="input-group">
             <label>Konfirmasi Kehadiran</label>
-    <form method="POST" action="https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec" id="reservasiForm">
+    <form method="POST" action="https://script.google.com/macros/s/AKfycbxlkGRWrWHez5q7mWUUpZi-gvHedTibENIpONRHiEBwdeeLIpKLmvTajkn3syZdTayJqA/exec" id="reservasiForm">
         <select id="attendanceStatus" name="status" required>
         <option value="">Konfirmasi Kehadiran</option>
         <option value="Ragu-ragu">Ragu-ragu</option>
@@ -712,7 +712,7 @@ function ubahHalaman(ubah) {
 
 // Ambil data dari Google Sheet
 function ambilDataUcapan() {
-    fetch('https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec?action=read')
+    fetch('https://script.google.com/macros/s/AKfycbxlkGRWrWHez5q7mWUUpZi-gvHedTibENIpONRHiEBwdeeLIpKLmvTajkn3syZdTayJqA/exec?action=read')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
@@ -746,7 +746,7 @@ function kirimReservasi() {
     const status = document.getElementById('attendanceStatus').value;
     const ucapan = document.getElementById('ucapan').value;
 
-    fetch('https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbxlkGRWrWHez5q7mWUUpZi-gvHedTibENIpONRHiEBwdeeLIpKLmvTajkn3syZdTayJqA/exec', {
         method: 'POST',
         body: new URLSearchParams({
             'nama': nama,
