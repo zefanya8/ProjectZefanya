@@ -640,14 +640,13 @@ button {
             <label>Konfirmasi Kehadiran</label>
     <form method="POST" action="https://script.google.com/macros/s/AKfycbzJS7G7rgNI_JMlnVI_gJHQhqrX1ucqgNoWc-0cJPTx9mSdtKgnpxritEcRP1nwMXRD0A/exec" id="reservasiForm">
         <select id="kehadiran" name="status" required>
-            <option value="">Konfirmasi Kehadiran</option>
-            <option value="hadir">Hadir</option>
-            <option value="tidak_hadir">Tidak Hadir</option>
-            <option value="ragu_ragu">Ragu-ragu</option>
-        </select>
-        <input type="text" id="nama" name="nama" placeholder="Nama Anda" required>
-        <textarea id="ucapan" name="ucapan" placeholder="Ucapan Anda" required></textarea>
-          <div class="input-group">
+      <option value="">Ragu-ragu</option>
+      <option value="Hadir">Hadir</option>
+      <option value="Tidak Hadir">Tidak Hadir</option>
+    </select>
+  </div>
+  
+  <div class="input-group">
     <label>Nama</label>
     <input type="text" id="nama" required>
   </div>
@@ -656,7 +655,8 @@ button {
     <label>Ucapan</label>
     <textarea id="ucapan" rows="5"></textarea>
   </div>
-          <button type="button" onclick="kirimReservasi()">Kirim Reservasi</button>
+  
+  <button type="button" onclick="kirimReservasi()">Kirim Reservasi</button>
     </form>
 </div>
 </div>
