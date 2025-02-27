@@ -453,47 +453,7 @@ button {
 .pagination button {
     margin: 0 10px;
     padding: 5px 15px;
-}
-.message-item {
-    background: white;
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.message-item h4 {
-    margin: 0 0 10px;
-    color: #376282;
-}
-
-.message-item p {
-    margin: 5px 0;
-}
-
-.message-item small {
-    color: #888;
-    font-size: 0.9em;
-}
-
-.pagination {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.pagination button {
-    margin: 0 10px;
-    padding: 5px 15px;
-    background-color: #d32f2f;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.pagination button:hover {
-    background-color: #b71c1c;
-}
+}        
 </style>
 </head>
 <body>
@@ -694,7 +654,7 @@ button {
 <div class="reservasi-container">
     <div class="input-group">
             <label>Konfirmasi Kehadiran</label>
-    <form  id="reservasiForm" method="POST" action="https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec">
+    <form method="POST" action="https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec" id="reservasiForm">
         <select id="attendanceStatus" name="status" required>
         <option value="">Konfirmasi Kehadiran</option>
         <option value="Ragu-ragu">Ragu-ragu</option>
@@ -718,6 +678,97 @@ button {
         </div>
     </div>
 </div>
+    
+<div id="ucapanContainer">
+  <div id="ucapanList"></div>
+  <div class="pagination">
+    <button onclick="ubahHalaman(-1)">Sebelumnya</button>
+    <span id="nomorHalaman">1</span>
+    <button onclick="ubahHalaman(1)">Berikutnya</button>
+  </div>
+</div>
+
+    <script>
+        let dataUcapan = [];
+let halamanAktif = 1;
+const perHalaman = 4;
+
+function tampilkanUcapan() {
+    const mulai = (halamanAktif - 1) * perHalaman;
+    const akhir = mulai + perHalaman;
+    const dataTampil = dataUcapan.slice(mulai, akhir);
+    
+    let html = '';
+    dataTampil.forEach(item => {
+        html += `
+            <div class="message-item">
+                <h4>${item.nama || ''}</h4>
+                <p>Status: ${item.status || ''}</p>
+                <p>${item.ucapan || ''}</p>
+            </div>
+        `;
+    });
+    
+    document.getElementById('ucapanList').innerHTML = html;
+    document.getElementById('nomorHalaman').innerText = halamanAktif;
+}
+
+function ubahHalaman(ubah) {
+  halamanAktif += ubah;
+  const totalHalaman = Math.ceil(dataUcapan.length / perHalaman);
+  halamanAktif = Math.max(1, Math.min(halamanAktif, totalHalaman));
+  tampilkanUcapan();
+}
+
+// Ambil data dari Google Sheet
+function ambilDataUcapan() {
+   fetch('https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec?action=read')
+    .then(response => response.json())
+    .then(data => {
+        dataUcapan = data.reverse();
+        halamanAktif = 1;
+        tampilkanUcapan();
+    })
+   .catch(error => console.error('Error:', error));
+}
+
+// Jalankan saat halaman load
+document.addEventListener('DOMContentLoaded', ambilDataUcapan);
+// Update setiap 30 detik
+setInterval(ambilDataUcapan, 30000);
+    </script>
+    <script>
+document.getElementById('reservasiForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Mencegah form submit default
+    kirimReservasi();
+});
+
+function kirimReservasi() {
+    const nama = document.getElementById('nama').value;
+    const status = document.getElementById('attendanceStatus').value;
+    const ucapan = document.getElementById('ucapan').value;
+
+    fetch('https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec', {
+        method: 'POST',
+        body: new URLSearchParams({
+            'nama': nama,
+            'status': status,
+            'ucapan': ucapan
+        })
+    })
+    .then(response => {
+        if(response.ok) {
+            alert('Reservasi berhasil dikirim!');
+            document.getElementById('reservasiForm').reset();
+            ambilDataUcapan(); // Memperbarui data setelah pengiriman
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat mengirim data');
+    });
+}
+    </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
     <script>
@@ -771,29 +822,29 @@ button {
 document.getElementById('bukaUndangan').addEventListener('click', function() {
   // Sembunyikan halaman cover
   document.getElementById('cover').style.display = 'none';
-  
+
   // Tampilkan halaman undangan dengan efek slide-up
   const undangan = document.getElementById('undangan');
   undangan.style.visibility = 'visible';
-  
+
   // Force reflow untuk memicu animasi
   void undangan.offsetHeight;
-  
+
   undangan.classList.add('active');
 });
         // buka undangan
         document.getElementById('bukaUndangan').addEventListener('click', function() {
     // Sembunyikan cover dengan efek fade
     document.getElementById('cover').style.opacity = '0';
-    
+
     // Set timeout untuk sinkronisasi animasi
     setTimeout(() => {
         document.getElementById('cover').style.display = 'none';
-        
+
         // Tampilkan undangan dengan efek slide-up
         const undangan = document.getElementById('undangan');
         undangan.classList.add('active');
-        
+
         // Aktifkan animasi reveal untuk konten
         const reveals = document.querySelectorAll('.reveal');
         reveals.forEach(reveal => {
