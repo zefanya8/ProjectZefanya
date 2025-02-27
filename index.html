@@ -726,7 +726,6 @@ function tampilkanUcapan() {
     document.getElementById('ucapanList').innerHTML = html;
     document.getElementById('nomorHalaman').innerText = halamanAktif;
 }
-
 function ubahHalaman(ubah) {
   halamanAktif += ubah;
   const totalHalaman = Math.ceil(dataUcapan.length / perHalaman);
@@ -734,24 +733,9 @@ function ubahHalaman(ubah) {
   tampilkanUcapan();
 }
 
-// Ambil data dari Google Sheet
-function ambilDataUcapan() {
-    fetch('https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec?action=read')
-    .then(response => response.json())
-    .then(data => {
-        dataUcapan = data.reverse();
-        halamanAktif = 1;
-        tampilkanUcapan();
-    })
-    .catch(error => console.error('Error:', error));
-}
-
-// Jalankan saat halaman load
-document.addEventListener('DOMContentLoaded', ambilDataUcapan);
-// Update setiap 30 detik
-setInterval(ambilDataUcapan, 30000);
     </script>
     <script>
+// Script baru (ganti dengan ini)
 document.getElementById('reservasiForm').addEventListener('submit', function(e) {
     e.preventDefault(); // Mencegah form submit default
     kirimReservasi();
@@ -791,30 +775,22 @@ function kirimReservasi() {
         alert('Terjadi kesalahan saat mengirim data');
     });
 }
-    .then(response => {
-        if(response.ok) {
-            alert('Reservasi berhasil dikirim!');
-            document.getElementById('reservasiForm').reset();
-            ambilDataUcapan(); // Memperbarui data setelah pengiriman
-        }
+        // Ambil data dari Google Sheet
+function ambilDataUcapan() {
+    fetch('https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec?action=read')
+    .then(response => response.json())
+    .then(data => {
+        dataUcapan = data.reverse();
+        halamanAktif = 1;
+        tampilkanUcapan();
     })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan saat mengirim data');
-    });
+    .catch(error => console.error('Error:', error));
 }
-    .then(response => {
-        if(response.ok) {
-            alert('Reservasi berhasil dikirim!');
-            document.getElementById('reservasiForm').reset();
-            ambilDataUcapan(); // Memperbarui data setelah pengiriman
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan saat mengirim data');
-    });
-}
+
+// Jalankan saat halaman load
+document.addEventListener('DOMContentLoaded', ambilDataUcapan);
+// Update setiap 30 detik
+setInterval(ambilDataUcapan, 30000);
     </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
