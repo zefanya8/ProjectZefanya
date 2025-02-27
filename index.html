@@ -855,40 +855,37 @@ function copyToClipboard(elementId) {
     </script>
     <script>
 document.getElementById('bukaUndangan').addEventListener('click', function() {
+    console.log('Tombol diklik'); // Debugging
+
+    // Memutar musik
     const audio = document.querySelector('audio');
-    audio.play();
-    // Sembunyikan halaman cover dan tampilkan undangan
-    document.getElementById('cover').style.display = 'none';
-    const undangan = document.getElementById('undangan');
-    undangan.style.visibility = 'visible';
-    undangan.classList.add('active');
-});
-  // Tampilkan halaman undangan dengan efek slide-up
-  const undangan = document.getElementById('undangan');
-  undangan.style.visibility = 'visible';
-
-  // Force reflow untuk memicu animasi
-  void undangan.offsetHeight;
-
-  undangan.classList.add('active');
-});
-    // Sembunyikan cover dengan efek fade
-    document.getElementById('cover').style.opacity = '0';
-
-    // Set timeout untuk sinkronisasi animasi
-    setTimeout(() => {
-        document.getElementById('cover').style.display = 'none';
-
-        // Tampilkan undangan dengan efek slide-up
-        const undangan = document.getElementById('undangan');
-        undangan.classList.add('active');
-
-        // Aktifkan animasi reveal untuk konten
-        const reveals = document.querySelectorAll('.reveal');
-        reveals.forEach(reveal => {
-            reveal.classList.add('active');
+    if (audio) {
+        audio.play().catch(error => {
+            console.error('Gagal memutar audio:', error);
         });
-    }, 500); // Sesuaikan dengan durasi transisi
+    }
+
+    // Sembunyikan halaman cover dengan efek fade
+    const cover = document.getElementById('cover');
+    if (cover) {
+        cover.style.opacity = '0';
+        setTimeout(() => {
+            cover.style.display = 'none';
+        }, 500); // Sesuaikan dengan durasi transisi
+    }
+
+    // Tampilkan halaman undangan dengan efek slide-up
+    const undangan = document.getElementById('undangan');
+    if (undangan) {
+        undangan.style.visibility = 'visible';
+        undangan.classList.add('active');
+    }
+
+    // Aktifkan animasi reveal untuk konten
+    const reveals = document.querySelectorAll('.reveal');
+    reveals.forEach(reveal => {
+        reveal.classList.add('active');
+    });
 });
     </script>
         <script>
