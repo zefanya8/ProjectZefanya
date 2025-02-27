@@ -454,12 +454,48 @@ button {
     margin: 0 10px;
     padding: 5px 15px;
 }        
+        /* Countdown Timer Styling */
+.countdown {
+    margin: 20px 0;
+    font-size: 1.5em;
+    font-family: 'Comic Neue', cursive;
+    color: #376282;
+}
+
+#countdown-timer {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#countdown-timer span {
+    padding: 10px;
+    background: #d32f2f;
+    color: white;
+    border-radius: 5px;
+}
+
+#add-to-calendar {
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#add-to-calendar:hover {
+    background-color: #45a049;
+}
 </style>
 </head>
 <body>
     <!-- Audio Element -->
     <audio autoplay loop>
-  <source src="https://zefanya8.github.io/wedingZ-E/CanonRock.mp3" type="audio/mp3">
+  <source src="https://zefanya8.github.io/wedingZ-E/musik.mp3" type="audio/mp3">
   Browser Anda tidak mendukung elemen audio.
 </audio>
         <!-- Halaman Awal -->
@@ -505,17 +541,29 @@ button {
     </div>
 
     <!-- Section Waktu & Tempat -->
-    <div class="section2 reveal">
-        <h2 style="font-family: 'Great Vibes', cursive; font-size: 3em;">Waktu dan Tempat</h2>
-        <div class="countdown" id="countdown"></div>
-        <h3>Lokasi Pemberkatan Nikah</h3>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15937.86249353762!2d104.71918141738281!3d-2.9682191599698013!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e3b75d133e9cabd%3A0x7a3a17a565d44d12!2sGereja%20GPIN%20Yerusalem%20Palembang!5e0!3m2!1sid!2sid!4v1738839274282!5m2!1sid!2sid" 
-                    style="width:100%; height:300px; border:0;" allowfullscreen></iframe>
-
-            <h3 style="margin-top: 30px;">Lokasi Resepsi</h3>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.4486843068526!2d104.71043427586058!3d-2.972913097003201!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e3b75ee5d4b8c4b%3A0x51db181576702dd4!2sJAMBUR%20SOPO%20GODANG%20PALEMBANG!5e0!3m2!1sid!2sid!4v1738839691274!5m2!1sid!2sid" 
-                    style="width:100%; height:300px; border:0;" allowfullscreen></iframe>
+<!-- Section Waktu & Tempat -->
+<div class="section2 reveal">
+    <h2 style="font-family: 'Great Vibes', cursive; font-size: 3em;">Waktu dan Tempat</h2>
+    
+    <!-- Countdown Timer -->
+    <div class="countdown" id="countdown">
+        <div id="countdown-timer">
+            <span id="days"></span>Hari
+            <span id="hours"></span>Jam
+            <span id="minutes"></span>Menit
+            <span id="seconds"></span>Detik
+        </div>
+        <button id="add-to-calendar" onclick="addToCalendar()">Tambahkan ke Kalender</button>
     </div>
+
+    <h3>Lokasi Pemberkatan Nikah</h3>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15937.86249353762!2d104.71918141738281!3d-2.9682191599698013!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e3b75d133e9cabd%3A0x7a3a17a565d44d12!2sGereja%20GPIN%20Yerusalem%20Palembang!5e0!3m2!1sid!2sid!4v1738839274282!5m2!1sid!2sid" 
+            style="width:100%; height:300px; border:0;" allowfullscreen></iframe>
+
+    <h3 style="margin-top: 30px;">Lokasi Resepsi</h3>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.4486843068526!2d104.71043427586058!3d-2.972913097003201!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e3b75ee5d4b8c4b%3A0x51db181576702dd4!2sJAMBUR%20SOPO%20GODANG%20PALEMBANG!5e0!3m2!1sid!2sid!4v1738839691274!5m2!1sid!2sid" 
+            style="width:100%; height:300px; border:0;" allowfullscreen></iframe>
+</div>
 
       <!-- Section Timeline -->
     <div class="section3 reveal">
@@ -851,6 +899,45 @@ document.getElementById('bukaUndangan').addEventListener('click', function() {
         });
     }, 500); // Sesuaikan dengan durasi transisi
 });
+        <script>
+// Tanggal acara pernikahan
+const weddingDate = new Date('March 15, 2025 00:00:00').getTime();
+
+// Fungsi untuk mengupdate countdown
+function updateCountdown() {
+    const now = new Date().getTime();
+    const timeLeft = weddingDate - now;
+
+    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+    document.getElementById('days').innerText = days;
+    document.getElementById('hours').innerText = hours;
+    document.getElementById('minutes').innerText = minutes;
+    document.getElementById('seconds').innerText = seconds;
+
+    if (timeLeft < 0) {
+        clearInterval(countdownInterval);
+        document.getElementById('countdown-timer').innerHTML = "Acara telah dimulai!";
+    }
+}
+
+// Update countdown setiap 1 detik
+const countdownInterval = setInterval(updateCountdown, 1000);
+
+// Fungsi untuk menambahkan acara ke kalender
+function addToCalendar() {
+    const eventDate = '20250315T000000'; // Format: YYYYMMDDTHHMMSS
+    const eventTitle = 'Pernikahan Zefanya & Esrani';
+    const eventLocation = 'Gereja GPIN Yerusalem Palembang dan Jambur Sopo Godang Palembang';
+    const eventDetails = 'Mari hadiri pernikahan Zefanya & Esrani pada tanggal 15 Maret 2025.';
+
+    const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=${eventDate}/${eventDate}&details=${encodeURIComponent(eventDetails)}&location=${encodeURIComponent(eventLocation)}&sf=true&output=xml`;
+    
+    window.open(googleCalendarUrl, '_blank');
+}
 </script>
 </body>
 </html>
