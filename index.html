@@ -412,6 +412,32 @@
   opacity: 1;
   transform: translateY(0);
 }
+        /* Reservasi */
+        .reservasi-container {
+  display: grid;
+  gap: 15px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+#nama {
+  height: 40px;
+}
+
+#ucapan {
+  height: 120px;
+  resize: none;
+}
+
+button {
+  margin-top: 15px;
+}
+        
     </style>
 </head>
 <body>
@@ -609,10 +635,11 @@
     </div>
 
     <!-- Message Section -->
-<div class="reservation-box">
-    <h3>Reservasi Kehadiran</h3>
-    <form method="POST" action="https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec" id="my-form">
-        <select id="attendanceStatus" name="status" required>
+<div class="reservasi-container">
+    <div class="input-group">
+            <label>Konfirmasi Kehadiran</label>
+    <form method="POST" action="https://script.google.com/macros/s/AKfycbzJS7G7rgNI_JMlnVI_gJHQhqrX1ucqgNoWc-0cJPTx9mSdtKgnpxritEcRP1nwMXRD0A/exec" id="reservasiForm">
+        <select id="kehadiran" name="status" required>
             <option value="">Konfirmasi Kehadiran</option>
             <option value="hadir">Hadir</option>
             <option value="tidak_hadir">Tidak Hadir</option>
@@ -620,15 +647,90 @@
         </select>
         <input type="text" id="nama" name="nama" placeholder="Nama Anda" required>
         <textarea id="ucapan" name="ucapan" placeholder="Ucapan Anda" required></textarea>
-        <button type="submit">Kirim Reservasi</button>
+          <div class="input-group">
+    <label>Nama</label>
+    <input type="text" id="nama" required>
+  </div>
+
+  <div class="input-group">
+    <label>Ucapan</label>
+    <textarea id="ucapan" rows="5"></textarea>
+  </div>
+          <button type="button" onclick="kirimReservasi()">Kirim Reservasi</button>
     </form>
 </div>
-
-<div class="reservation-box">
-    <h3>Ucapan Tamu</h3>
-    <ul id="messageList" class="message-list"></ul>
+</div>
+<div id="ucapanContainer">
+  <div id="ucapanList"></div>
+  <div class="pagination">
+    <button onclick="ubahHalaman(-1)">Sebelumnya</button>
+    <span id="nomorHalaman">1</span>
+    <button onclick="ubahHalaman(1)">Berikutnya</button>
+  </div>
 </div>
 
+    <script>
+        let dataUcapan = [];
+let halamanAktif = 1;
+const perHalaman = 4;
+
+function tampilkanUcapan() {
+  const mulai = (halamanAktif - 1) * perHalaman;
+  const akhir = mulai + perHalaman;
+  const dataTampil = dataUcapan.slice(mulai, akhir);
+  
+  let html = '';
+  dataTampil.forEach(item => {
+    html += `
+      <div class="ucapan-item">
+        <strong>${item.nama}</strong>
+        <p>${item.ucapan}</p>
+      </div>
+    `;
+  });
+  
+  document.getElementById('ucapanList').innerHTML = html;
+  document.getElementById('nomorHalaman').innerText = halamanAktif;
+}
+
+function ubahHalaman(ubah) {
+  halamanAktif += ubah;
+  const totalHalaman = Math.ceil(dataUcapan.length / perHalaman);
+  halamanAktif = Math.max(1, Math.min(halamanAktif, totalHalaman));
+  tampilkanUcapan();
+}
+
+// Ambil data dari Google Sheet
+function ambilDataUcapan() {
+  google.script.run
+    .withSuccessHandler(data => {
+      dataUcapan = data.reverse(); // Tampilkan terbaru di atas
+      halamanAktif = 1;
+      tampilkanUcapan();
+    })
+    .ambilDataUcapan();
+}
+
+// Jalankan saat halaman load
+document.addEventListener('DOMContentLoaded', ambilDataUcapan);
+// Update setiap 30 detik
+setInterval(ambilDataUcapan, 30000);
+    </script>
+    <script>
+        function kirimReservasi() {
+  google.script.run
+    .withSuccessHandler(() => {
+      alert('Reservasi berhasil!');
+      document.getElementById('reservasiForm').reset();
+    })
+    .tambahDataReservasi(
+      document.getElementById('nama').value,
+      document.getElementById('status').value,
+      document.getElementById('ucapan').value
+    );
+}
+        
+    </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
     <script>
