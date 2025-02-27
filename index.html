@@ -712,7 +712,7 @@ function ubahHalaman(ubah) {
 
 // Ambil data dari Google Sheet
 function ambilDataUcapan() {
-    fetch('https://script.google.com/macros/s/AKfycbxlkGRWrWHez5q7mWUUpZi-gvHedTibENIpONRHiEBwdeeLIpKLmvTajkn3syZdTayJqA/exec?action=read')
+    fetch('https://script.google.com/macros/s/AKfycbwpgtN5iq4NpGXaYVhyx4a4JykGn03s3XYRr0_bYvi8e6bL0jzzh1BE1Ryt3ZwhciKiDg/exec?action=read')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok ' + response.statusText);
@@ -720,6 +720,7 @@ function ambilDataUcapan() {
             return response.json();
         })
         .then(data => {
+            console.log('Data dari Google Sheet:', data); // Log data untuk debugging
             dataUcapan = data.reverse();
             halamanAktif = 1;
             tampilkanUcapan();
@@ -746,7 +747,7 @@ function kirimReservasi() {
     const status = document.getElementById('attendanceStatus').value;
     const ucapan = document.getElementById('ucapan').value;
 
-    fetch('https://script.google.com/macros/s/AKfycbxlkGRWrWHez5q7mWUUpZi-gvHedTibENIpONRHiEBwdeeLIpKLmvTajkn3syZdTayJqA/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbwpgtN5iq4NpGXaYVhyx4a4JykGn03s3XYRr0_bYvi8e6bL0jzzh1BE1Ryt3ZwhciKiDg/exec', {
         method: 'POST',
         body: new URLSearchParams({
             'nama': nama,
