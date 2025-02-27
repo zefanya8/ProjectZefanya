@@ -712,16 +712,24 @@ function ubahHalaman(ubah) {
 
 // Ambil data dari Google Sheet
 function ambilDataUcapan() {
-   fetch('https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec?action=read')
-    .then(response => response.json())
-    .then(data => {
-        dataUcapan = data.reverse();
-        halamanAktif = 1;
-        tampilkanUcapan();
-    })
-   .catch(error => console.error('Error:', error));
+    fetch('https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec?action=read')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            dataUcapan = data.reverse();
+            halamanAktif = 1;
+            tampilkanUcapan();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat mengambil data dari Google Sheet.');
+        });
 }
-
+        
 // Jalankan saat halaman load
 document.addEventListener('DOMContentLoaded', ambilDataUcapan);
 // Update setiap 30 detik
