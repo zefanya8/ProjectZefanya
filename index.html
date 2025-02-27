@@ -611,15 +611,15 @@
     <!-- Message Section -->
 <div class="reservation-box">
     <h3>Reservasi Kehadiran</h3>
-    <form id="reservationForm">
-        <select id="attendanceStatus" required>
+    <form method="POST" action="https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec" id="my-form">
+        <select id="attendanceStatus" name="status" required>
             <option value="">Konfirmasi Kehadiran</option>
             <option value="hadir">Hadir</option>
             <option value="tidak_hadir">Tidak Hadir</option>
             <option value="ragu_ragu">Ragu-ragu</option>
         </select>
-        <input type="text" id="nama-tamu" placeholder="Nama Anda" required>
-        <textarea id="isi-ucapan" placeholder="Ucapan Anda" required></textarea>
+        <input type="text" id="nama" name="nama" placeholder="Nama Anda" required>
+        <textarea id="ucapan" name="ucapan" placeholder="Ucapan Anda" required></textarea>
         <button type="submit">Kirim Reservasi</button>
     </form>
 </div>
@@ -629,84 +629,7 @@
     <ul id="messageList" class="message-list"></ul>
 </div>
 
-<script>
-    // Konfigurasi Supabase
-    const supabaseUrl = 'https://szjemdiahjnrztjzkohb.supabase.co'; // Ganti dengan URL Supabase Anda
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN6amVtZGlhaGpucnp0anprb2hiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA0Njk3NTksImV4cCI6MjA1NjA0NTc1OX0.7GG6VosM3IaquV57ieL1K_sU9vpdCgO_bnTiuRVLzFk'; // Ganti dengan API key Anda
-    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-    // Fungsi untuk mengirim data reservasi
-    async function sendReservation(event) {
-        event.preventDefault(); // Mencegah form mengarahkan ke halaman lain
-
-        // Ambil data dari form
-        const nama = document.getElementById('nama-tamu').value;
-        const ucapan = document.getElementById('isi-ucapan').value;
-        const status = document.getElementById('attendanceStatus').value;
-
-        // Validasi input
-        if (!nama || !ucapan || !status) {
-            alert('Harap isi semua field!');
-            return;
-        }
-
-        // Kirim data ke Supabase
-        try {
-            const { data, error } = await supabaseClient
-                .from('reservasi_kehadiran') // Ganti dengan nama tabel Anda di Supabase
-                .insert([
-                    {
-                        nama: nama,
-                        ucapan: ucapan,
-                        status: status
-                    }
-                ]);
-
-            if (error) {
-                throw error;
-            }
-
-            // Berhasil mengirim data
-            alert('Reservasi berhasil dikirim!');
-            document.getElementById('reservationForm').reset(); // Reset form
-            loadMessages(); // Muat ulang daftar ucapan
-        } catch (error) {
-            console.error('Error:', error.message);
-            alert('Gagal mengirim reservasi. Silakan coba lagi.');
-        }
-    }
-
-    // Fungsi untuk memuat daftar ucapan
-    async function loadMessages() {
-        try {
-            const { data, error } = await supabaseClient
-                .from('reservasi_kehadiran') // Ganti dengan nama tabel Anda di Supabase
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (error) {
-                throw error;
-            }
-
-            // Tampilkan daftar ucapan
-            const messageList = document.getElementById('messageList');
-            messageList.innerHTML = data.map(item => `
-                <li class="message-item">
-                    <strong>${item.nama}</strong> (${item.status})<br>
-                    ${item.ucapan}
-                </li>
-            `).join('');
-        } catch (error) {
-            console.error('Error:', error.message);
-        }
-    }
-
-    // Event listener untuk form submission
-    document.getElementById('reservationForm').addEventListener('submit', sendReservation);
-
-    // Muat daftar ucapan saat halaman pertama kali dimuat
-    loadMessages();
-</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
     <script>
     // Inisialisasi Lightgallery
