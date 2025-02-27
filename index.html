@@ -641,14 +641,14 @@ button {
     <form method="POST" action="https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec" id="reservasiForm">
         <select id="attendanceStatus" name="status" required>
         <option value="">Konfirmasi Kehadiran</option>
-        <option value="">Ragu-ragu</option>
+        <option value="Ragu-ragu">Ragu-ragu</option>
         <option value="Hadir">Hadir</option>
         <option value="Tidak Hadir">Tidak Hadir</option>
     </select>
   </div>
         <input type="text" id="nama" name="nama" placeholder="Nama Anda" required>
         <textarea id="ucapan" name="ucapan" placeholder="Ucapan Anda" required></textarea>
-  <button type="button" onclick="kirimReservasi()">Kirim Reservasi</button>
+  <button type="submit" onclick="kirimReservasi()">Kirim Reservasi</button>
     </form>
 </div>
 </div>
