@@ -437,8 +437,24 @@
 button {
   margin-top: 15px;
 }
-        
-    </style>
+.message-item {
+    background: white;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination button {
+    margin: 0 10px;
+    padding: 5px 15px;
+}        
+</style>
 </head>
 <body>
     <!-- Audio Element -->
@@ -651,7 +667,18 @@ button {
   <button type="submit" onclick="kirimReservasi()">Kirim Reservasi</button>
     </form>
 </div>
+<div class="reservation-box">
+    <div id="ucapanContainer">
+        <h3>Ucapan Tamu</h3>
+        <div id="ucapanList" class="message-list"></div>
+        <div class="pagination">
+            <button onclick="ubahHalaman(-1)">Sebelumnya</button>
+            <span id="nomorHalaman">1</span>
+            <button onclick="ubahHalaman(1)">Berikutnya</button>
+        </div>
+    </div>
 </div>
+    
 <div id="ucapanContainer">
   <div id="ucapanList"></div>
   <div class="pagination">
@@ -667,22 +694,23 @@ let halamanAktif = 1;
 const perHalaman = 4;
 
 function tampilkanUcapan() {
-  const mulai = (halamanAktif - 1) * perHalaman;
-  const akhir = mulai + perHalaman;
-  const dataTampil = dataUcapan.slice(mulai, akhir);
-  
-  let html = '';
-  dataTampil.forEach(item => {
-    html += `
-      <div class="ucapan-item">
-        <strong>${item.nama}</strong>
-        <p>${item.ucapan}</p>
-      </div>
-    `;
-  });
-  
-  document.getElementById('ucapanList').innerHTML = html;
-  document.getElementById('nomorHalaman').innerText = halamanAktif;
+    const mulai = (halamanAktif - 1) * perHalaman;
+    const akhir = mulai + perHalaman;
+    const dataTampil = dataUcapan.slice(mulai, akhir);
+    
+    let html = '';
+    dataTampil.forEach(item => {
+        html += `
+            <div class="message-item">
+                <h4>${item.nama || ''}</h4>
+                <p>Status: ${item.status || ''}</p>
+                <p>${item.ucapan || ''}</p>
+            </div>
+        `;
+    });
+    
+    document.getElementById('ucapanList').innerHTML = html;
+    document.getElementById('nomorHalaman').innerText = halamanAktif;
 }
 
 function ubahHalaman(ubah) {
@@ -694,13 +722,14 @@ function ubahHalaman(ubah) {
 
 // Ambil data dari Google Sheet
 function ambilDataUcapan() {
-  google.script.run
-    .withSuccessHandler(data => {
-      dataUcapan = data.reverse(); // Tampilkan terbaru di atas
-      halamanAktif = 1;
-      tampilkanUcapan();
+    fetch('https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec?action=read')
+    .then(response => response.json())
+    .then(data => {
+        dataUcapan = data.reverse();
+        halamanAktif = 1;
+        tampilkanUcapan();
     })
-    .ambilDataUcapan();
+    .catch(error => console.error('Error:', error));
 }
 
 // Jalankan saat halaman load
@@ -709,19 +738,36 @@ document.addEventListener('DOMContentLoaded', ambilDataUcapan);
 setInterval(ambilDataUcapan, 30000);
     </script>
     <script>
-        function kirimReservasi() {
-  google.script.run
-    .withSuccessHandler(() => {
-      alert('Reservasi berhasil!');
-      document.getElementById('reservasiForm').reset();
+document.getElementById('reservasiForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Mencegah form submit default
+    kirimReservasi();
+});
+
+function kirimReservasi() {
+    const nama = document.getElementById('nama').value;
+    const status = document.getElementById('attendanceStatus').value;
+    const ucapan = document.getElementById('ucapan').value;
+
+    fetch('https://script.google.com/macros/s/AKfycbymbwxgT9pjGKlT9AorcQOAGUyLBaUk1_sxXVGof5jTTw1XBl-htTSWE_xLbWqviScPnw/exec', {
+        method: 'POST',
+        body: new URLSearchParams({
+            'nama': nama,
+            'status': status,
+            'ucapan': ucapan
+        })
     })
-    .tambahDataReservasi(
-      document.getElementById('nama').value,
-      document.getElementById('status').value,
-      document.getElementById('ucapan').value
-    );
+    .then(response => {
+        if(response.ok) {
+            alert('Reservasi berhasil dikirim!');
+            document.getElementById('reservasiForm').reset();
+            ambilDataUcapan(); // Memperbarui data setelah pengiriman
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat mengirim data');
+    });
 }
-        
     </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
