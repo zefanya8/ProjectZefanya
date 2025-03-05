@@ -446,15 +446,6 @@ button {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.pagination {
-    margin-top: 20px;
-    text-align: center;
-}
-
-.pagination button {
-    margin: 0 10px;
-    padding: 5px 15px;
-}        
         /* Countdown Timer Styling */
 .countdown {
     margin: 20px 0;
@@ -490,6 +481,32 @@ button {
 
 #add-to-calendar:hover {
     background-color: #45a049;
+}
+        .message-list {
+    max-height: 500px; /* Sesuaikan tinggi sesuai kebutuhan */
+    overflow-y: auto;
+    padding: 10px;
+}
+
+/* Hapus style pagination jika ada */
+.pagination {
+    display: none;
+}
+        .message-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.message-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.message-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.message-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 </style>
 </head>
@@ -721,11 +738,6 @@ button {
     <div id="ucapanContainer">
         <h3>Ucapan Tamu</h3>
         <div id="ucapanList" class="message-list"></div>
-        <div class="pagination">
-            <button onclick="ubahHalaman(-1)">Sebelumnya</button>
-            <span id="nomorHalaman">1</span>
-            <button onclick="ubahHalaman(1)">Berikutnya</button>
-        </div>
     </div>
 </div>
 </div>
@@ -735,12 +747,8 @@ let halamanAktif = 1;
 const perHalaman = 4;
 
 function tampilkanUcapan() {
-    const mulai = (halamanAktif - 1) * perHalaman;
-    const akhir = mulai + perHalaman;
-    const dataTampil = dataUcapan.slice(mulai, akhir);
-
     let html = '';
-    dataTampil.forEach(item => {
+    dataUcapan.forEach(item => {
         html += `
             <div class="message-item">
                 <h4>${item.nama || ''}</h4>
@@ -749,18 +757,14 @@ function tampilkanUcapan() {
             </div>
         `;
     });
-
     document.getElementById('ucapanList').innerHTML = html;
-    document.getElementById('nomorHalaman').innerText = halamanAktif;
 }
 
-function ubahHalaman(ubah) {
-  halamanAktif += ubah;
-  const totalHalaman = Math.ceil(dataUcapan.length / perHalaman);
-  halamanAktif = Math.max(1, Math.min(halamanAktif, totalHalaman));
-  tampilkanUcapan();
-}
-
+// Hapus semua fungsi dan variabel terkait pagination:
+// - let halamanAktif
+// - const perHalaman
+// - function ubahHalaman()
+        
 // Ambil data dari Google Sheet
 function ambilDataUcapan() {
     fetch('https://script.google.com/macros/s/AKfycbwpgtN5iq4NpGXaYVhyx4a4JykGn03s3XYRr0_bYvi8e6bL0jzzh1BE1Ryt3ZwhciKiDg/exec?action=read')
