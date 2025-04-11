@@ -155,7 +155,8 @@
             'Curing'
         ];
         const JUMLAH_TITIK = 20;
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzqClHG0lo2JZvxgECVrZzWbGSSOgTZ_NyVddBZGT4bdsBbN2WHyMLzJVL_mZkhJjs/exec'; // GANTI DENGAN URL ANDA
+        // GANTI DENGAN URL DEPLOYMENT ANDA SETELAH MENGISI SCRIPT GOOGLE APPS DI BAWAH
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzqClHG0lo2JZvxgECVrZzWbGSSOgTZ_NyVddBZGT4bdsBbN2WHyMLzJVL_mZkhJjs/exec';
 
         // Generate form
         const container = document.getElementById('titikContainer');
@@ -242,15 +243,16 @@
                     body: JSON.stringify(data),
                     headers: { 
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    mode: 'no-cors'
                 });
 
-                if(!response.ok) {
+                if(!response.ok && response.type !== 'opaque') {
                     const error = await response.json().catch(() => ({}));
                     throw new Error(error.message || 'Gagal menyimpan data');
                 }
 
-                const result = await response.json();
+                const result = await response.json().catch(() => ({}));
                 if(result.result === 'error') {
                     throw new Error(result.error);
                 }
