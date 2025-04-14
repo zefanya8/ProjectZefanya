@@ -17,7 +17,7 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-image: url('https://yt3.ggpht.com/a/AGF-l7-UR7Ky3FVBdHn_mKUn48rsFy3nayS8SCC-2Q=s900-c-k-c0xffffffff-no-rj-mo&auto=format&fit=crop&w=2070&q=80');
+            background-image: url('https://yt3.ggpht.com/a/AGF-l7-UR7Ky3FVBdHn_mKUn48rsFy3nayS8SCC-2Q=s900-c-k-c0xffffffff-no-rj-mo');
             background-attachment: fixed;
             background-size: cover;
             background-position: center;
@@ -220,7 +220,7 @@
             <div class="logo">
                 <i class="fas fa-hard-hat"></i>
             </div>
-            <h1>Form Inspeksi Pekerjaan Refractory</h1>
+            <h1>Form Realisasi Pekerjaan Refractory</h1>
             <p class="text-muted">Sistem Pelaporan Progress Pekerjaan Harian</p>
         </div>
         
@@ -228,14 +228,14 @@
             <div class="form-section">
                 <h3><i class="fas fa-user-circle"></i> Informasi Responden</h3>
                 <div class="row mb-3">
-                    <div class="col-md-6 required-field">
+                    <div class="col-md-6">
                         <label for="namaResponden" class="form-label">Nama Responden</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                             <input type="text" class="form-control" id="namaResponden" required>
                         </div>
                     </div>
-                    <div class="col-md-6 required-field">
+                    <div class="col-md-6">
                         <label for="vendor" class="form-label">PT/Vendor</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-building"></i></span>
@@ -251,7 +251,7 @@
                 </div>
                 
                 <div class="row mb-3">
-                    <div class="col-md-6 required-field">
+                    <div class="col-md-6">
                         <label for="areaPekerjaan" class="form-label">Area Pekerjaan</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-map-marked-alt"></i></span>
@@ -266,10 +266,11 @@
                                 <option value="B54">B54</option>
                                 <option value="Downpipe">Downpipe</option>
                                 <option value="Burner">Burner</option>
+                                <option value="Burner">Kalsiner</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-6 required-field">
+                    <div class="col-md-6">
                         <label for="jumlahTitik" class="form-label">Jumlah Titik Pekerjaan</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-list-ol"></i></span>
@@ -302,7 +303,7 @@
         </form>
         
         <div class="footer">
-            <p>&copy; 2023 Sistem Inspeksi Refractory | Dibangun dengan <i class="fas fa-heart text-danger"></i></p>
+            <p>&copy; 2025 Sistem Pelaporan Pekerjaan Refractory | Dibangun dengan <i class="fas fa-heart text-danger"> by ZMM</i></p>
         </div>
     </div>
 
@@ -347,28 +348,28 @@
                         
                         <div class="titik-content">
                             <div class="row">
-                                <div class="col-md-3 mb-3 required-field">
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label">Scaffolding</label>
                                     <div class="input-group">
                                         <input type="number" class="form-control progress-input" name="scaffolding[]" min="0" max="100" value="0" required>
                                         <span class="input-group-text">%</span>
                                     </div>
                                 </div>
-                                <div class="col-md-3 mb-3 required-field">
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label">Bongkar Molding</label>
                                     <div class="input-group">
                                         <input type="number" class="form-control progress-input" name="bongkarMolding[]" min="0" max="100" value="0" required>
                                         <span class="input-group-text">%</span>
                                     </div>
                                 </div>
-                                <div class="col-md-3 mb-3 required-field">
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label">Bongkar Dompet</label>
                                     <div class="input-group">
                                         <input type="number" class="form-control progress-input" name="bongkarDompet[]" min="0" max="100" value="0" required>
                                         <span class="input-group-text">%</span>
                                     </div>
                                 </div>
-                                <div class="col-md-3 mb-3 required-field">
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label">Bongkar Casting Lama</label>
                                     <div class="input-group">
                                         <input type="number" class="form-control progress-input" name="bongkarCastingLama[]" min="0" max="100" value="0" required>
@@ -385,7 +386,7 @@
                                         <span class="input-group-text">%</span>
                                     </div>
                                 </div>
-                                <div class="col-md-3 mb-3 required-field">
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label">Anchoring</label>
                                     <div class="input-group">
                                         <input type="number" class="form-control progress-input" name="anchoring[]" min="0" max="100" value="0" required>
@@ -409,28 +410,28 @@
                             </div>
                             
                             <div class="row">
-                                <div class="col-md-3 mb-3 required-field">
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label">Casting</label>
                                     <div class="input-group">
                                         <input type="number" class="form-control progress-input" name="casting[]" min="0" max="100" value="0" required>
                                         <span class="input-group-text">%</span>
                                     </div>
                                 </div>
-                                <div class="col-md-3 mb-3 required-field">
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label">Curring</label>
                                     <div class="input-group">
                                         <input type="number" class="form-control progress-input" name="curring[]" min="0" max="100" value="0" required>
                                         <span class="input-group-text">%</span>
                                     </div>
                                 </div>
-                                <div class="col-md-3 mb-3 required-field">
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label">Buka Scaffolding</label>
                                     <div class="input-group">
                                         <input type="number" class="form-control progress-input" name="bukaScaffolding[]" min="0" max="100" value="0" required>
                                         <span class="input-group-text">%</span>
                                     </div>
                                 </div>
-                                <div class="col-md-3 mb-3 required-field">
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label">Cleaning</label>
                                     <div class="input-group">
                                         <input type="number" class="form-control progress-input" name="cleaning[]" min="0" max="100" value="0" required>
