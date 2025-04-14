@@ -27,6 +27,20 @@
         .progress-input {
             max-width: 100px;
         }
+        .optional-field label:after {
+            content: " (optional)";
+            font-weight: normal;
+            color: #6c757d;
+        }
+        .required-field label:after {
+            content: " *";
+            color: #dc3545;
+        }
+        .collapse-btn {
+            cursor: pointer;
+            color: #0d6efd;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -37,11 +51,11 @@
             <div class="form-section">
                 <h3>Informasi Responden</h3>
                 <div class="row mb-3">
-                    <div class="col-md-6">
+                    <div class="col-md-6 required-field">
                         <label for="namaResponden" class="form-label">Nama Responden</label>
                         <input type="text" class="form-control" id="namaResponden" required>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 required-field">
                         <label for="vendor" class="form-label">PT/Vendor</label>
                         <select class="form-select" id="vendor" required>
                             <option value="" selected disabled>Pilih Vendor</option>
@@ -54,7 +68,7 @@
                 </div>
                 
                 <div class="row mb-3">
-                    <div class="col-md-6">
+                    <div class="col-md-6 required-field">
                         <label for="areaPekerjaan" class="form-label">Area Pekerjaan</label>
                         <select class="form-select" id="areaPekerjaan" required>
                             <option value="" selected disabled>Pilih Area Pekerjaan</option>
@@ -69,15 +83,20 @@
                             <option value="Burner">Burner</option>
                         </select>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 required-field">
                         <label for="jumlahTitik" class="form-label">Jumlah Titik Pekerjaan</label>
-                        <input type="number" class="form-control" id="jumlahTitik" min="1" max="50" value="20" required>
+                        <input type="number" class="form-control" id="jumlahTitik" min="1" max="50" value="1" required>
                     </div>
                 </div>
             </div>
             
             <div class="form-section">
-                <h3>Detail Pekerjaan per Titik</h3>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3>Detail Pekerjaan per Titik</h3>
+                    <div>
+                        <span class="collapse-btn" id="toggleAllBtn">Sembunyikan Semua</span>
+                    </div>
+                </div>
                 <div id="titikContainer">
                     <!-- Titik pekerjaan akan di-generate oleh JavaScript -->
                 </div>
@@ -96,6 +115,9 @@
             const jumlahTitikInput = document.getElementById('jumlahTitik');
             const titikContainer = document.getElementById('titikContainer');
             const vendorSelect = document.getElementById('vendor');
+            const toggleAllBtn = document.getElementById('toggleAllBtn');
+            
+            let allCollapsed = false;
             
             // Generate form titik pekerjaan saat area atau jumlah titik berubah
             function generateTitikForms() {
@@ -110,103 +132,109 @@
                 for (let i = 1; i <= jumlahTitik; i++) {
                     const titikDiv = document.createElement('div');
                     titikDiv.className = 'titik-pekerjaan';
+                    titikDiv.id = `titik-${i}`;
                     
                     const titikCode = `${i}.${vendorCode}`;
                     
                     titikDiv.innerHTML = `
-                        <div class="titik-header">Titik Pekerjaan: ${titikCode}</div>
+                        <div class="d-flex justify-content-between align-items-center titik-header">
+                            <span>Titik Pekerjaan: ${titikCode}</span>
+                            <span class="collapse-btn toggle-titik">Sembunyikan</span>
+                        </div>
                         <input type="hidden" name="titikCode[]" value="${titikCode}">
                         <input type="hidden" name="area[]" value="${area}">
                         
-                        <div class="row">
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label">Scaffolding</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control progress-input" name="scaffolding[]" min="0" max="100" required>
-                                    <span class="input-group-text">%</span>
+                        <div class="titik-content">
+                            <div class="row">
+                                <div class="col-md-3 mb-3 required-field">
+                                    <label class="form-label">Scaffolding</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control progress-input" name="scaffolding[]" min="0" max="100" value="0" required>
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3 required-field">
+                                    <label class="form-label">Bongkar Molding</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control progress-input" name="bongkarMolding[]" min="0" max="100" value="0" required>
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3 required-field">
+                                    <label class="form-label">Bongkar Dompet</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control progress-input" name="bongkarDompet[]" min="0" max="100" value="0" required>
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3 required-field">
+                                    <label class="form-label">Bongkar Casting Lama</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control progress-input" name="bongkarCastingLama[]" min="0" max="100" value="0" required>
+                                        <span class="input-group-text">%</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label">Bongkar Molding</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control progress-input" name="bongkarMolding[]" min="0" max="100" required>
-                                    <span class="input-group-text">%</span>
+                            
+                            <div class="row">
+                                <div class="col-md-3 mb-3 optional-field">
+                                    <label class="form-label">Ganti Plat (jika ada)</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control progress-input" name="gantiPlat[]" min="0" max="100" value="0">
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3 required-field">
+                                    <label class="form-label">Anchoring</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control progress-input" name="anchoring[]" min="0" max="100" value="0" required>
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3 optional-field">
+                                    <label class="form-label">Insulating (jika ada)</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control progress-input" name="insulating[]" min="0" max="100" value="0">
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3 optional-field">
+                                    <label class="form-label">Molding (Jika Ada)</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control progress-input" name="molding[]" min="0" max="100" value="0">
+                                        <span class="input-group-text">%</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label">Bongkar Dompet</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control progress-input" name="bongkarDompet[]" min="0" max="100" required>
-                                    <span class="input-group-text">%</span>
+                            
+                            <div class="row">
+                                <div class="col-md-3 mb-3 required-field">
+                                    <label class="form-label">Casting</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control progress-input" name="casting[]" min="0" max="100" value="0" required>
+                                        <span class="input-group-text">%</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label">Bongkar Casting Lama</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control progress-input" name="bongkarCastingLama[]" min="0" max="100" required>
-                                    <span class="input-group-text">%</span>
+                                <div class="col-md-3 mb-3 required-field">
+                                    <label class="form-label">Curring</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control progress-input" name="curring[]" min="0" max="100" value="0" required>
+                                        <span class="input-group-text">%</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label">Ganti Plat (jika ada)</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control progress-input" name="gantiPlat[]" min="0" max="100">
-                                    <span class="input-group-text">%</span>
+                                <div class="col-md-3 mb-3 required-field">
+                                    <label class="form-label">Buka Scaffolding</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control progress-input" name="bukaScaffolding[]" min="0" max="100" value="0" required>
+                                        <span class="input-group-text">%</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label">Anchoring</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control progress-input" name="anchoring[]" min="0" max="100" required>
-                                    <span class="input-group-text">%</span>
-                                </div>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label">Insulating (jika ada)</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control progress-input" name="insulating[]" min="0" max="100">
-                                    <span class="input-group-text">%</span>
-                                </div>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label">Molding (Jika Ada)</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control progress-input" name="molding[]" min="0" max="100">
-                                    <span class="input-group-text">%</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label">Casting</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control progress-input" name="casting[]" min="0" max="100" required>
-                                    <span class="input-group-text">%</span>
-                                </div>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label">Curring</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control progress-input" name="curring[]" min="0" max="100" required>
-                                    <span class="input-group-text">%</span>
-                                </div>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label">Buka Scaffolding</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control progress-input" name="bukaScaffolding[]" min="0" max="100" required>
-                                    <span class="input-group-text">%</span>
-                                </div>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label">Cleaning</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control progress-input" name="cleaning[]" min="0" max="100" required>
-                                    <span class="input-group-text">%</span>
+                                <div class="col-md-3 mb-3 required-field">
+                                    <label class="form-label">Cleaning</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control progress-input" name="cleaning[]" min="0" max="100" value="0" required>
+                                        <span class="input-group-text">%</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -214,12 +242,47 @@
                     
                     titikContainer.appendChild(titikDiv);
                 }
+                
+                // Add event listeners for collapse/expand buttons
+                document.querySelectorAll('.toggle-titik').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const titikDiv = this.closest('.titik-pekerjaan');
+                        const content = titikDiv.querySelector('.titik-content');
+                        
+                        if (content.style.display === 'none') {
+                            content.style.display = 'block';
+                            this.textContent = 'Sembunyikan';
+                        } else {
+                            content.style.display = 'none';
+                            this.textContent = 'Tampilkan';
+                        }
+                    });
+                });
             }
+            
+            // Toggle all titik sections
+            toggleAllBtn.addEventListener('click', function() {
+                allCollapsed = !allCollapsed;
+                this.textContent = allCollapsed ? 'Tampilkan Semua' : 'Sembunyikan Semua';
+                
+                document.querySelectorAll('.titik-pekerjaan .titik-content').forEach(content => {
+                    content.style.display = allCollapsed ? 'none' : 'block';
+                });
+                
+                document.querySelectorAll('.toggle-titik').forEach(btn => {
+                    btn.textContent = allCollapsed ? 'Tampilkan' : 'Sembunyikan';
+                });
+            });
             
             // Event listeners
             areaPekerjaanSelect.addEventListener('change', generateTitikForms);
             jumlahTitikInput.addEventListener('change', generateTitikForms);
             vendorSelect.addEventListener('change', generateTitikForms);
+            
+            // Initialize form if values are already selected
+            if (areaPekerjaanSelect.value && vendorSelect.value) {
+                generateTitikForms();
+            }
             
             // Form submission
             document.getElementById('inspeksiForm').addEventListener('submit', function(e) {
@@ -228,11 +291,16 @@
                 const namaResponden = document.getElementById('namaResponden').value;
                 const vendor = vendorSelect.options[vendorSelect.selectedIndex].text;
                 const areaPekerjaan = areaPekerjaanSelect.value;
-                const jumlahTitik = jumlahTitikInput.value;
                 
                 // Collect data from all titik pekerjaan
                 const titikCodes = document.querySelectorAll('input[name="titikCode[]"]');
                 const data = [];
+                
+                // Check if there are any titik pekerjaan
+                if (titikCodes.length === 0) {
+                    alert('Silakan pilih area pekerjaan dan vendor terlebih dahulu');
+                    return;
+                }
                 
                 titikCodes.forEach((codeInput, index) => {
                     const titikCode = codeInput.value;
@@ -244,25 +312,31 @@
                         vendor,
                         areaPekerjaan,
                         titikCode,
-                        scaffolding: container.querySelector('input[name="scaffolding[]"]').value,
-                        bongkarMolding: container.querySelector('input[name="bongkarMolding[]"]').value,
-                        bongkarDompet: container.querySelector('input[name="bongkarDompet[]"]').value,
-                        bongkarCastingLama: container.querySelector('input[name="bongkarCastingLama[]"]').value,
+                        scaffolding: container.querySelector('input[name="scaffolding[]"]').value || '0',
+                        bongkarMolding: container.querySelector('input[name="bongkarMolding[]"]').value || '0',
+                        bongkarDompet: container.querySelector('input[name="bongkarDompet[]"]').value || '0',
+                        bongkarCastingLama: container.querySelector('input[name="bongkarCastingLama[]"]').value || '0',
                         gantiPlat: container.querySelector('input[name="gantiPlat[]"]').value || '0',
-                        anchoring: container.querySelector('input[name="anchoring[]"]').value,
+                        anchoring: container.querySelector('input[name="anchoring[]"]').value || '0',
                         insulating: container.querySelector('input[name="insulating[]"]').value || '0',
                         molding: container.querySelector('input[name="molding[]"]').value || '0',
-                        casting: container.querySelector('input[name="casting[]"]').value,
-                        curring: container.querySelector('input[name="curring[]"]').value,
-                        bukaScaffolding: container.querySelector('input[name="bukaScaffolding[]"]').value,
-                        cleaning: container.querySelector('input[name="cleaning[]"]').value
+                        casting: container.querySelector('input[name="casting[]"]').value || '0',
+                        curring: container.querySelector('input[name="curring[]"]').value || '0',
+                        bukaScaffolding: container.querySelector('input[name="bukaScaffolding[]"]').value || '0',
+                        cleaning: container.querySelector('input[name="cleaning[]"]').value || '0'
                     };
                     
                     data.push(rowData);
                 });
                 
+                // Show loading state
+                const submitBtn = e.target.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn.textContent;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Mengirim...';
+                
                 // Send data to Google Sheets
-                fetch('https://script.google.com/macros/s/AKfycbzSz3gm5VXIBWKGSl2ANTXeiVe0H6sT6HI5JfNripQpAaifkBSWqKszsKNnmBxcnn-_/exec', {
+                fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: {
@@ -278,6 +352,10 @@
                 .catch(error => {
                     console.error('Error:', error);
                     alert('Terjadi kesalahan saat mengirim data.');
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalBtnText;
                 });
             });
         });
