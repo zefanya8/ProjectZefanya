@@ -235,6 +235,21 @@
                 max-width: 140px;
             }
         }
+        .admin-login-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .admin-login-btn.admin-active {
+            background-color: var(--accent-color);
+        }
     </style>
 </head>
 <body>
@@ -353,7 +368,7 @@
                                 <option value="R">RMP</option>
                                 <option value="V">Visuvius</option>
                                 <option value="S">Shinagawa</option>
-                                <option value="I">Calderys</option>
+                                <option value="C">Calderys</option>
                             </select>
                         </div>
                     </div>
@@ -415,17 +430,23 @@
         </div>
     </div>
 
-    <!-- Password Modal -->
+    <!-- Tombol Login Admin -->
+    <button id="adminLoginBtn" class="btn btn-admin admin-login-btn" title="Login Administrator">
+        <i class="fas fa-user-shield"></i>
+    </button>
+
+    <!-- Modal Password -->
     <div id="passwordModal" class="password-modal">
         <div class="password-modal-content">
-            <h4><i class="fas fa-lock me-2"></i>Masukkan Password Admin</h4>
+            <h4><i class="fas fa-lock me-2"></i>Login Administrator</h4>
             <div class="mb-3">
-                <input type="password" class="form-control" id="adminPassword" placeholder="Password">
+                <label for="adminPassword" class="form-label">Password</label>
+                <input type="password" class="form-control" id="adminPassword" placeholder="Masukkan password">
                 <p id="passwordError" class="text-danger mt-2" style="display:none;">Password salah!</p>
             </div>
             <div class="d-flex justify-content-end">
                 <button type="button" class="btn btn-secondary me-2" id="btnCancelPassword">Batal</button>
-                <button type="button" class="btn btn-admin" id="btnSubmitPassword">Submit</button>
+                <button type="button" class="btn btn-admin" id="btnSubmitPassword">Login</button>
             </div>
         </div>
     </div>
@@ -476,6 +497,45 @@
             const btnSubmitPassword = document.getElementById('btnSubmitPassword');
             const btnCancelPassword = document.getElementById('btnCancelPassword');
             const passwordError = document.getElementById('passwordError');
+
+            // Tambahkan elemen untuk tombol admin
+            const adminLoginBtn = document.getElementById('adminLoginBtn');
+            
+            // Event listener untuk tombol login admin
+            adminLoginBtn.addEventListener('click', function() {
+                if (!isAdminAuthenticated) {
+                    showPasswordModal();
+                } else {
+                    // Scroll ke bagian admin jika sudah login
+                    document.getElementById('adminSection').scrollIntoView();
+                }
+            });
+            
+            // Fungsi untuk menampilkan modal password
+            function showPasswordModal() {
+                passwordModal.style.display = 'block';
+                adminPassword.focus();
+            }
+            
+            // Fungsi untuk submit password
+            function submitPassword() {
+                if (adminPassword.value === ADMIN_PASSWORD) {
+                    isAdminAuthenticated = true;
+                    passwordModal.style.display = 'none';
+                    adminPassword.value = '';
+                    passwordError.style.display = 'none';
+                    adminSection.style.display = 'block';
+                    adminLoginBtn.classList.add('admin-active');
+                    
+                    // Setel tanggal default ke hari ini
+                    adminTanggal.valueAsDate = new Date();
+                    
+                    // Scroll ke bagian admin
+                    document.getElementById('adminSection').scrollIntoView();
+                } else {
+                    passwordError.style.display = 'block';
+                }
+            }
             
             // Initialize date to today
             adminTanggal.valueAsDate = new Date();
