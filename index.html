@@ -258,7 +258,7 @@
             <div class="logo">
                 <i class="fas fa-hard-hat"></i>
             </div>
-            <h1>Form Inspeksi Pekerjaan Refractory</h1>
+            <h1>Form Realisasi Pekerjaan Refractory</h1>
             <p class="text-muted">Sistem Pelaporan Progress Pekerjaan Harian</p>
         </div>
         
@@ -270,17 +270,17 @@
                     <label for="adminArea" class="form-label">Area Pekerjaan</label>
                     <select class="form-select" id="adminArea">
                         <option value="" selected disabled>Pilih Area</option>
-                                <option value="Cooler">Cooler</option>
-                                <option value="KOH">KOH</option>
-                                <option value="TAD">TAD</option>
-                                <option value="Inlet Kiln">Inlet Kiln</option>
-                                <option value="Riser Inlet Kiln">Riser Inlet Kiln</option>
-                                <option value="B53">B53</option>
-                                <option value="A54">A54</option>
-                                <option value="B54">B54</option>
-                                <option value="Kalsiner">Kalsiner</option>
-                                <option value="Downpipe">Downpipe</option>
-                                <option value="Burner">Burner</option>
+                        <option value="Cooler">Cooler</option>
+                        <option value="KOH">KOH</option>
+                        <option value="TAD">TAD</option>
+                        <option value="Inlet Kiln">Inlet Kiln</option>
+                        <option value="Riser Inlet Kiln">Riser Inlet Kiln</option>
+                        <option value="B53">B53</option>
+                        <option value="A54">A54</option>
+                        <option value="B54">B54</option>
+                        <option value="Kalsiner">Kalsiner</option>
+                        <option value="Downpipe">Downpipe</option>
+                        <option value="Burner">Burner</option>
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -426,7 +426,7 @@
         </form>
         
         <div class="footer">
-            <p>&copy; 2023 Sistem Inspeksi Refractory | Dibangun dengan <i class="fas fa-heart text-danger"></i></p>
+            <p>&copy; 2023 Sistem Inspeksi Refractory | Dibangun dengan <i class="fas fa-heart text-danger"> BY ZMM/UM21</i></p>
         </div>
     </div>
 
@@ -470,7 +470,7 @@
         };
         
         // Global variables
-        const workTargets = [];
+        let workTargets = JSON.parse(localStorage.getItem('workTargets')) || [];
         let isAdminAuthenticated = false;
         
         document.addEventListener('DOMContentLoaded', function() {
@@ -497,48 +497,15 @@
             const btnSubmitPassword = document.getElementById('btnSubmitPassword');
             const btnCancelPassword = document.getElementById('btnCancelPassword');
             const passwordError = document.getElementById('passwordError');
-
-            // Tambahkan elemen untuk tombol admin
             const adminLoginBtn = document.getElementById('adminLoginBtn');
-            
-            // Event listener untuk tombol login admin
-            adminLoginBtn.addEventListener('click', function() {
-                if (!isAdminAuthenticated) {
-                    showPasswordModal();
-                } else {
-                    // Scroll ke bagian admin jika sudah login
-                    document.getElementById('adminSection').scrollIntoView();
-                }
-            });
-            
-            // Fungsi untuk menampilkan modal password
-            function showPasswordModal() {
-                passwordModal.style.display = 'block';
-                adminPassword.focus();
-            }
-            
-            // Fungsi untuk submit password
-            function submitPassword() {
-                if (adminPassword.value === ADMIN_PASSWORD) {
-                    isAdminAuthenticated = true;
-                    passwordModal.style.display = 'none';
-                    adminPassword.value = '';
-                    passwordError.style.display = 'none';
-                    adminSection.style.display = 'block';
-                    adminLoginBtn.classList.add('admin-active');
-                    
-                    // Setel tanggal default ke hari ini
-                    adminTanggal.valueAsDate = new Date();
-                    
-                    // Scroll ke bagian admin
-                    document.getElementById('adminSection').scrollIntoView();
-                } else {
-                    passwordError.style.display = 'block';
-                }
-            }
             
             // Initialize date to today
             adminTanggal.valueAsDate = new Date();
+            
+            // Load existing targets from localStorage
+            if (workTargets.length > 0) {
+                updateTargetList();
+            }
             
             // Event Listeners
             areaPekerjaanSelect.addEventListener('change', generateTitikForms);
@@ -549,10 +516,24 @@
             btnShowTargets.addEventListener('click', toggleTargetList);
             btnSubmitPassword.addEventListener('click', submitPassword);
             btnCancelPassword.addEventListener('click', cancelPassword);
+            adminLoginBtn.addEventListener('click', toggleAdminPanel);
             
             // Initialize form if values exist
             if (areaPekerjaanSelect.value && vendorSelect.value) {
                 generateTitikForms();
+            }
+            
+            // Toggle admin panel
+            function toggleAdminPanel() {
+                if (!isAdminAuthenticated) {
+                    showPasswordModal();
+                } else {
+                    adminSection.style.display = adminSection.style.display === 'none' ? 'block' : 'none';
+                    adminLoginBtn.classList.toggle('admin-active');
+                    if (adminSection.style.display === 'block') {
+                        adminSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
             }
             
             // Generate work point forms
@@ -742,7 +723,7 @@
                     return;
                 }
                 
-                workTargets.push({
+                const newTarget = {
                     area,
                     titik: titik === 'all' ? null : parseInt(titik),
                     tahap,
@@ -750,7 +731,10 @@
                     jamMulai,
                     jamSelesai,
                     target: parseInt(target)
-                });
+                };
+                
+                workTargets.push(newTarget);
+                localStorage.setItem('workTargets', JSON.stringify(workTargets));
                 
                 updateTargetList();
                 updateAllTargetDisplays();
@@ -775,7 +759,9 @@
                 
                 document.querySelectorAll('.delete-target').forEach(btn => {
                     btn.addEventListener('click', function() {
-                        workTargets.splice(parseInt(this.getAttribute('data-index')), 1);
+                        const index = parseInt(this.getAttribute('data-index'));
+                        workTargets.splice(index, 1);
+                        localStorage.setItem('workTargets', JSON.stringify(workTargets));
                         updateTargetList();
                         updateAllTargetDisplays();
                     });
@@ -805,6 +791,8 @@
                     adminPassword.value = '';
                     passwordError.style.display = 'none';
                     adminSection.style.display = 'block';
+                    adminLoginBtn.classList.add('admin-active');
+                    localStorage.setItem('adminAuthenticated', 'true');
                 } else {
                     passwordError.style.display = 'block';
                 }
@@ -814,6 +802,13 @@
                 passwordModal.style.display = 'none';
                 adminPassword.value = '';
                 passwordError.style.display = 'none';
+            }
+            
+            // Check if admin was previously authenticated
+            if (localStorage.getItem('adminAuthenticated') === 'true') {
+                isAdminAuthenticated = true;
+                adminSection.style.display = 'block';
+                adminLoginBtn.classList.add('admin-active');
             }
             
             // Form submission
@@ -848,7 +843,7 @@
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Mengirim...';
                 
-                fetch('https://script.google.com/macros/s/AKfycbyMT5YgtsQZKIDjpVx--Qw9BcD2zcykHJ3t2ffyOHPLz4A67qzZcdH3Sk3u2N2l3mI/exec', {
+                fetch('https://script.google.com/macros/s/AKfycby6rjf6rWThqxm5M0RKF_cD_kWf-Rzf7iqfHOrX-8_B3cDs5Sl7iy1TX43Lack4KCvM/exec', {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
