@@ -474,18 +474,49 @@
         let isAdminAuthenticated = false;
         
         document.addEventListener('DOMContentLoaded', function() {
-            // DOM Elements (tetap sama seperti sebelumnya)
+            // DOM Elements
+            const areaPekerjaanSelect = document.getElementById('areaPekerjaan');
+            const jumlahTitikInput = document.getElementById('jumlahTitik');
+            const titikContainer = document.getElementById('titikContainer');
+            const vendorSelect = document.getElementById('vendor');
+            const toggleAllBtn = document.getElementById('toggleAllBtn');
+            const adminSection = document.getElementById('adminSection');
+            const adminArea = document.getElementById('adminArea');
+            const adminTitik = document.getElementById('adminTitik');
+            const adminTahap = document.getElementById('adminTahap');
+            const adminTanggal = document.getElementById('adminTanggal');
+            const adminJamMulai = document.getElementById('adminJamMulai');
+            const adminJamSelesai = document.getElementById('adminJamSelesai');
+            const adminTarget = document.getElementById('adminTarget');
+            const btnSetTarget = document.getElementById('btnSetTarget');
+            const btnShowTargets = document.getElementById('btnShowTargets');
+            const targetListContainer = document.getElementById('targetListContainer');
+            const targetList = document.getElementById('targetList');
+            const passwordModal = document.getElementById('passwordModal');
+            const adminPassword = document.getElementById('adminPassword');
+            const btnSubmitPassword = document.getElementById('btnSubmitPassword');
+            const btnCancelPassword = document.getElementById('btnCancelPassword');
+            const passwordError = document.getElementById('passwordError');
+            const adminLoginBtn = document.getElementById('adminLoginBtn');
             
             // Initialize date to today
             adminTanggal.valueAsDate = new Date();
             
-            // Load existing targets from Google Sheet
+            // Load existing targets from server
             loadTargetsFromServer();
             
             // Event Listeners
-            areaPekerjaanSelect.addEventListener('change', generateTitikForms);
+            areaPekerjaanSelect.addEventListener('change', function() {
+                updateTitikOptions();
+                generateTitikForms();
+            });
+            
             jumlahTitikInput.addEventListener('change', generateTitikForms);
-            vendorSelect.addEventListener('change', generateTitikForms);
+            vendorSelect.addEventListener('change', function() {
+                updateTitikOptions();
+                generateTitikForms();
+            });
+            
             adminArea.addEventListener('change', updateTitikOptions);
             btnSetTarget.addEventListener('click', handleSetTarget);
             btnShowTargets.addEventListener('click', toggleTargetList);
@@ -529,10 +560,13 @@
             // Generate work point forms
             function generateTitikForms() {
                 const area = areaPekerjaanSelect.value;
-                const jumlahTitik = parseInt(jumlahTitikInput.value);
+                const jumlahTitik = parseInt(jumlahTitikInput.value) || 1;
                 const vendorCode = vendorSelect.value;
                 
-                if (!area || !jumlahTitik || !vendorCode) return;
+                if (!area || !jumlahTitik || !vendorCode) {
+                    titikContainer.innerHTML = '';
+                    return;
+                }
                 
                 titikContainer.innerHTML = '';
                 
@@ -720,16 +754,29 @@
                     tanggal,
                     jamMulai,
                     jamSelesai,
-                    target: parseInt(target)
+                    target: parseInt(target),
+                    action: 'setTarget'
                 };
                 
-                workTargets.push(newTarget);
-                localStorage.setItem('workTargets', JSON.stringify(workTargets));
-                
-                updateTargetList();
-                updateAllTargetDisplays();
-                adminTahap.value = '';
-                adminTarget.value = '0';
+                // Save to server
+                fetch('https://script.google.com/macros/s/AKfycbztjCIOVhDWZH_K_QR5x-GX9yIAvli3T6pW-Fa3_roA1zSm8n8qN1n5KysZZxbk03Xi/exec', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newTarget)
+                })
+                .then(() => {
+                    workTargets.push(newTarget);
+                    updateTargetList();
+                    updateAllTargetDisplays();
+                    adminTahap.value = '';
+                    adminTarget.value = '0';
+                    alert('Target berhasil disimpan!');
+                })
+                .catch(error => {
+                    console.error('Error saving target:', error);
+                    alert('Gagal menyimpan target.');
+                });
             }
             
             function updateTargetList() {
@@ -751,7 +798,6 @@
                     btn.addEventListener('click', function() {
                         const index = parseInt(this.getAttribute('data-index'));
                         workTargets.splice(index, 1);
-                        localStorage.setItem('workTargets', JSON.stringify(workTargets));
                         updateTargetList();
                         updateAllTargetDisplays();
                     });
@@ -792,58 +838,6 @@
                 passwordModal.style.display = 'none';
                 adminPassword.value = '';
                 passwordError.style.display = 'none';
-            }
-
-            // Handle set target
-            function handleSetTarget() {
-                if (!isAdminAuthenticated) {
-                    showPasswordModal();
-                    return;
-                }
-                
-                const area = adminArea.value;
-                const titik = adminTitik.value;
-                const tahap = adminTahap.value;
-                const tanggal = adminTanggal.value;
-                const jamMulai = adminJamMulai.value;
-                const jamSelesai = adminJamSelesai.value;
-                const target = adminTarget.value;
-                
-                if (!area || !tahap || !tanggal || !jamMulai || !jamSelesai || !target) {
-                    alert('Harap lengkapi semua field target!');
-                    return;
-                }
-                
-                const newTarget = {
-                    area,
-                    titik: titik === 'all' ? null : parseInt(titik),
-                    tahap,
-                    tanggal,
-                    jamMulai,
-                    jamSelesai,
-                    target: parseInt(target),
-                    action: 'setTarget'
-                };
-                
-                // Save to server
-                fetch('https://script.google.com/macros/s/AKfycbztjCIOVhDWZH_K_QR5x-GX9yIAvli3T6pW-Fa3_roA1zSm8n8qN1n5KysZZxbk03Xi/exec', {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newTarget)
-                })
-                .then(() => {
-                    workTargets.push(newTarget);
-                    updateTargetList();
-                    updateAllTargetDisplays();
-                    adminTahap.value = '';
-                    adminTarget.value = '0';
-                    alert('Target berhasil disimpan!');
-                })
-                .catch(error => {
-                    console.error('Error saving target:', error);
-                    alert('Gagal menyimpan target.');
-                });
             }
 
             // Check if admin was previously authenticated
