@@ -454,7 +454,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Configuration
-        const ADMIN_PASSWORD = "chepet"; // Change this to your desired password
+        const ADMIN_PASSWORD = "chepet";
         const progressRules = {
             bongkarMolding: ['scaffolding'],
             bongkarDompet: ['bongkarMolding'],
@@ -470,42 +470,17 @@
         };
         
         // Global variables
-        let workTargets = JSON.parse(localStorage.getItem('workTargets')) || [];
+        let workTargets = [];
         let isAdminAuthenticated = false;
         
         document.addEventListener('DOMContentLoaded', function() {
-            // DOM Elements
-            const areaPekerjaanSelect = document.getElementById('areaPekerjaan');
-            const jumlahTitikInput = document.getElementById('jumlahTitik');
-            const titikContainer = document.getElementById('titikContainer');
-            const vendorSelect = document.getElementById('vendor');
-            const toggleAllBtn = document.getElementById('toggleAllBtn');
-            const adminSection = document.getElementById('adminSection');
-            const adminArea = document.getElementById('adminArea');
-            const adminTitik = document.getElementById('adminTitik');
-            const adminTahap = document.getElementById('adminTahap');
-            const adminTanggal = document.getElementById('adminTanggal');
-            const adminJamMulai = document.getElementById('adminJamMulai');
-            const adminJamSelesai = document.getElementById('adminJamSelesai');
-            const adminTarget = document.getElementById('adminTarget');
-            const btnSetTarget = document.getElementById('btnSetTarget');
-            const btnShowTargets = document.getElementById('btnShowTargets');
-            const targetListContainer = document.getElementById('targetListContainer');
-            const targetList = document.getElementById('targetList');
-            const passwordModal = document.getElementById('passwordModal');
-            const adminPassword = document.getElementById('adminPassword');
-            const btnSubmitPassword = document.getElementById('btnSubmitPassword');
-            const btnCancelPassword = document.getElementById('btnCancelPassword');
-            const passwordError = document.getElementById('passwordError');
-            const adminLoginBtn = document.getElementById('adminLoginBtn');
+            // DOM Elements (tetap sama seperti sebelumnya)
             
             // Initialize date to today
             adminTanggal.valueAsDate = new Date();
             
-            // Load existing targets from localStorage
-            if (workTargets.length > 0) {
-                updateTargetList();
-            }
+            // Load existing targets from Google Sheet
+            loadTargetsFromServer();
             
             // Event Listeners
             areaPekerjaanSelect.addEventListener('change', generateTitikForms);
@@ -536,6 +511,21 @@
                 }
             }
             
+            // Load targets from server
+            function loadTargetsFromServer() {
+                fetch('https://script.google.com/macros/s/AKfycbztjCIOVhDWZH_K_QR5x-GX9yIAvli3T6pW-Fa3_roA1zSm8n8qN1n5KysZZxbk03Xi/exec?action=getTargets')
+                    .then(response => response.json())
+                    .then(data => {
+                        workTargets = data;
+                        if (areaPekerjaanSelect.value && vendorSelect.value) {
+                            updateAllTargetDisplays();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading targets:', error);
+                    });
+            }
+
             // Generate work point forms
             function generateTitikForms() {
                 const area = areaPekerjaanSelect.value;
@@ -803,7 +793,59 @@
                 adminPassword.value = '';
                 passwordError.style.display = 'none';
             }
-            
+
+            // Handle set target
+            function handleSetTarget() {
+                if (!isAdminAuthenticated) {
+                    showPasswordModal();
+                    return;
+                }
+                
+                const area = adminArea.value;
+                const titik = adminTitik.value;
+                const tahap = adminTahap.value;
+                const tanggal = adminTanggal.value;
+                const jamMulai = adminJamMulai.value;
+                const jamSelesai = adminJamSelesai.value;
+                const target = adminTarget.value;
+                
+                if (!area || !tahap || !tanggal || !jamMulai || !jamSelesai || !target) {
+                    alert('Harap lengkapi semua field target!');
+                    return;
+                }
+                
+                const newTarget = {
+                    area,
+                    titik: titik === 'all' ? null : parseInt(titik),
+                    tahap,
+                    tanggal,
+                    jamMulai,
+                    jamSelesai,
+                    target: parseInt(target),
+                    action: 'setTarget'
+                };
+                
+                // Save to server
+                fetch('https://script.google.com/macros/s/AKfycbztjCIOVhDWZH_K_QR5x-GX9yIAvli3T6pW-Fa3_roA1zSm8n8qN1n5KysZZxbk03Xi/exec', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newTarget)
+                })
+                .then(() => {
+                    workTargets.push(newTarget);
+                    updateTargetList();
+                    updateAllTargetDisplays();
+                    adminTahap.value = '';
+                    adminTarget.value = '0';
+                    alert('Target berhasil disimpan!');
+                })
+                .catch(error => {
+                    console.error('Error saving target:', error);
+                    alert('Gagal menyimpan target.');
+                });
+            }
+
             // Check if admin was previously authenticated
             if (localStorage.getItem('adminAuthenticated') === 'true') {
                 isAdminAuthenticated = true;
@@ -843,7 +885,7 @@
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Mengirim...';
                 
-                fetch('https://script.google.com/macros/s/AKfycby6rjf6rWThqxm5M0RKF_cD_kWf-Rzf7iqfHOrX-8_B3cDs5Sl7iy1TX43Lack4KCvM/exec', {
+                fetch('https://script.google.com/macros/s/AKfycbztjCIOVhDWZH_K_QR5x-GX9yIAvli3T6pW-Fa3_roA1zSm8n8qN1n5KysZZxbk03Xi/exec', {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
