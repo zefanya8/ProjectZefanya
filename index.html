@@ -544,7 +544,7 @@
             
             // Load targets from server
             function loadTargetsFromServer() {
-                fetch('https://script.google.com/macros/s/AKfycbztjCIOVhDWZH_K_QR5x-GX9yIAvli3T6pW-Fa3_roA1zSm8n8qN1n5KysZZxbk03Xi/exec?action=getTargets')
+                fetch('https://script.google.com/macros/s/AKfycbyhkq-1O6zaLhGO9qu6NavFW7HbmOqyKskORBvthaf6-Rp8Lt2Q5TaaZqWtBCMfsqyR/exec?action=getTargets')
                     .then(response => response.json())
                     .then(data => {
                         workTargets = data;
@@ -774,7 +774,7 @@
                 };
                 
                 // Save to server
-                fetch('https://script.google.com/macros/s/AKfycbztjCIOVhDWZH_K_QR5x-GX9yIAvli3T6pW-Fa3_roA1zSm8n8qN1n5KysZZxbk03Xi/exec', {
+                fetch('https://script.google.com/macros/s/AKfycbyhkq-1O6zaLhGO9qu6NavFW7HbmOqyKskORBvthaf6-Rp8Lt2Q5TaaZqWtBCMfsqyR/exec', {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
@@ -888,7 +888,7 @@
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Mengirim...';
                 
-                fetch('https://script.google.com/macros/s/AKfycbztjCIOVhDWZH_K_QR5x-GX9yIAvli3T6pW-Fa3_roA1zSm8n8qN1n5KysZZxbk03Xi/exec', {
+                fetch('https://script.google.com/macros/s/AKfycbyhkq-1O6zaLhGO9qu6NavFW7HbmOqyKskORBvthaf6-Rp8Lt2Q5TaaZqWtBCMfsqyR/exec', {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
