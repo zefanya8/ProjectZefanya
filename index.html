@@ -720,13 +720,18 @@
                         : '<em>Belum ada target yang ditetapkan</em>';
                 });
             }
-            
             function generateTargetText(targets) {
-                return '<strong>Target:</strong> ' + targets.map(target => 
-                    `${target.tanggal} ${target.jamMulai}-${target.jamSelesai}: ${target.target}%` +
-                    (target.titik ? ` (Titik ${target.titik})` : '')
-                ).join('<br>');
-            }
+                return '<strong>Target:</strong> ' + targets.map(target => {
+                    // Format tanggal (YYYY-MM-DD)
+                    const formattedDate = target.tanggal;
+                // Format jam (HH:MM)
+                    const formattedStartTime = target.jamMulai.substring(0, 5);
+                    const formattedEndTime = target.jamSelesai.substring(0, 5);
+        
+        return `${formattedDate} ${formattedStartTime}-${formattedEndTime}: ${target.target}%` +
+               (target.titik ? ` (Titik ${target.titik})` : '');
+    }).join('<br>');
+}
             
             function handleSetTarget() {
                 if (!isAdminAuthenticated) {
@@ -746,7 +751,17 @@
                     alert('Harap lengkapi semua field target!');
                     return;
                 }
-                
+                    // Validasi format waktu
+                if (!/^\d{2}:\d{2}$/.test(jamMulai) || !/^\d{2}:\d{2}$/.test(jamSelesai)) {
+                    alert('Format jam harus HH:MM');
+                    return;
+                }
+    
+    // Validasi format tanggal
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(tanggal)) {
+        alert('Format tanggal harus YYYY-MM-DD');
+        return;
+    }
                 const newTarget = {
                     area,
                     titik: titik === 'all' ? null : parseInt(titik),
@@ -840,13 +855,7 @@
                 passwordError.style.display = 'none';
             }
 
-            // Check if admin was previously authenticated
-            if (localStorage.getItem('adminAuthenticated') === 'true') {
-                isAdminAuthenticated = true;
-                adminSection.style.display = 'block';
-                adminLoginBtn.classList.add('admin-active');
-            }
-            
+
             // Form submission
             document.getElementById('inspeksiForm').addEventListener('submit', function(e) {
                 e.preventDefault();
