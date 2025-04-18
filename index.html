@@ -636,7 +636,7 @@
             
             // Load targets from server
             function loadTargetsFromServer() {
-                fetch('https://script.google.com/macros/s/AKfycbyhkq-1O6zaLhGO9qu6NavFW7HbmOqyKskORBvthaf6-Rp8Lt2Q5TaaZqWtBCMfsqyR/exec?action=getTargets')
+                fetch('https://script.google.com/macros/s/AKfycbwusKr1xWmZVo5LUIoiIX8Fq9XNluCVvnP7pgaWx6I3zkPtyVe3tP9HnozAxiVAVNyp/exec?action=getTargets')
                     .then(response => response.json())
                     .then(data => {
                         workTargets = data;
@@ -651,7 +651,7 @@
             
             // Load titik configurations from server
             function loadTitikConfigurations() {
-                fetch('https://script.google.com/macros/s/AKfycbyhkq-1O6zaLhGO9qu6NavFW7HbmOqyKskORBvthaf6-Rp8Lt2Q5TaaZqWtBCMfsqyR/exec?action=getTitikConfig')
+                fetch('https://script.google.com/macros/s/AKfycbwusKr1xWmZVo5LUIoiIX8Fq9XNluCVvnP7pgaWx6I3zkPtyVe3tP9HnozAxiVAVNyp/exec?action=getTitikConfig')
                     .then(response => response.json())
                     .then(data => {
                         titikConfigurations = data;
@@ -926,7 +926,7 @@
                 });
                 
                 Promise.all(targetsToSave.map(target => 
-                    fetch('https://script.google.com/macros/s/AKfycbyhkq-1O6zaLhGO9qu6NavFW7HbmOqyKskORBvthaf6-Rp8Lt2Q5TaaZqWtBCMfsqyR/exec', {
+                    fetch('https://script.google.com/macros/s/AKfycbwusKr1xWmZVo5LUIoiIX8Fq9XNluCVvnP7pgaWx6I3zkPtyVe3tP9HnozAxiVAVNyp/exec', {
                         method: 'POST',
                         mode: 'no-cors',
                         headers: { 'Content-Type': 'application/json' },
@@ -1004,7 +1004,7 @@
                     action: 'setTitikConfig'
                 };
                 
-                fetch('https://script.google.com/macros/s/AKfycbyhkq-1O6zaLhGO9qu6NavFW7HbmOqyKskORBvthaf6-Rp8Lt2Q5TaaZqWtBCMfsqyR/exec', {
+                fetch('https://script.google.com/macros/s/AKfycbwusKr1xWmZVo5LUIoiIX8Fq9XNluCVvnP7pgaWx6I3zkPtyVe3tP9HnozAxiVAVNyp/exec', {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
@@ -1043,7 +1043,7 @@
                         const index = parseInt(this.getAttribute('data-index'));
                         const configToDelete = titikConfigurations[index];
                         
-                        fetch('https://script.google.com/macros/s/AKfycbyhkq-1O6zaLhGO9qu6NavFW7HbmOqyKskORBvthaf6-Rp8Lt2Q5TaaZqWtBCMfsqyR/exec', {
+                        fetch('https://script.google.com/macros/s/AKfycbwusKr1xWmZVo5LUIoiIX8Fq9XNluCVvnP7pgaWx6I3zkPtyVe3tP9HnozAxiVAVNyp/exec', {
                             method: 'POST',
                             mode: 'no-cors',
                             headers: { 'Content-Type': 'application/json' },
@@ -1132,7 +1132,7 @@
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Mengirim...';
                 
-                fetch('https://script.google.com/macros/s/AKfycbyhkq-1O6zaLhGO9qu6NavFW7HbmOqyKskORBvthaf6-Rp8Lt2Q5TaaZqWtBCMfsqyR/exec', {
+                fetch('https://script.google.com/macros/s/AKfycbwusKr1xWmZVo5LUIoiIX8Fq9XNluCVvnP7pgaWx6I3zkPtyVe3tP9HnozAxiVAVNyp/exec', {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
