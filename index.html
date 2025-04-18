@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Inspeksi Pekerjaan Refractory</title>
+    <title>Form Realisasi Pekerjaan Refractory</title>
     <link rel="icon" type="image/png" href="https://www.klikiburini.com/wp-content/uploads/2017/12/Logo_Semen_Padang.svg_-600x747.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -265,85 +265,157 @@
         <!-- Admin Section -->
         <div class="form-section admin-section" id="adminSection" style="display:none;">
             <h3><i class="fas fa-user-shield"></i> Panel Administrator</h3>
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <label for="adminArea" class="form-label">Area Pekerjaan</label>
-                    <select class="form-select" id="adminArea">
-                        <option value="" selected disabled>Pilih Area</option>
-                        <option value="Cooler">Cooler</option>
-                        <option value="KOH">KOH</option>
-                        <option value="TAD">TAD</option>
-                        <option value="Inlet Kiln">Inlet Kiln</option>
-                        <option value="Riser Inlet Kiln">Riser Inlet Kiln</option>
-                        <option value="B53">B53</option>
-                        <option value="A54">A54</option>
-                        <option value="B54">B54</option>
-                        <option value="Kalsiner">Kalsiner</option>
-                        <option value="Downpipe">Downpipe</option>
-                        <option value="Burner">Burner</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label for="adminTitik" class="form-label">Titik Pekerjaan</label>
-                    <select class="form-select" id="adminTitik">
-                        <option value="all" selected>Semua Titik</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label for="adminTahap" class="form-label">Tahap Pekerjaan</label>
-                    <select class="form-select" id="adminTahap">
-                        <option value="" selected disabled>Pilih Tahap</option>
-                        <option value="scaffolding">Scaffolding</option>
-                        <option value="bongkarMolding">Bongkar Molding</option>
-                        <option value="bongkarDompet">Bongkar Dompet</option>
-                        <option value="bongkarCastingLama">Bongkar Casting Lama</option>
-                        <option value="gantiPlat">Ganti Plat</option>
-                        <option value="anchoring">Anchoring</option>
-                        <option value="insulating">Insulating</option>
-                        <option value="molding">Molding</option>
-                        <option value="casting">Casting</option>
-                        <option value="curring">Curring</option>
-                        <option value="bukaScaffolding">Buka Scaffolding</option>
-                        <option value="cleaning">Cleaning</option>
-                    </select>
-                </div>
-            </div>
             
-            <div class="row mb-3">
-                <div class="col-md-3">
-                    <label for="adminTanggal" class="form-label">Tanggal</label>
-                    <input type="date" class="form-control" id="adminTanggal">
-                </div>
-                <div class="col-md-3">
-                    <label for="adminJamMulai" class="form-label">Jam Mulai</label>
-                    <input type="time" class="form-control" id="adminJamMulai" value="07:00">
-                </div>
-                <div class="col-md-3">
-                    <label for="adminJamSelesai" class="form-label">Jam Selesai</label>
-                    <input type="time" class="form-control" id="adminJamSelesai" value="19:00">
-                </div>
-                <div class="col-md-3">
-                    <label for="adminTarget" class="form-label">Target (%)</label>
-                    <input type="number" class="form-control target-input" id="adminTarget" min="0" max="100" value="0">
-                </div>
-            </div>
+            <!-- Tab Navigation -->
+            <ul class="nav nav-tabs mb-4" id="adminTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="target-tab" data-bs-toggle="tab" data-bs-target="#targetTab" type="button" role="tab">Set Target</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="titik-tab" data-bs-toggle="tab" data-bs-target="#titikTab" type="button" role="tab">Kelola Titik Pekerjaan</button>
+                </li>
+            </ul>
             
-            <div class="row mb-3">
-                <div class="col-md-9">
-                    <button type="button" class="btn btn-admin w-100" id="btnSetTarget">
-                        <i class="fas fa-save me-2"></i>Set Target
-                    </button>
+            <!-- Tab Content -->
+            <div class="tab-content" id="adminTabContent">
+                <!-- Target Tab -->
+                <div class="tab-pane fade show active" id="targetTab" role="tabpanel">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="adminArea" class="form-label">Area Pekerjaan</label>
+                            <select class="form-select" id="adminArea">
+                                <option value="" selected disabled>Pilih Area</option>
+                                <option value="Cooler">Cooler</option>
+                                <option value="KOH">KOH</option>
+                                <option value="TAD">TAD</option>
+                                <option value="Inlet Kiln">Inlet Kiln</option>
+                                <option value="Riser Inlet Kiln">Riser Inlet Kiln</option>
+                                <option value="B53">B53</option>
+                                <option value="A54">A54</option>
+                                <option value="B54">B54</option>
+                                <option value="Kalsiner">Kalsiner</option>
+                                <option value="Downpipe">Downpipe</option>
+                                <option value="Burner">Burner</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="adminTitik" class="form-label">Titik Pekerjaan</label>
+                            <select class="form-select" id="adminTitik">
+                                <option value="all" selected>Semua Titik</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="adminTahap" class="form-label">Tahap Pekerjaan</label>
+                            <select class="form-select" id="adminTahap">
+                                <option value="" selected disabled>Pilih Tahap</option>
+                                <option value="scaffolding">Scaffolding</option>
+                                <option value="bongkarMolding">Bongkar Molding</option>
+                                <option value="bongkarDompet">Bongkar Dompet</option>
+                                <option value="bongkarCastingLama">Bongkar Casting Lama</option>
+                                <option value="gantiPlat">Ganti Plat</option>
+                                <option value="anchoring">Anchoring</option>
+                                <option value="insulating">Insulating</option>
+                                <option value="molding">Molding</option>
+                                <option value="casting">Casting</option>
+                                <option value="curring">Curring</option>
+                                <option value="bukaScaffolding">Buka Scaffolding</option>
+                                <option value="cleaning">Cleaning</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="adminTanggal" class="form-label">Tanggal</label>
+                            <input type="date" class="form-control" id="adminTanggal">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="adminJamMulai" class="form-label">Jam Mulai</label>
+                            <input type="time" class="form-control" id="adminJamMulai" value="07:00">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="adminJamSelesai" class="form-label">Jam Selesai</label>
+                            <input type="time" class="form-control" id="adminJamSelesai" value="19:00">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="adminTarget" class="form-label">Target (%)</label>
+                            <input type="number" class="form-control target-input" id="adminTarget" min="0" max="100" value="0">
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-9">
+                            <button type="button" class="btn btn-admin w-100" id="btnSetTarget">
+                                <i class="fas fa-save me-2"></i>Set Target
+                            </button>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-outline-secondary w-100" id="btnShowTargets">
+                                <i class="fas fa-list me-2"></i>Lihat Target
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3" id="targetListContainer" style="display:none;">
+                        <h5>Target yang Telah Diset</h5>
+                        <div id="targetList" class="p-2" style="background-color: #f8f9fa; border-radius: 5px; max-height: 200px; overflow-y: auto;"></div>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <button type="button" class="btn btn-outline-secondary w-100" id="btnShowTargets">
-                        <i class="fas fa-list me-2"></i>Lihat Target
-                    </button>
+                
+                <!-- Titik Pekerjaan Tab -->
+                <div class="tab-pane fade" id="titikTab" role="tabpanel">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="titikArea" class="form-label">Area Pekerjaan</label>
+                            <select class="form-select" id="titikArea">
+                                <option value="" selected disabled>Pilih Area</option>
+                                <option value="Cooler">Cooler</option>
+                                <option value="KOH">KOH</option>
+                                <option value="TAD">TAD</option>
+                                <option value="Inlet Kiln">Inlet Kiln</option>
+                                <option value="Riser Inlet Kiln">Riser Inlet Kiln</option>
+                                <option value="B53">B53</option>
+                                <option value="A54">A54</option>
+                                <option value="B54">B54</option>
+                                <option value="Kalsiner">Kalsiner</option>
+                                <option value="Downpipe">Downpipe</option>
+                                <option value="Burner">Burner</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="titikVendor" class="form-label">Vendor</label>
+                            <select class="form-select" id="titikVendor">
+                                <option value="" selected disabled>Pilih Vendor</option>
+                                <option value="R">RMP</option>
+                                <option value="V">Visuvius</option>
+                                <option value="S">Shinagawa</option>
+                                <option value="C">Calderys</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="titikJumlah" class="form-label">Jumlah Titik</label>
+                            <input type="number" class="form-control" id="titikJumlah" min="1" max="50" value="1">
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-admin w-100" id="btnSaveTitik">
+                                <i class="fas fa-save me-2"></i>Simpan Konfigurasi
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-outline-secondary w-100" id="btnShowTitik">
+                                <i class="fas fa-list me-2"></i>Lihat Konfigurasi
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3" id="titikListContainer" style="display:none;">
+                        <h5>Konfigurasi Titik Pekerjaan</h5>
+                        <div id="titikList" class="p-2" style="background-color: #f8f9fa; border-radius: 5px; max-height: 200px; overflow-y: auto;"></div>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="mb-3" id="targetListContainer" style="display:none;">
-                <h5>Target yang Telah Diset</h5>
-                <div id="targetList" class="p-2" style="background-color: #f8f9fa; border-radius: 5px; max-height: 200px; overflow-y: auto;"></div>
             </div>
         </div>
         
@@ -395,11 +467,11 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-6 required-field">
+                    <div class="col-md-6">
                         <label for="jumlahTitik" class="form-label">Jumlah Titik Pekerjaan</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fas fa-list-ol"></i></span>
-                            <input type="number" class="form-control" id="jumlahTitik" min="1" max="50" value="14" required>
+                            <input type="number" class="form-control" id="jumlahTitik" min="1" max="50" readonly>
                         </div>
                     </div>
                 </div>
@@ -456,21 +528,23 @@
         // Configuration
         const ADMIN_PASSWORD = "chepet";
         const progressRules = {
+            scaffolding: [],
             bongkarMolding: ['scaffolding'],
-            bongkarDompet: ['bongkarMolding'],
-            bongkarCastingLama: ['bongkarDompet'],
-            gantiPlat: ['bongkarCastingLama'],
-            anchoring: ['gantiPlat'],
-            insulating: ['anchoring'],
-            molding: ['insulating'],
-            casting: ['molding'],
-            curring: ['casting'],
-            bukaScaffolding: ['curring'],
-            cleaning: ['bukaScaffolding']
+            bongkarDompet: ['scaffolding', 'bongkarMolding'],
+            bongkarCastingLama: ['scaffolding', 'bongkarMolding', 'bongkarDompet'],
+            gantiPlat: ['scaffolding', 'bongkarMolding', 'bongkarDompet', 'bongkarCastingLama'],
+            anchoring: ['scaffolding', 'bongkarMolding', 'bongkarDompet', 'bongkarCastingLama', 'gantiPlat'],
+            insulating: ['scaffolding', 'bongkarMolding', 'bongkarDompet', 'bongkarCastingLama', 'gantiPlat', 'anchoring'],
+            molding: ['scaffolding', 'bongkarMolding', 'bongkarDompet', 'bongkarCastingLama', 'gantiPlat', 'anchoring', 'insulating'],
+            casting: ['scaffolding', 'bongkarMolding', 'bongkarDompet', 'bongkarCastingLama', 'gantiPlat', 'anchoring', 'insulating', 'molding'],
+            curring: ['scaffolding', 'bongkarMolding', 'bongkarDompet', 'bongkarCastingLama', 'gantiPlat', 'anchoring', 'insulating', 'molding', 'casting'],
+            bukaScaffolding: ['scaffolding', 'bongkarMolding', 'bongkarDompet', 'bongkarCastingLama', 'gantiPlat', 'anchoring', 'insulating', 'molding', 'casting', 'curring'],
+            cleaning: ['scaffolding', 'bongkarMolding', 'bongkarDompet', 'bongkarCastingLama', 'gantiPlat', 'anchoring', 'insulating', 'molding', 'casting', 'curring', 'bukaScaffolding']
         };
         
         // Global variables
         let workTargets = [];
+        let titikConfigurations = [];
         let isAdminAuthenticated = false;
         
         document.addEventListener('DOMContentLoaded', function() {
@@ -499,21 +573,32 @@
             const passwordError = document.getElementById('passwordError');
             const adminLoginBtn = document.getElementById('adminLoginBtn');
             
+            // New elements for titik configuration
+            const titikArea = document.getElementById('titikArea');
+            const titikVendor = document.getElementById('titikVendor');
+            const titikJumlah = document.getElementById('titikJumlah');
+            const btnSaveTitik = document.getElementById('btnSaveTitik');
+            const btnShowTitik = document.getElementById('btnShowTitik');
+            const titikListContainer = document.getElementById('titikListContainer');
+            const titikList = document.getElementById('titikList');
+            
             // Initialize date to today
             adminTanggal.valueAsDate = new Date();
             
-            // Load existing targets from server
+            // Load existing data from server
             loadTargetsFromServer();
+            loadTitikConfigurations();
             
             // Event Listeners
             areaPekerjaanSelect.addEventListener('change', function() {
                 updateTitikOptions();
+                updateJumlahTitik();
                 generateTitikForms();
             });
             
-            jumlahTitikInput.addEventListener('change', generateTitikForms);
             vendorSelect.addEventListener('change', function() {
                 updateTitikOptions();
+                updateJumlahTitik();
                 generateTitikForms();
             });
             
@@ -524,8 +609,15 @@
             btnCancelPassword.addEventListener('click', cancelPassword);
             adminLoginBtn.addEventListener('click', toggleAdminPanel);
             
+            // New event listeners for titik configuration
+            titikArea.addEventListener('change', updateTitikOptions);
+            titikVendor.addEventListener('change', updateTitikOptions);
+            btnSaveTitik.addEventListener('click', handleSaveTitik);
+            btnShowTitik.addEventListener('click', toggleTitikList);
+            
             // Initialize form if values exist
             if (areaPekerjaanSelect.value && vendorSelect.value) {
+                updateJumlahTitik();
                 generateTitikForms();
             }
             
@@ -556,11 +648,41 @@
                         console.error('Error loading targets:', error);
                     });
             }
+            
+            // Load titik configurations from server
+            function loadTitikConfigurations() {
+                fetch('https://script.google.com/macros/s/AKfycbyhkq-1O6zaLhGO9qu6NavFW7HbmOqyKskORBvthaf6-Rp8Lt2Q5TaaZqWtBCMfsqyR/exec?action=getTitikConfig')
+                    .then(response => response.json())
+                    .then(data => {
+                        titikConfigurations = data;
+                        updateJumlahTitik();
+                    })
+                    .catch(error => {
+                        console.error('Error loading titik configurations:', error);
+                    });
+            }
+            
+            // Update jumlah titik based on selected area and vendor
+            function updateJumlahTitik() {
+                const area = areaPekerjaanSelect.value;
+                const vendor = vendorSelect.value;
+                
+                if (!area || !vendor) {
+                    jumlahTitikInput.value = '';
+                    return;
+                }
+                
+                const config = titikConfigurations.find(c => 
+                    c.area === area && c.vendor === vendor
+                );
+                
+                jumlahTitikInput.value = config ? config.jumlahTitik : 0;
+            }
 
             // Generate work point forms
             function generateTitikForms() {
                 const area = areaPekerjaanSelect.value;
-                const jumlahTitik = parseInt(jumlahTitikInput.value) || 1;
+                const jumlahTitik = parseInt(jumlahTitikInput.value) || 0;
                 const vendorCode = vendorSelect.value;
                 
                 if (!area || !jumlahTitik || !vendorCode) {
@@ -662,12 +784,13 @@
             function setupProgressInputListeners() {
                 document.querySelectorAll('.progress-input').forEach(input => {
                     input.addEventListener('change', function() {
+                        const titikDiv = this.closest('.titik-pekerjaan');
                         const fieldName = Array.from(this.classList)
                             .find(cls => cls in progressRules);
                         
                         if (fieldName && progressRules[fieldName]) {
                             progressRules[fieldName].forEach(depField => {
-                                document.querySelectorAll(`.progress-input.${depField}`).forEach(depInput => {
+                                titikDiv.querySelectorAll(`.progress-input.${depField}`).forEach(depInput => {
                                     depInput.value = 100;
                                 });
                             });
@@ -679,10 +802,10 @@
             function updateTitikOptions() {
                 adminTitik.innerHTML = '<option value="all">Semua Titik</option>';
                 const area = areaPekerjaanSelect.value;
-                const jumlahTitik = parseInt(jumlahTitikInput.value) || 1;
+                const jumlahTitik = parseInt(jumlahTitikInput.value) || 0;
                 const vendorCode = vendorSelect.value;
                 
-                if (area && vendorCode) {
+                if (area && vendorCode && jumlahTitik > 0) {
                     for (let i = 1; i <= jumlahTitik; i++) {
                         const option = document.createElement('option');
                         option.value = i;
@@ -696,7 +819,7 @@
                 const area = areaPekerjaanSelect.value;
                 if (!area) return;
                 
-                const jumlahTitik = parseInt(jumlahTitikInput.value) || 1;
+                const jumlahTitik = parseInt(jumlahTitikInput.value) || 0;
                 const vendorCode = vendorSelect.value;
                 
                 for (let i = 1; i <= jumlahTitik; i++) {
@@ -705,7 +828,13 @@
             }
             
             function updateTargetDisplayForPoint(pointNumber, area, titikCode) {
-                Object.keys(progressRules).concat(['scaffolding', 'gantiPlat', 'insulating', 'molding']).forEach(tahap => {
+                const allTahap = [
+                    'scaffolding', 'bongkarMolding', 'bongkarDompet', 'bongkarCastingLama',
+                    'gantiPlat', 'anchoring', 'insulating', 'molding', 
+                    'casting', 'curring', 'bukaScaffolding', 'cleaning'
+                ];
+                
+                allTahap.forEach(tahap => {
                     const targetElement = document.getElementById(`target-${tahap}-${pointNumber}`);
                     if (!targetElement) return;
                     
@@ -720,18 +849,17 @@
                         : '<em>Belum ada target yang ditetapkan</em>';
                 });
             }
+            
             function generateTargetText(targets) {
                 return '<strong>Target:</strong> ' + targets.map(target => {
-                    // Format tanggal (YYYY-MM-DD)
                     const formattedDate = target.tanggal;
-                // Format jam (HH:MM)
                     const formattedStartTime = target.jamMulai.substring(0, 5);
                     const formattedEndTime = target.jamSelesai.substring(0, 5);
         
-        return `${formattedDate} ${formattedStartTime}-${formattedEndTime}: ${target.target}%` +
-               (target.titik ? ` (Titik ${target.titik})` : '');
-    }).join('<br>');
-}
+                    return `${formattedDate} ${formattedStartTime}-${formattedEndTime}: ${target.target}%` +
+                           (target.titik ? ` (Titik ${target.titik})` : '');
+                }).join('<br>');
+            }
             
             function handleSetTarget() {
                 if (!isAdminAuthenticated) {
@@ -751,18 +879,21 @@
                     alert('Harap lengkapi semua field target!');
                     return;
                 }
-                    // Validasi format waktu
+                
                 if (!/^\d{2}:\d{2}$/.test(jamMulai) || !/^\d{2}:\d{2}$/.test(jamSelesai)) {
                     alert('Format jam harus HH:MM');
                     return;
                 }
     
-    // Validasi format tanggal
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(tanggal)) {
-        alert('Format tanggal harus YYYY-MM-DD');
-        return;
-    }
-                const newTarget = {
+                if (!/^\d{4}-\d{2}-\d{2}$/.test(tanggal)) {
+                    alert('Format tanggal harus YYYY-MM-DD');
+                    return;
+                }
+                
+                const previousStages = progressRules[tahap] || [];
+                const targetsToSave = [];
+                
+                targetsToSave.push({
                     area,
                     titik: titik === 'all' ? null : parseInt(titik),
                     tahap,
@@ -771,19 +902,39 @@
                     jamSelesai,
                     target: parseInt(target),
                     action: 'setTarget'
-                };
+                });
                 
-                // Save to server
-                fetch('https://script.google.com/macros/s/AKfycbyhkq-1O6zaLhGO9qu6NavFW7HbmOqyKskORBvthaf6-Rp8Lt2Q5TaaZqWtBCMfsqyR/exec', {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newTarget)
-                })
+                previousStages.forEach(prevTahap => {
+                    const existingTarget = workTargets.find(t => 
+                        t.area === area && 
+                        t.tahap === prevTahap && 
+                        (t.titik === (titik === 'all' ? null : parseInt(titik)))
+                    );
+                    
+                    if (!existingTarget || existingTarget.target < 100) {
+                        targetsToSave.push({
+                            area,
+                            titik: titik === 'all' ? null : parseInt(titik),
+                            tahap: prevTahap,
+                            tanggal,
+                            jamMulai,
+                            jamSelesai,
+                            target: 100,
+                            action: 'setTarget'
+                        });
+                    }
+                });
+                
+                Promise.all(targetsToSave.map(target => 
+                    fetch('https://script.google.com/macros/s/AKfycbyhkq-1O6zaLhGO9qu6NavFW7HbmOqyKskORBvthaf6-Rp8Lt2Q5TaaZqWtBCMfsqyR/exec', {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(target)
+                    })
+                ))
                 .then(() => {
-                    workTargets.push(newTarget);
-                    updateTargetList();
-                    updateAllTargetDisplays();
+                    loadTargetsFromServer();
                     adminTahap.value = '';
                     adminTarget.value = '0';
                     alert('Target berhasil disimpan!');
@@ -830,6 +981,100 @@
                 }
             }
             
+            // Handle save titik configuration
+            function handleSaveTitik() {
+                if (!isAdminAuthenticated) {
+                    showPasswordModal();
+                    return;
+                }
+                
+                const area = titikArea.value;
+                const vendor = titikVendor.value;
+                const jumlahTitik = parseInt(titikJumlah.value) || 0;
+                
+                if (!area || !vendor || !jumlahTitik) {
+                    alert('Harap lengkapi semua field konfigurasi titik!');
+                    return;
+                }
+                
+                const newConfig = {
+                    area,
+                    vendor,
+                    jumlahTitik,
+                    action: 'setTitikConfig'
+                };
+                
+                fetch('https://script.google.com/macros/s/AKfycbyhkq-1O6zaLhGO9qu6NavFW7HbmOqyKskORBvthaf6-Rp8Lt2Q5TaaZqWtBCMfsqyR/exec', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newConfig)
+                })
+                .then(() => {
+                    loadTitikConfigurations();
+                    titikArea.value = '';
+                    titikVendor.value = '';
+                    titikJumlah.value = '1';
+                    alert('Konfigurasi titik berhasil disimpan!');
+                })
+                .catch(error => {
+                    console.error('Error saving titik configuration:', error);
+                    alert('Gagal menyimpan konfigurasi titik.');
+                });
+            }
+            
+            function updateTitikList() {
+                titikList.innerHTML = titikConfigurations.length === 0 
+                    ? '<p class="text-muted">Belum ada konfigurasi titik yang ditetapkan</p>'
+                    : titikConfigurations.map((config, index) => `
+                        <div class="d-flex justify-content-between align-items-center mb-2 p-2 bg-white rounded">
+                            <div>
+                                <strong>${config.area} - ${config.vendor}</strong><br>
+                                <small>Jumlah Titik: ${config.jumlahTitik}</small>
+                            </div>
+                            <button class="btn btn-sm btn-outline-danger delete-titik" data-index="${index}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `).join('');
+                
+                document.querySelectorAll('.delete-titik').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        const configToDelete = titikConfigurations[index];
+                        
+                        fetch('https://script.google.com/macros/s/AKfycbyhkq-1O6zaLhGO9qu6NavFW7HbmOqyKskORBvthaf6-Rp8Lt2Q5TaaZqWtBCMfsqyR/exec', {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                action: 'deleteTitikConfig',
+                                area: configToDelete.area,
+                                vendor: configToDelete.vendor
+                            })
+                        })
+                        .then(() => {
+                            loadTitikConfigurations();
+                        })
+                        .catch(error => {
+                            console.error('Error deleting titik configuration:', error);
+                            alert('Gagal menghapus konfigurasi titik.');
+                        });
+                    });
+                });
+            }
+            
+            function toggleTitikList() {
+                if (titikListContainer.style.display === 'none') {
+                    updateTitikList();
+                    titikListContainer.style.display = 'block';
+                    btnShowTitik.innerHTML = '<i class="fas fa-eye-slash me-2"></i>Sembunyikan Konfigurasi';
+                } else {
+                    titikListContainer.style.display = 'none';
+                    btnShowTitik.innerHTML = '<i class="fas fa-list me-2"></i>Lihat Konfigurasi';
+                }
+            }
+            
             function showPasswordModal() {
                 passwordModal.style.display = 'block';
                 adminPassword.focus();
@@ -854,7 +1099,6 @@
                 adminPassword.value = '';
                 passwordError.style.display = 'none';
             }
-
 
             // Form submission
             document.getElementById('inspeksiForm').addEventListener('submit', function(e) {
